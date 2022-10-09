@@ -1,0 +1,15 @@
+{
+	"authors": [
+		"jordan4ibanez"
+	],
+	"copyright": "Copyright © 2022, jordan4ibanez",
+	"dependencies": {
+		"raylib-d": "~>4.2.2"
+	},
+	"description": "a 2d game made with raylib",
+	"license": "MIT",
+	"name": "2d_game",
+    "libs": [ "raylib" ],
+    "lflags-posix" : ["-L."],
+    "lflags-osx" : ["-rpath", "@executable_path/"],
+}
