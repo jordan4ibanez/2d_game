@@ -1,16 +1,15 @@
 import std.stdio;
 
-import raylib;
-
-public class TextureCache {
-
-}
-
+import game;
 
 void main() {
-	validateRaylibBinding();
 
-    InitWindow(512,512, "2D Game");
+    Game game = new Game();
+
+    game.run();
+	
+
+    /*
 
     Camera2D camera = Camera2D(Vector2(0,0), Vector2(0,0), 0, 0.25);
 
@@ -39,4 +38,5 @@ void main() {
         EndDrawing();
     }
     CloseWindow();
+    */
 }
