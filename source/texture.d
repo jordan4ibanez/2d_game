@@ -11,9 +11,13 @@ public class TextureContainer {
     this(string textureLocation) {
         texture = LoadTexture(toStringz(textureLocation));
     }
-    
+
     ~this() {
         UnloadTexture(texture);
+    }
+
+    Texture get() {
+        return texture;
     }
 }
 
