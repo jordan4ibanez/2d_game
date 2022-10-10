@@ -4,18 +4,25 @@ import raylib;
 import world;
 import window;
 import camera;
+import texture;
 
 public class Game {
 
     World world;
     Window window;
     Cam camera;
+    TextureCache cache;
 
     this () {
         validateRaylibBinding();
         window = new Window(this);
         world  = new World(this);
         camera = new Cam(this);
+        cache = new TextureCache();
+
+        camera.setClearColor(255,120,6,255);
+
+        cache.upload("thing", "textures/modernCity/1 x 1.png");
     }
 
     void run() {
@@ -36,12 +43,8 @@ public class Game {
 
             camera.clear();
 
-
-
-
-
-
-
+            Texture blah =  cache.get("thing").get();
+            DrawTexture(blah, 0,0, Colors.RAYWHITE);
 
 
         }
