@@ -11,6 +11,8 @@ public class World {
     this(Game game) {
         this.game = game;
 
+        map = new Map(32, 32);
+
     }
 
 }
@@ -20,8 +22,14 @@ public class Map {
 
     MapTile[] map;
     
-    long width;
-    long height;
+    int width;
+    int height;
+
+    this(int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.map = new MapTile[width*height];
+    }
 
     final
     MapTile get(int x, int y) {
