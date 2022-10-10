@@ -44,7 +44,11 @@ public class Game {
             camera.clear();
 
             Texture blah =  cache.get("thing").get();
-            DrawTexture(blah, 0,0, Colors.RAYWHITE);
+            foreach (int x; 0..32) {
+                foreach (int y; 0..32) {
+                    DrawTexture(blah, x*16,y*16, Colors.RAYWHITE);
+                }
+            }
 
 
         }
