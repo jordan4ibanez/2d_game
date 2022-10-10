@@ -1,8 +1,17 @@
 module world;
 
+import game;
+
 /// World is what the game takes place in
 public class World {
+    Game game;
+
     Map map;
+
+    this(Game game) {
+        this.game = game;
+
+    }
 
 }
 

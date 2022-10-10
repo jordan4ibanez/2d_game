@@ -13,9 +13,9 @@ public class Game {
 
     this () {
         validateRaylibBinding();
-        window = new Window();
-        world  = new World();
-        camera = new Cam();
+        window = new Window(this);
+        world  = new World(this);
+        camera = new Cam(this);
     }
 
     void run() {

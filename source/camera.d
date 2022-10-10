@@ -1,14 +1,18 @@
 module camera;
 
 import raylib;
+import game;
 
 public class Cam {
+
+    Game game;
 
     Camera2D camera;
 
     Color background;
 
-    this() {
+    this(Game game) {
+        this.game = game;
         this.camera = Camera2D(Vector2(0,0),Vector2(0,0), 0, 1);
         this.background = Colors.RAYWHITE;
     }
