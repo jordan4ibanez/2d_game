@@ -5,6 +5,7 @@ import world;
 import window;
 import camera;
 import texture;
+import time_keeper;
 
 public class Game {
 
@@ -12,6 +13,8 @@ public class Game {
     Window window;
     Cam camera;
     TextureCache cache;
+    TimeKeeper timeKeeper;
+
 
     this () {
         validateRaylibBinding();
@@ -19,6 +22,7 @@ public class Game {
         world  = new World(this);
         camera = new Cam(this);
         cache = new TextureCache();
+        timeKeeper = new TimeKeeper(this);
 
         camera.setClearColor(255,120,6,255);
 
@@ -44,11 +48,14 @@ public class Game {
             camera.clear();
 
             Texture blah =  cache.get("thing").get();
+
+            /*
             foreach (int x; 0..32) {
                 foreach (int y; 0..32) {
                     DrawTexture(blah, x*16,y*16, Colors.RAYWHITE);
                 }
             }
+            */
 
 
         }
