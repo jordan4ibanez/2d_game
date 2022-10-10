@@ -1,5 +1,6 @@
 module game;
 
+import std.stdio;
 import raylib;
 import world;
 import window;
@@ -27,6 +28,9 @@ public class Game {
         camera.setClearColor(255,120,6,255);
 
         cache.upload("thing", "textures/modernCity/1 x 1.png");
+
+
+        SetTargetFPS(60);
     }
 
     void run() {
@@ -40,6 +44,9 @@ public class Game {
 
     }
 
+    int size = 10;
+    bool up = true;
+
     void render() {
         BeginDrawing();
         BeginMode2D(camera.get());
@@ -48,6 +55,16 @@ public class Game {
             camera.clear();
 
             Texture blah =  cache.get("thing").get();
+
+            if (up) {
+                size += 1;
+                up = size < 100 ? true : false;
+            } else {
+                size -= 1;
+                up = size > 10 ? false : true;
+            }
+
+            writeln(size);
 
             /*
             foreach (int x; 0..32) {
@@ -59,7 +76,7 @@ public class Game {
 
             Rectangle source = Rectangle(0,0, blah.width, blah.height);
 
-            Rectangle goal = Rectangle(0,0,55, 30);
+            Rectangle goal = Rectangle(0,0,size, 30);
 
             DrawTexturePro(blah, source, goal, Vector2(0,0),0, Colors.WHITE);
 
