@@ -17,6 +17,10 @@ public class Cam {
         this.background = Colors.RAYWHITE;
     }
 
+    void setClearColor(ubyte r, ubyte g, ubyte b, ubyte a) {
+        this.background = Color(r,g,b,a);
+    }
+
     void clear() {
         ClearBackground(this.background);
     }
