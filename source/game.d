@@ -57,6 +57,12 @@ public class Game {
             }
             */
 
+            Rectangle source = Rectangle(0,0, blah.width, blah.height);
+
+            Rectangle goal = Rectangle(0,0,55, 30);
+
+            DrawTexturePro(blah, source, goal, Vector2(0,0),0, Colors.WHITE);
+
 
         }
         EndMode2D();
