@@ -3,6 +3,7 @@ module texture;
 import raylib;
 import std.string: toStringz;
 
+/// Wraps around texture
 public class TextureContainer {
     
     Texture texture;
@@ -10,11 +11,13 @@ public class TextureContainer {
     this(string textureLocation) {
         texture = LoadTexture(toStringz(textureLocation));
     }
+    
     ~this() {
         UnloadTexture(texture);
     }
 }
 
+/// Holds texture containers
 public class TextureCache {
 
     TextureContainer[string] cache;
