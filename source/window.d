@@ -9,6 +9,7 @@ public class Window {
     
     this(Game game) {
         this.game = game;
+        SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
         InitWindow(512,512, "2D Game");
     }
 

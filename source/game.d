@@ -28,7 +28,9 @@ public class Game {
 
         camera.setClearColor(255,120,6,255);
 
-        cache.upload("thing", "textures/modernCity/1 x 1.png");
+        cache.upload("atlas", "textures/city.png");
+
+        world.uploadAtlas(cache.get("atlas").get());
 
 
         SetTargetFPS(60);
@@ -46,6 +48,7 @@ public class Game {
         world.cleanUp();
         window.cleanUp();
 
+
         cache.destroy();
         world.destroy();
         camera.destroy();
@@ -60,6 +63,8 @@ public class Game {
     int size = 10;
     bool up = true;
 
+    float zoom = 6;
+
     void render() {
         BeginDrawing();
         BeginMode2D(camera.get());
@@ -67,17 +72,27 @@ public class Game {
 
             camera.clear();
 
-            Texture blah =  cache.get("thing").get();
+            // Texture blah =  cache.get("atlas").get();
 
             if (up) {
-                size += 1;
-                up = size < 100 ? true : false;
+                zoom += 0.01;
+                up = zoom < 5 ? true : false;
             } else {
-                size -= 1;
-                up = size > 10 ? false : true;
+                zoom -= 0.01;
+                up = zoom > 1 ? false : true;
             }
 
-            writeln(size);
+            writeln(zoom);
+
+            camera.setZoom(zoom);
+
+            // writeln(size);
+
+            foreach (x; 0..37) {
+                foreach (y; 0..28) {
+                    world.drawTile(x,y,x,y,1);
+                }
+            }
 
             /*
             foreach (int x; 0..32) {
@@ -87,11 +102,7 @@ public class Game {
             }
             */
 
-            Rectangle source = Rectangle(0,0, blah.width, blah.height);
-
-            Rectangle goal = Rectangle(0,0,size, 30);
-
-            DrawTexturePro(blah, source, goal, Vector2(0,0),0, Colors.WHITE);
+            
 
 
         }
