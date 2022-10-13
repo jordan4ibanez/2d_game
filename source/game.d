@@ -57,6 +57,7 @@ public class Game {
     }
 
     void update() {
+        timeKeeper.calculateDelta();
 
     }
 
@@ -70,15 +71,15 @@ public class Game {
         BeginMode2D(camera.get());
         {
 
+            float delta = timeKeeper.getDelta();
+
             camera.clear();
 
-            // Texture blah =  cache.get("atlas").get();
-
             if (up) {
-                zoom += 0.01;
+                zoom += delta;
                 up = zoom < 5 ? true : false;
             } else {
-                zoom -= 0.01;
+                zoom -= delta;
                 up = zoom > 1 ? false : true;
             }
 
@@ -86,23 +87,12 @@ public class Game {
 
             camera.setZoom(zoom);
 
-            // writeln(size);
 
             foreach (x; 0..37) {
                 foreach (y; 0..28) {
                     world.drawTile(x,y,x,y,1);
                 }
-            }
-
-            /*
-            foreach (int x; 0..32) {
-                foreach (int y; 0..32) {
-                    DrawTexture(blah, x*16,y*16, Colors.RAYWHITE);
-                }
-            }
-            */
-
-            
+            }           
 
 
         }
