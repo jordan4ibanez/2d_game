@@ -19,6 +19,7 @@ public class Game {
 
     this () {
         validateRaylibBinding();
+        SetTraceLogLevel(TraceLogLevel.LOG_NONE);
         window = new Window(this);
         world  = new World(this);
         camera = new Cam(this);
@@ -42,6 +43,14 @@ public class Game {
 
     void cleanUp() {
         cache.cleanUp();
+        world.cleanUp();
+        window.cleanUp();
+
+        cache.destroy();
+        world.destroy();
+        camera.destroy();
+        timeKeeper.destroy();
+        window.destroy();
     }
 
     void update() {

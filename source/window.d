@@ -12,7 +12,7 @@ public class Window {
         InitWindow(512,512, "2D Game");
     }
 
-    ~this() {
+    void cleanUp() {
         CloseWindow();
     }
 

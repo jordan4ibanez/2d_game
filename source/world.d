@@ -1,6 +1,7 @@
 module world;
 
 import game;
+import std.stdio;
 
 /// World is what the game takes place in
 public class World {
@@ -10,9 +11,11 @@ public class World {
 
     this(Game game) {
         this.game = game;
-
         map = new Map(32, 32);
+    }
 
+    void cleanUp() {
+        map = null;
     }
 
 }
