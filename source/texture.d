@@ -12,7 +12,7 @@ public class TextureContainer {
         texture = LoadTexture(toStringz(textureLocation));
     }
 
-    ~this() {
+    void cleanUp() {
         UnloadTexture(texture);
     }
 
@@ -32,5 +32,11 @@ public class TextureCache {
 
     TextureContainer get(string name) {
         return cache[name];
+    }
+
+    void cleanUp() {
+        foreach (textureContainer; cache) {
+            textureContainer.cleanUp();
+        }
     }
 }

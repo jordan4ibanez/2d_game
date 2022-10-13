@@ -5,6 +5,6 @@ import game;
 void main() {
 
     Game game = new Game();
-
     game.run();
+    game.cleanUp();
 }

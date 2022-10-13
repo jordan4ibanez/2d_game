@@ -40,6 +40,10 @@ public class Game {
         }
     }
 
+    void cleanUp() {
+        cache.cleanUp();
+    }
+
     void update() {
 
     }
