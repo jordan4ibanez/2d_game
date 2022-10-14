@@ -11,8 +11,6 @@ public class MapEditor : GameState {
     int size = 10;
     bool up = true;
 
-    float zoom = 6;
-
     this(Game game) {
         super(game);
     }
@@ -24,7 +22,13 @@ public class MapEditor : GameState {
 
     override
     void update() {
-        
+
+        float scrollDelta = mouse.getScrollDelta();
+        float zoom = camera.getZoom();
+        camera.setZoom(zoom + (scrollDelta / 10));
+
+        writeln(zoom);
+
     }
 
     override
@@ -37,6 +41,7 @@ public class MapEditor : GameState {
 
             camera.clear();
 
+            /*
             if (up) {
                 zoom += delta;
                 up = zoom < 5 ? true : false;
@@ -44,15 +49,13 @@ public class MapEditor : GameState {
                 zoom -= delta;
                 up = zoom > 1 ? false : true;
             }
-
-            mouse.getDelta();
-
-            // game.camera.setZoom(zoom);
+            */
 
 
             foreach (x; 0..37) {
                 foreach (y; 0..28) {
-                    world.drawTile(x,y,x,y,1);
+                    DrawRectangleLines(x * 16, y * 16, 16, 16, Colors.BLACK);
+                    // world.drawTile(x,y,x,y,1);
                 }
             }
         }
