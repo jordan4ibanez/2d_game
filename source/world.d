@@ -6,15 +6,13 @@ import raylib;
 
 /// World is what the game takes place in
 public class World {
-    Game game;
-
+    
     Map map;
 
     Texture atlas;
 
-    this(Game game) {
-        this.game = game;
-        map = new Map(32, 32);
+    this(int width, int height) {
+        map = new Map(width, height);
     }
 
     void cleanUp() {
@@ -24,7 +22,7 @@ public class World {
     void uploadAtlas(Texture atlas) {
         this.atlas = atlas;
     }
-    
+    /*
     void drawTile(int posX, int posY, int tileX, int tileY, int border) {
 
         int baseX = tileX == 0 ? 0 : (tileX * 16) + (tileX * border);        
@@ -47,14 +45,15 @@ public class World {
         DrawTexturePro(atlas, source, goal, Vector2(0,0), 0, Colors.WHITE);
         // DrawRectangle(cast(int)goal.x, cast(int)goal.y + 16, cast(int)goal.width, cast(int)goal.height, Colors.BLACK);
 
-    }  
+    } 
+    */
 
 }
 
 /// The world has a map
 public class Map {
 
-    MapTile[] map;
+    MapTile[] tiles;
     
     int width;
     int height;
@@ -62,7 +61,7 @@ public class Map {
     this(int width, int height) {
         this.width = width;
         this.height = height;
-        this.map = new MapTile[width*height];
+        this.tiles = new MapTile[width*height];
     }
 
     final
@@ -73,7 +72,7 @@ public class Map {
         if (y < 0 || y > this.height - 1) {
             throw new Exception("Y getter is out of bounds for map!");
         }
-        return map[(x * this.width) + y];
+        return tiles[(x * this.width) + y];
     }
 
 }
