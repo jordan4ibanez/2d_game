@@ -34,6 +34,9 @@ public class MapEditor : GameState {
 
     int atlasSelectionX = 0;
     int atlasSelectionY = 0;
+
+    int selectedTileX = 0;
+    int selectedTileY = 0;
     
     this(Game game) {
         super(game);
@@ -56,7 +59,6 @@ public class MapEditor : GameState {
 
         if (atlasBrowserMode) {
 
-            if (mouse.leftButtonPressed()) {
                 Vector2 mousePosition = mouse.getPosition();
 
                 Vector2 windowSize = window.getSize();
@@ -74,15 +76,18 @@ public class MapEditor : GameState {
 
                 // This is imprecise, but we only care about generalities in the selection (1 pixel extra because border)
                 atlasSelectionX =  cast(int)floor(mousePosition.x / (17 * scaler));
-                atlasSelectionY =  cast(int)floor(mousePosition.y / (17 * scaler));
-
-                writeln(atlasSelectionY);
+                atlasSelectionY =  cast(int)floor(mousePosition.y / (17 * scaler));                
 
                 if (atlasSelectionX >= 37 || atlasSelectionY >= 28 || atlasSelectionX < 0 || atlasSelectionY < 0) {
                     atlasSelectionX = 0;
                     atlasSelectionY = 0;
                 }
-            }
+
+                if (mouse.leftButtonPressed()) {
+                    selectedTileX = atlasSelectionX;
+                    selectedTileY = atlasSelectionY;
+                }
+            
 
 
         } else {
@@ -190,17 +195,15 @@ public class MapEditor : GameState {
                 DrawTexturePro(atlas, source, goal, Vector2(0,0), 0, Colors.WHITE);
             }
             {
-                // int tileX = atlasSelection % 37;
-                // int tileY = (atlasSelection / 37);
-                int baseX = atlasSelectionX == 0 ? 1 : cast(int)ceil(((atlasSelectionX * 16.0) + atlasSelectionX) * scaler);
-                int baseY = atlasSelectionY == 0 ? 1 : cast(int)ceil(((atlasSelectionY * 16.0) + atlasSelectionY) * scaler);
+                int baseXSelection = selectedTileX == 0 ? 1 : cast(int)ceil(((selectedTileX * 16.0) + selectedTileX) * scaler);
+                int baseYSelection = selectedTileY == 0 ? 1 : cast(int)ceil(((selectedTileY * 16.0) + selectedTileY) * scaler);
 
+                DrawRectangleLines(baseXSelection, baseYSelection, cast(int)floor(16 * scaler), cast(int)floor(16 * scaler), Color(255, 0, 0, 255));
 
+                int baseXHover = atlasSelectionX == 0 ? 1 : cast(int)ceil(((atlasSelectionX * 16.0) + atlasSelectionX) * scaler);
+                int baseYHover = atlasSelectionY == 0 ? 1 : cast(int)ceil(((atlasSelectionY * 16.0) + atlasSelectionY) * scaler);
 
-                // writeln(atlasSelection);
-                // int baseY = tileY == 0 ? 0 : (tileY * 16) + tileY;
-
-                DrawRectangleLines(baseX, baseY, cast(int)floor(16 * scaler), cast(int)floor(16 * scaler), Color(57, 255, 20, 255));
+                DrawRectangleLines(baseXHover, baseYHover, cast(int)floor(16 * scaler), cast(int)floor(16 * scaler), Color(57, 255, 20, 255));
             }
 
 
