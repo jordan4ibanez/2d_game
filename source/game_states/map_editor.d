@@ -40,13 +40,16 @@ public class MapEditor : GameState {
     
     this(Game game) {
         super(game);
-        this.world = new World(50, 50);
+        this.world = new World(100, 100);
         atlas = cache.get("atlas").get();
     }
     
     override
     void start() {
         camera.setClearColor(0,0,0,0);
+        // Let this thing run faster than any monitor on the market
+        // Setting a target FPS lower creates frustrating issues with placing
+        SetTargetFPS(500);
     }    
 
 
@@ -134,11 +137,15 @@ public class MapEditor : GameState {
                             }
                         } else if (mode == 2) {
                             if (mouse.leftButtonDown()) {
+                                
                                 MapTile currentSelection = world.map.get(mapSelectPosX, mapSelectPosY);
 
                                 foreach (x; 0..world.map.width) {
                                     foreach (y; 0..world.map.height) {
-                                        if (currentSelection is null && world.map.get(x,y) is null) {
+                                        if (
+                                        currentSelection is null && world.map.get(x,y) is null) {// ||
+                                        // This needs a crawler algorithm to work better
+                                        // (currentSelection !is null && world.map.get(x,y) !is null && world.map.get(x,y).equals(currentSelection)) ) {
                                             world.map.set(x, y,atlasSelectedTileX, atlasSelectedTileY);
                                         }
                                     }
