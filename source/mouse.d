@@ -41,5 +41,8 @@ public class Mouse {
     float getRightButton() {
         return rightButton;
     }
-        
+
+    Vector2 getPosition() {
+        return this.position;
+    }
 }
