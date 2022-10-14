@@ -7,6 +7,7 @@ import camera;
 import texture;
 import time_keeper;
 import mouse;
+import keyboard;
 import game_states.game_state;
 import game_states.map_editor;
 
@@ -17,6 +18,8 @@ public class Game {
     TextureCache cache;
     TimeKeeper timeKeeper;
     Mouse mouse;
+    Keyboard keyboard;
+    
     string currentState = "MapEditor";
 
     GameState[string] states;
@@ -29,6 +32,7 @@ public class Game {
         cache = new TextureCache();
         timeKeeper = new TimeKeeper(this);
         mouse = new Mouse();
+        keyboard = new Keyboard();
 
         camera.setClearColor(255,120,6,255);
 
