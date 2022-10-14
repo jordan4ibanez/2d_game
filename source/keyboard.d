@@ -15,6 +15,7 @@ public class Keyboard {
     private bool[string] down;
 
     this() {
+        // string interface becomes left_control, left_shift, etc
         Key[] newKeys = [
             Key.KEY_LEFT_CONTROL,
             Key.KEY_LEFT_SHIFT,
