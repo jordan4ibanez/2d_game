@@ -18,7 +18,7 @@ public class MapEditor : GameState {
     1 - add
     2 - remove
     */
-    int mode = 0;
+    int mode = 1;
 
     World world;
     
@@ -44,6 +44,14 @@ public class MapEditor : GameState {
         if (mouse.leftButton) {
             Vector2 mouseDelta = mouse.getDelta();
             camera.addOffset(mouseDelta);
+        }
+
+        if (keyboard.isDown("left_control")) {
+            mode = 1;
+        } else if (keyboard.isDown("left_shift")) {
+            mode = 2;
+        } else {
+            mode = 0;
         }
     }
 

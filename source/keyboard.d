@@ -10,9 +10,9 @@ alias Key = KeyboardKey;
 
 public class Keyboard {
 
-    int[string] keys;
-    bool[string] pressed;
-    bool[string] down;
+    private int[string] keys;
+    private bool[string] pressed;
+    private bool[string] down;
 
     this() {
         Key[] newKeys = [
