@@ -51,6 +51,10 @@ public class Map {
         tiles[(posX * this.width) + posY] = new MapTile(tileX, tileY);
     }
 
+    final remove(int posX, int posY) {
+        tiles[(posX * this.width) + posY] = null;
+    }
+
     final
     void rangeCheck(int x, int y) {
         if (x < 0 || x >= this.width) {

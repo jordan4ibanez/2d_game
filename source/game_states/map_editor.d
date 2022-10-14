@@ -107,9 +107,7 @@ public class MapEditor : GameState {
 
                     camera.addOffset(mouseDelta);
                 }
-            }
-
-            {
+            } else {
                 // Too much math!
                 Vector2 mousePos = mouse.getPosition();
                 Vector2 center = window.getCenter();
@@ -125,8 +123,10 @@ public class MapEditor : GameState {
                         mapSelectPosX = -1;
                         mapSelectPosY = -1;    
                     } else {
-                        if (mouse.leftButtonPressed()) {
+                        if (mouse.leftButtonDown()) {
                             world.map.set(mapSelectPosX, mapSelectPosY,atlasSelectedTileX, atlasSelectedTileY);
+                        } else if (mouse.rightButtonDown()) {
+                            world.map.remove(mapSelectPosX, mapSelectPosY);
                         }
                     }
                 } else {
