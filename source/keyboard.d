@@ -17,7 +17,8 @@ public class Keyboard {
     this() {
         Key[] newKeys = [
             Key.KEY_LEFT_CONTROL,
-            Key.KEY_LEFT_SHIFT
+            Key.KEY_LEFT_SHIFT,
+            Key.KEY_TAB
         ];
         insertKeys(newKeys);
     }
