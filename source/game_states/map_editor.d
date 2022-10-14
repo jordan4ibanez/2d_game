@@ -32,7 +32,8 @@ public class MapEditor : GameState {
 
     int atlasLimit = 37 * 28;
 
-    int atlasSelection = 0;
+    int atlasSelectionX = 0;
+    int atlasSelectionY = 0;
     
     this(Game game) {
         super(game);
@@ -54,12 +55,36 @@ public class MapEditor : GameState {
         }
 
         if (showAtlasSelection) {
-            atlasSelection -= cast(int)floor(mouse.getScrollDelta());
-            if (atlasSelection < 0) {
-                atlasSelection = atlasLimit - 1;
-            } else if (atlasSelection >= atlasLimit) {
-                atlasSelection = 0;
+
+            if (mouse.leftButtonPressed()) {
+                Vector2 mousePosition = mouse.getPosition();
+
+                Vector2 windowSize = window.getSize();
+
+                
+                float scaler;
+                float scalerX = cast(float)windowSize.x / cast(float)atlas.width;
+                float scalerY = cast(float)windowSize.y / cast(float)atlas.height;
+
+                if (scalerX > scalerY) {
+                    scaler = scalerY;
+                } else {
+                    scaler = scalerX;
+                }
+
+                // This is imprecise, but we only care about generalities in the selection (1 pixel extra because border)
+                atlasSelectionX =  cast(int)floor(mousePosition.x / (17 * scaler));
+                atlasSelectionY =  cast(int)floor(mousePosition.y / (17 * scaler));
+
+                writeln(atlasSelectionY);
+
+                if (atlasSelectionX >= 37 || atlasSelectionY >= 28 || atlasSelectionX < 0 || atlasSelectionY < 0) {
+                    atlasSelectionX = 0;
+                    atlasSelectionY = 0;
+                }
             }
+
+
         } else {
             if (keyboard.isDown("left_control")) {
                 mode = 1;
@@ -165,10 +190,10 @@ public class MapEditor : GameState {
                 DrawTexturePro(atlas, source, goal, Vector2(0,0), 0, Colors.WHITE);
             }
             {
-                int tileX = atlasSelection % 37;
-                int tileY = (atlasSelection / 37);
-                int baseX = tileX == 0 ? 1 : cast(int)ceil(((tileX * 16.0) + tileX) * scaler);
-                int baseY = tileY == 0 ? 1 : cast(int)ceil(((tileY * 16.0) + tileY) * scaler);
+                // int tileX = atlasSelection % 37;
+                // int tileY = (atlasSelection / 37);
+                int baseX = atlasSelectionX == 0 ? 1 : cast(int)ceil(((atlasSelectionX * 16.0) + atlasSelectionX) * scaler);
+                int baseY = atlasSelectionY == 0 ? 1 : cast(int)ceil(((atlasSelectionY * 16.0) + atlasSelectionY) * scaler);
 
 
 
