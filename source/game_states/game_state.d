@@ -7,6 +7,7 @@ import camera;
 import texture;
 import time_keeper;
 import mouse;
+import keyboard;
 
 public class GameState {
 
@@ -15,6 +16,7 @@ public class GameState {
     TextureCache cache;
     TimeKeeper timeKeeper;
     Mouse mouse;
+    Keyboard keyboard;
 
     // Assign pointer for all GameStates
     this(Game game) {
@@ -23,6 +25,7 @@ public class GameState {
         cache  = game.cache;
         timeKeeper = game.timeKeeper;
         mouse = game.mouse;
+        keyboard = game.keyboard;
     }
     void start() {
         throw new Exception("Start() is not implimented for a GameState!");
