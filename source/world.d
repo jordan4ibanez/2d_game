@@ -6,7 +6,7 @@ import raylib;
 
 /// World is what the game takes place in
 public class World {
-    
+
     Map map;
 
     Texture atlas;
@@ -66,10 +66,10 @@ public class Map {
 
     final
     MapTile get(int x, int y) {
-        if (x < 0 || x > this.width - 1) {
+        if (x < 0 || x >= this.width) {
             throw new Exception("X getter is out of bounds for map!");
         }
-        if (y < 0 || y > this.height - 1) {
+        if (y < 0 || y >= this.height) {
             throw new Exception("Y getter is out of bounds for map!");
         }
         return tiles[(x * this.width) + y];
