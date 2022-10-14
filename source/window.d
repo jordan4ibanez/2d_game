@@ -21,4 +21,8 @@ public class Window {
         return WindowShouldClose();
     }
 
+    Vector2 getSize() {
+        return Vector2(GetRenderWidth(), GetRenderHeight());
+    }
+
 }
