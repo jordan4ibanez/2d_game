@@ -65,21 +65,41 @@ public class Map {
     }
 
     final
-    MapTile get(int x, int y) {
+    MapTile get(int posX, int posY) {
+        rangeCheck(posX, posY);
+        return tiles[(posX * this.width) + posY];
+    }
+
+    final
+    void set(int posX, int posY, int tileX, int tileY) {
+        rangeCheck(posX, posY);
+        // Let the GC go at it, this isn't a high performance section
+        tiles[(posX * this.width) + posY] = new MapTile(tileX, tileY);
+    }
+
+    final
+    void rangeCheck(int x, int y) {
         if (x < 0 || x >= this.width) {
             throw new Exception("X getter is out of bounds for map!");
         }
         if (y < 0 || y >= this.height) {
             throw new Exception("Y getter is out of bounds for map!");
         }
-        return tiles[(x * this.width) + y];
     }
 
 }
 
 /// The map has map tiles
 public class MapTile {
+    // change this to layer array! (foreground/background instead?)
 
+    int x;
+    int y;
+
+    this(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 }
 
 /// The map tiles have layers
