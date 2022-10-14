@@ -2,6 +2,7 @@ module camera;
 
 import raylib;
 import game;
+import std.algorithm.comparison: clamp;
 
 public class Cam {
 
@@ -13,8 +14,12 @@ public class Cam {
 
     this(Game game) {
         this.game = game;
-        this.camera = Camera2D(Vector2(0,0),Vector2(0,0), 0, 1);
+        this.camera = Camera2D(Vector2(0,0),Vector2(0,0), 0, 5);
         this.background = Colors.RAYWHITE;
+    }
+
+    void update() {
+        
     }
 
     void setClearColor(ubyte r, ubyte g, ubyte b, ubyte a) {
@@ -38,7 +43,11 @@ public class Cam {
     }
 
     void setZoom(float zoom) {
-        this.camera.zoom = zoom;
+        this.camera.zoom = clamp(zoom, 5, 12);
+    }
+
+    float getZoom() {
+        return this.camera.zoom;
     }
 
     Camera2D get() {
