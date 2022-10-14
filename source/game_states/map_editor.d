@@ -121,6 +121,10 @@ public class MapEditor : GameState {
                     if (selectionPositionX >= world.map.width || selectionPositionY >= world.map.height) {
                         selectionPositionX = -1;
                         selectionPositionY = -1;    
+                    } else {
+                        if (mouse.leftButtonPressed()) {
+                            writeln("place it at: ", selectionPositionX, selectionPositionY);
+                        }
                     }
                 } else {
                     selectionPositionX = -1;
