@@ -7,6 +7,7 @@ import window;
 import camera;
 import texture;
 import time_keeper;
+import mouse;
 import game_state;
 import map_editor;
 
@@ -17,6 +18,7 @@ public class Game {
     Cam camera;
     TextureCache cache;
     TimeKeeper timeKeeper;
+    Mouse mouse;
     string currentState = "MapEditor";
 
     GameState[string] states;
@@ -29,6 +31,7 @@ public class Game {
         camera = new Cam(this);
         cache = new TextureCache();
         timeKeeper = new TimeKeeper(this);
+        mouse = new Mouse();
 
         camera.setClearColor(255,120,6,255);
 
@@ -43,7 +46,12 @@ public class Game {
 
     void run() {
         while (!window.shouldClose()) {
+            
+            mouse.update();
+            timeKeeper.calculateDelta();
+
             GameState state = states[currentState];
+
             state.update();
             state.render();
         }
