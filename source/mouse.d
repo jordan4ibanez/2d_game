@@ -33,5 +33,13 @@ public class Mouse {
     float getScrollDelta() {
         return scrollDelta;
     }
+
+    float getLeftButton() {
+        return leftButton;
+    }
+    
+    float getRightButton() {
+        return rightButton;
+    }
         
 }
