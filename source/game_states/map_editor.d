@@ -70,7 +70,7 @@ public class MapEditor : GameState {
             }
 
             if (mode == 0) {
-                if (mouse.leftButton) {
+                if (mouse.leftButtonDown()) {
                     Vector2 mouseDelta = mouse.getDelta();
                     float zoom = camera.getZoom();
                     mouseDelta.x /= zoom;
