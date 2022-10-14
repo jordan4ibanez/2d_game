@@ -21,6 +21,9 @@ public class MapEditor : GameState {
     int mode = 1;
 
     World world;
+
+    int selectionPositionX = 0;
+    int selectionPositionY = 0;
     
     this(Game game) {
         super(game);
@@ -30,7 +33,7 @@ public class MapEditor : GameState {
     override
     void start() {
         camera.setClearColor(0,0,0,0);
-    }
+    }    
 
 
     override
@@ -47,8 +50,9 @@ public class MapEditor : GameState {
         if (mode == 0) {
             if (mouse.leftButton) {
                 Vector2 mouseDelta = mouse.getDelta();
-                mouseDelta.x /= camera.getZoom();
-                mouseDelta.y /= camera.getZoom();
+                float zoom = camera.getZoom();
+                mouseDelta.x /= zoom;
+                mouseDelta.y /= zoom;
 
                 camera.addOffset(mouseDelta);
             }
@@ -77,6 +81,8 @@ public class MapEditor : GameState {
                     // world.drawTile(x,y,x,y,1);
                 }
             }
+
+            DrawRectangleLines(selectionPositionX * 16, selectionPositionY * 16, 16, 16, Color(57, 255, 20, 255));
         }
         EndMode2D();
 
