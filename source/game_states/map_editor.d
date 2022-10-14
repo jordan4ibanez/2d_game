@@ -5,6 +5,7 @@ import game_states.game_state;
 import game;
 import raylib;
 import world;
+import std.math: floor;
 
 
 public class MapEditor : GameState {
@@ -22,8 +23,8 @@ public class MapEditor : GameState {
 
     World world;
 
-    int selectionPositionX = 0;
-    int selectionPositionY = 0;
+    int selectionPositionX = -1;
+    int selectionPositionY = -1;
     
     this(Game game) {
         super(game);
@@ -58,6 +59,35 @@ public class MapEditor : GameState {
             }
         }
 
+        {
+            Vector2 mousePos = mouse.getPosition();
+            Vector2 center = window.getCenter();
+            Vector2 offset = camera.getOffset();
+
+            Vector2 realPos = Vector2Subtract(mousePos, center);
+
+            float zoom = camera.getZoom();
+
+            Vector2 scaledPos = Vector2Divide(realPos, Vector2(zoom, zoom));
+
+            Vector2 adjustedPos = Vector2Subtract(scaledPos, offset);
+
+            writeln(adjustedPos);
+
+            if (adjustedPos.x >= 0 && adjustedPos.y >= 0) {
+                selectionPositionX = cast(int)floor(adjustedPos.x / 16.0);
+                selectionPositionY = cast(int)floor(adjustedPos.y / 16.0);
+                if (selectionPositionX >= world.map.width || selectionPositionY >= world.map.height) {
+                    selectionPositionX = -1;
+                    selectionPositionY = -1;    
+                }
+            } else {
+                selectionPositionX = -1;
+                selectionPositionY = -1;
+            }
+
+        }
+
         float scrollDelta = mouse.getScrollDelta();
         float zoom = camera.getZoom();
         camera.setZoom(zoom + (scrollDelta / 10));
@@ -82,7 +112,9 @@ public class MapEditor : GameState {
                 }
             }
 
-            DrawRectangleLines(selectionPositionX * 16, selectionPositionY * 16, 16, 16, Color(57, 255, 20, 255));
+            if (selectionPositionX > -1 && selectionPositionY > -1) {
+                DrawRectangleLines(selectionPositionX * 16, selectionPositionY * 16, 16, 16, Color(57, 255, 20, 255));
+            }
         }
         EndMode2D();
 
