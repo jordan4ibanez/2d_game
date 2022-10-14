@@ -2,7 +2,6 @@ module game;
 
 import std.stdio;
 import raylib;
-import world;
 import window;
 import camera;
 import texture;
@@ -13,7 +12,6 @@ import map_editor;
 
 public class Game {
 
-    World world;
     Window window;
     Cam camera;
     TextureCache cache;
@@ -27,7 +25,6 @@ public class Game {
         validateRaylibBinding();
         SetTraceLogLevel(TraceLogLevel.LOG_NONE);
         window = new Window(this);
-        world  = new World(this);
         camera = new Cam(this);
         cache = new TextureCache();
         timeKeeper = new TimeKeeper(this);
@@ -36,15 +33,17 @@ public class Game {
         camera.setClearColor(255,120,6,255);
 
         cache.upload("atlas", "textures/city.png");
-        world.uploadAtlas(cache.get("atlas").get());
+        // world.uploadAtlas(cache.get("atlas").get());
 
         states["MapEditor"] = new MapEditor(this);
-
 
         SetTargetFPS(60);
     }
 
     void run() {
+
+        setState("MapEditor");
+
         while (!window.shouldClose()) {
 
             mouse.update();
@@ -60,7 +59,6 @@ public class Game {
 
     void cleanUp() {
         cache.cleanUp();
-        world.cleanUp();
         window.cleanUp();
 
         foreach (state; states) {
@@ -68,7 +66,6 @@ public class Game {
         }
 
         cache.destroy();
-        world.destroy();
         camera.destroy();
         timeKeeper.destroy();
         window.destroy();

@@ -2,7 +2,6 @@ module game_state;
 
 import game;
 import std.stdio;
-import world;
 import window;
 import camera;
 import texture;
@@ -11,7 +10,6 @@ import mouse;
 
 public class GameState {
 
-    World world;
     Window window;
     Cam camera;
     TextureCache cache;
@@ -20,7 +18,6 @@ public class GameState {
 
     // Assign pointer for all GameStates
     this(Game game) {
-        world  = game.world;
         window = game.window;
         camera = game.camera;
         cache  = game.cache;
