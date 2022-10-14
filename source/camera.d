@@ -25,7 +25,8 @@ public class Cam {
         Vector2 windowSize = game.window.getSize();
         windowSize.x /= 2.0;
         windowSize.y /= 2.0;
-        this.camera.offset = Vector2Add(offset, windowSize);
+        this.camera.offset = windowSize;
+        this.camera.target = Vector2Multiply(offset, Vector2(-1.0, -1.0));
     }
 
     void setClearColor(ubyte r, ubyte g, ubyte b, ubyte a) {
