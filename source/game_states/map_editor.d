@@ -28,7 +28,7 @@ public class MapEditor : GameState {
 
     Texture atlas;
 
-    bool showAtlasSelection = true;
+    bool atlasBrowserMode = true;
 
     int atlasLimit = 37 * 28;
 
@@ -51,10 +51,10 @@ public class MapEditor : GameState {
     void update() {
 
         if (keyboard.isPressed("tab")) {
-            showAtlasSelection = !showAtlasSelection;
+            atlasBrowserMode = !atlasBrowserMode;
         }
 
-        if (showAtlasSelection) {
+        if (atlasBrowserMode) {
 
             if (mouse.leftButtonPressed()) {
                 Vector2 mousePosition = mouse.getPosition();
@@ -140,7 +140,7 @@ public class MapEditor : GameState {
         {
             camera.clear();
 
-            if (!showAtlasSelection) {
+            if (!atlasBrowserMode) {
                 foreach (x; 0..world.map.width) {
                     foreach (y; 0..world.map.height) {
                         if (world.map.get(x,y) is null) {
@@ -157,7 +157,7 @@ public class MapEditor : GameState {
         }
         EndMode2D();
 
-        if (showAtlasSelection) {
+        if (atlasBrowserMode) {
 
             Vector2 windowSize = window.getSize();
 
