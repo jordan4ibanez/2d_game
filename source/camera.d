@@ -40,6 +40,10 @@ public class Cam {
         this.offset = offset;
     }
 
+    void addOffset(Vector2 addingOffset) {
+        this.offset = Vector2Add(offset, addingOffset);
+    }
+
     void setTarget(Vector2 target) {
         this.camera.target = target;
     }
