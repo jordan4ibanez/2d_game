@@ -30,21 +30,11 @@ public class MapEditor : GameState {
     override
     void start() {
         camera.setClearColor(0,0,0,0);
-
     }
 
 
     override
     void update() {
-
-        float scrollDelta = mouse.getScrollDelta();
-        float zoom = camera.getZoom();
-        camera.setZoom(zoom + (scrollDelta / 10));
-
-        if (mouse.leftButton) {
-            Vector2 mouseDelta = mouse.getDelta();
-            camera.addOffset(mouseDelta);
-        }
 
         if (keyboard.isDown("left_control")) {
             mode = 1;
@@ -53,6 +43,20 @@ public class MapEditor : GameState {
         } else {
             mode = 0;
         }
+
+        if (mode == 0) {
+            if (mouse.leftButton) {
+                Vector2 mouseDelta = mouse.getDelta();
+                mouseDelta.x /= camera.getZoom();
+                mouseDelta.y /= camera.getZoom();
+
+                camera.addOffset(mouseDelta);
+            }
+        }
+
+        float scrollDelta = mouse.getScrollDelta();
+        float zoom = camera.getZoom();
+        camera.setZoom(zoom + (scrollDelta / 10));
     }
 
     override
@@ -65,20 +69,10 @@ public class MapEditor : GameState {
 
             camera.clear();
 
-            /*
-            if (up) {
-                zoom += delta;
-                up = zoom < 5 ? true : false;
-            } else {
-                zoom -= delta;
-                up = zoom > 1 ? false : true;
-            }
-            */
-
             foreach (x; 0..world.map.width) {
                 foreach (y; 0..world.map.height) {
                     if (world.map.get(x,y) is null) {
-                        DrawRectangleLines(x * 16, y * 16, 16, 16, Colors.BLACK);
+                        DrawRectangleLines(x * 16, y * 16, 16, 16, Colors.WHITE);
                     }
                     // world.drawTile(x,y,x,y,1);
                 }
