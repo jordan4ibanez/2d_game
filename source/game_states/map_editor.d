@@ -16,8 +16,7 @@ public class MapEditor : GameState {
     /*
     modes:
     0 - move
-    1 - add
-    2 - remove
+    1 - add/remove
     */
     int mode = 1;
 
@@ -91,12 +90,10 @@ public class MapEditor : GameState {
 
 
         } else {
-            if (keyboard.isDown("left_control")) {
-                mode = 1;
-            } else if (keyboard.isDown("left_shift")) {
-                mode = 2;
-            } else {
+            if (keyboard.isDown("left_shift")) {
                 mode = 0;
+            } else {
+                mode = 1;
             }
 
             if (mode == 0) {
@@ -217,14 +214,8 @@ public class MapEditor : GameState {
                     break;
                 }
                 case 1: {
-                    DrawText("MODE: PLACE", 4,2, 38, Colors.BLACK);
-                    DrawText("MODE: PLACE", 2,0, 38, Color(57, 255, 20, 255));
-                    break;
-                }
-
-                case 2: {
-                    DrawText("MODE: REMOVE", 4,2, 38, Colors.BLACK);
-                    DrawText("MODE: REMOVE", 2,0, 38, Color(57, 255, 20, 255));
+                    DrawText("MODE: EDITING", 4,2, 38, Colors.BLACK);
+                    DrawText("MODE: EDITING", 2,0, 38, Color(57, 255, 20, 255));
                     break;
                 }
             }
