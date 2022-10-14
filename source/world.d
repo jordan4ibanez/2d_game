@@ -78,6 +78,10 @@ public class MapTile {
         this.x = x;
         this.y = y;
     }
+
+    bool equals(MapTile other) {
+        return this.x == other.x && this.y == other.y;
+    }
 }
 
 /// The map tiles have layers
