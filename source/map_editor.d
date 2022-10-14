@@ -24,18 +24,18 @@ public class MapEditor : GameState {
 
     override
     void update() {
-        game.timeKeeper.calculateDelta();
+        
     }
 
     override
     void render() {
         BeginDrawing();
-        BeginMode2D(game.camera.get());
+        BeginMode2D(camera.get());
         {
 
-            float delta = game.timeKeeper.getDelta();
+            float delta = timeKeeper.getDelta();
 
-            game.camera.clear();
+            camera.clear();
 
             if (up) {
                 zoom += delta;
@@ -45,14 +45,14 @@ public class MapEditor : GameState {
                 up = zoom > 1 ? false : true;
             }
 
-            writeln(zoom);
+            mouse.getDelta();
 
-            game.camera.setZoom(zoom);
+            // game.camera.setZoom(zoom);
 
 
             foreach (x; 0..37) {
                 foreach (y; 0..28) {
-                    game.world.drawTile(x,y,x,y,1);
+                    world.drawTile(x,y,x,y,1);
                 }
             }
         }
