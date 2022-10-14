@@ -7,6 +7,8 @@ public class Mouse {
     private Vector2 position = Vector2(0,0);
     private Vector2 oldPosition = Vector2(0,0);
     private float scrollDelta = 0;
+    bool leftButton = false;
+    bool rightButton = false;
 
     this() {
         position = GetMousePosition();
@@ -19,6 +21,9 @@ public class Mouse {
         this.position = GetMousePosition();
 
         scrollDelta = GetMouseWheelMove();
+
+        this.leftButton = IsMouseButtonDown(MouseButton.MOUSE_LEFT_BUTTON);
+        this.rightButton = IsMouseButtonDown(MouseButton.MOUSE_RIGHT_BUTTON);
     }
 
     Vector2 getDelta() {
