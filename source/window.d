@@ -25,4 +25,8 @@ public class Window {
         return Vector2(GetRenderWidth(), GetRenderHeight());
     }
 
+    Vector2 getCenter() {
+        return Vector2(GetRenderWidth() / 2.0, GetRenderHeight() / 2.0);
+    }
+
 }
