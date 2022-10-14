@@ -17,6 +17,7 @@ public class MapEditor : GameState {
     modes:
     0 - move
     1 - add/remove
+    2 - flood fill
     */
     int mode = 1;
 
@@ -94,6 +95,8 @@ public class MapEditor : GameState {
             // Hold shift to be able to drag the camera around
             if (keyboard.isDown("left_shift")) {
                 mode = 0;
+            } else if (keyboard.isDown("left_control")) {
+                mode = 2;
             } else {
                 mode = 1;
             }
@@ -123,10 +126,24 @@ public class MapEditor : GameState {
                         mapSelectPosX = -1;
                         mapSelectPosY = -1;    
                     } else {
-                        if (mouse.leftButtonDown()) {
-                            world.map.set(mapSelectPosX, mapSelectPosY,atlasSelectedTileX, atlasSelectedTileY);
-                        } else if (mouse.rightButtonDown()) {
-                            world.map.remove(mapSelectPosX, mapSelectPosY);
+                        if (mode == 1) {
+                            if (mouse.leftButtonDown()) {
+                                world.map.set(mapSelectPosX, mapSelectPosY,atlasSelectedTileX, atlasSelectedTileY);
+                            } else if (mouse.rightButtonDown()) {
+                                world.map.remove(mapSelectPosX, mapSelectPosY);
+                            }
+                        } else if (mode == 2) {
+                            if (mouse.leftButtonDown()) {
+                                MapTile currentSelection = world.map.get(mapSelectPosX, mapSelectPosY);
+
+                                foreach (x; 0..world.map.width) {
+                                    foreach (y; 0..world.map.height) {
+                                        if (currentSelection is null && world.map.get(x,y) is null) {
+                                            world.map.set(x, y,atlasSelectedTileX, atlasSelectedTileY);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 } else {
@@ -248,6 +265,11 @@ public class MapEditor : GameState {
                 case 1: {
                     DrawText("MODE: EDITING", 4,2, 38, Colors.BLACK);
                     DrawText("MODE: EDITING", 2,0, 38, Color(57, 255, 20, 255));
+                    break;
+                }
+                case 2: {
+                    DrawText("MODE: FLOOD FILL", 4,2, 38, Colors.BLACK);
+                    DrawText("MODE: FLOOD FILL", 2,0, 38, Color(57, 255, 20, 255));
                     break;
                 }
             }
