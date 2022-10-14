@@ -74,8 +74,8 @@ public class MapEditor : GameState {
                 }
 
                 // This is imprecise, but we only care about generalities in the selection (1 pixel extra because border)
-                atlasHoverX =  cast(int)floor(mousePosition.x / (17 * scaler));
-                atlasHoverY =  cast(int)floor(mousePosition.y / (17 * scaler));                
+                atlasHoverX = cast(int)floor(mousePosition.x / (17 * scaler));
+                atlasHoverY = cast(int)floor(mousePosition.y / (17 * scaler));                
 
                 if (atlasHoverX >= 37 || atlasHoverY >= 28 || atlasHoverX < 0 || atlasHoverY < 0) {
                     atlasHoverX = 0;
@@ -90,6 +90,8 @@ public class MapEditor : GameState {
 
 
         } else {
+
+            // Hold shift to be able to drag the camera around
             if (keyboard.isDown("left_shift")) {
                 mode = 0;
             } else {
@@ -108,6 +110,7 @@ public class MapEditor : GameState {
             }
 
             {
+                // Too much math!
                 Vector2 mousePos = mouse.getPosition();
                 Vector2 center = window.getCenter();
                 Vector2 offset = camera.getOffset();
@@ -123,7 +126,7 @@ public class MapEditor : GameState {
                         mapSelectPosY = -1;    
                     } else {
                         if (mouse.leftButtonPressed()) {
-                            writeln("place it at: ", mapSelectPosX, mapSelectPosY);
+                            world.map.set(mapSelectPosX, mapSelectPosY,atlasSelectedTileX, atlasSelectedTileY);
                         }
                     }
                 } else {
@@ -139,6 +142,28 @@ public class MapEditor : GameState {
         }
     }
 
+    void drawTile(int posX, int posY, int tileX, int tileY, int border) {
+
+        int baseX = tileX == 0 ? 0 : (tileX * 16) + (tileX * border);        
+        int baseY = tileY == 0 ? 0 : (tileY * 16) + (tileY * border);
+
+        Rectangle source = Rectangle(
+            baseX,
+            baseY,
+            16,
+            16
+        );
+
+        Rectangle goal = Rectangle(
+            posX * 16,
+            posY * 16,
+            16,
+            16,
+        );
+
+        DrawTexturePro(atlas, source, goal, Vector2(0,0), 0, Colors.WHITE);
+    }
+
     override
     void render() {
         BeginDrawing();
@@ -149,8 +174,11 @@ public class MapEditor : GameState {
             if (!atlasBrowserMode) {
                 foreach (x; 0..world.map.width) {
                     foreach (y; 0..world.map.height) {
-                        if (world.map.get(x,y) is null) {
+                        MapTile thisTile = world.map.get(x,y);
+                        if (thisTile is null) {
                             DrawRectangleLines(x * 16, y * 16, 16, 16, Colors.WHITE);
+                        } else {
+                            drawTile(x, y, thisTile.x, thisTile.y, 1);
                         }
                         // world.drawTile(x,y,x,y,1);
                     }
