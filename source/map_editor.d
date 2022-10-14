@@ -13,8 +13,6 @@ public class MapEditor : GameState {
 
     float zoom = 6;
 
-
-
     this(Game game) {
         super(game);
     }
@@ -56,9 +54,7 @@ public class MapEditor : GameState {
                 foreach (y; 0..28) {
                     game.world.drawTile(x,y,x,y,1);
                 }
-            }           
-
-
+            }
         }
         EndMode2D();
         EndDrawing();

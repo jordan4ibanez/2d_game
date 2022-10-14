@@ -21,8 +21,6 @@ public class Game {
 
     GameState[string] states;
 
-
-
     this () {
         validateRaylibBinding();
         SetTraceLogLevel(TraceLogLevel.LOG_NONE);
@@ -65,5 +63,11 @@ public class Game {
         camera.destroy();
         timeKeeper.destroy();
         window.destroy();
+    }
+
+    void setState(string newState) {
+        states[currentState].cleanUp();
+        currentState = newState;
+        states[currentState].start();
     }
 }
