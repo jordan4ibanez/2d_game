@@ -7,6 +7,8 @@ import window;
 import camera;
 import texture;
 import time_keeper;
+import game_state;
+import map_editor;
 
 public class Game {
 
@@ -15,6 +17,10 @@ public class Game {
     Cam camera;
     TextureCache cache;
     TimeKeeper timeKeeper;
+    string currentState = "MapEditor";
+
+    GameState[string] states;
+
 
 
     this () {
@@ -29,8 +35,9 @@ public class Game {
         camera.setClearColor(255,120,6,255);
 
         cache.upload("atlas", "textures/city.png");
-
         world.uploadAtlas(cache.get("atlas").get());
+
+        states["MapEditor"] = new MapEditor(this);
 
 
         SetTargetFPS(60);
@@ -38,8 +45,9 @@ public class Game {
 
     void run() {
         while (!window.shouldClose()) {
-            update();
-            render();
+            GameState state = states[currentState];
+            state.update();
+            state.render();
         }
     }
 
@@ -48,55 +56,14 @@ public class Game {
         world.cleanUp();
         window.cleanUp();
 
+        foreach (state; states) {
+            state.cleanUp();
+        }
 
         cache.destroy();
         world.destroy();
         camera.destroy();
         timeKeeper.destroy();
         window.destroy();
-    }
-
-    void update() {
-        timeKeeper.calculateDelta();
-
-    }
-
-    int size = 10;
-    bool up = true;
-
-    float zoom = 6;
-
-    void render() {
-        BeginDrawing();
-        BeginMode2D(camera.get());
-        {
-
-            float delta = timeKeeper.getDelta();
-
-            camera.clear();
-
-            if (up) {
-                zoom += delta;
-                up = zoom < 5 ? true : false;
-            } else {
-                zoom -= delta;
-                up = zoom > 1 ? false : true;
-            }
-
-            writeln(zoom);
-
-            camera.setZoom(zoom);
-
-
-            foreach (x; 0..37) {
-                foreach (y; 0..28) {
-                    world.drawTile(x,y,x,y,1);
-                }
-            }           
-
-
-        }
-        EndMode2D();
-        EndDrawing();
     }
 }
