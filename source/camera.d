@@ -45,8 +45,16 @@ public class Cam {
         this.offset = Vector2Add(offset, addingOffset);
     }
 
+    Vector2 getOffset() {
+        return offset;
+    }
+
     void setTarget(Vector2 target) {
         this.camera.target = target;
+    }
+
+    Vector2 getTarget() {
+        return this.camera.target;
     }
 
     void setRotation(float rotation) {
