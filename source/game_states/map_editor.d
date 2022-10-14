@@ -22,8 +22,8 @@ public class MapEditor : GameState {
 
     World world;
 
-    int selectionPositionX = -1;
-    int selectionPositionY = -1;
+    int mapSelectPosX = -1;
+    int mapSelectPosY = -1;
 
     Texture atlas;
 
@@ -31,11 +31,11 @@ public class MapEditor : GameState {
 
     int atlasLimit = 37 * 28;
 
-    int atlasSelectionX = 0;
-    int atlasSelectionY = 0;
+    int atlasHoverX = 0;
+    int atlasHoverY = 0;
 
-    int selectedTileX = 0;
-    int selectedTileY = 0;
+    int atlasSelectedTileX = 0;
+    int atlasSelectedTileY = 0;
     
     this(Game game) {
         super(game);
@@ -74,17 +74,17 @@ public class MapEditor : GameState {
                 }
 
                 // This is imprecise, but we only care about generalities in the selection (1 pixel extra because border)
-                atlasSelectionX =  cast(int)floor(mousePosition.x / (17 * scaler));
-                atlasSelectionY =  cast(int)floor(mousePosition.y / (17 * scaler));                
+                atlasHoverX =  cast(int)floor(mousePosition.x / (17 * scaler));
+                atlasHoverY =  cast(int)floor(mousePosition.y / (17 * scaler));                
 
-                if (atlasSelectionX >= 37 || atlasSelectionY >= 28 || atlasSelectionX < 0 || atlasSelectionY < 0) {
-                    atlasSelectionX = 0;
-                    atlasSelectionY = 0;
+                if (atlasHoverX >= 37 || atlasHoverY >= 28 || atlasHoverX < 0 || atlasHoverY < 0) {
+                    atlasHoverX = 0;
+                    atlasHoverY = 0;
                 }
 
                 if (mouse.leftButtonPressed()) {
-                    selectedTileX = atlasSelectionX;
-                    selectedTileY = atlasSelectionY;
+                    atlasSelectedTileX = atlasHoverX;
+                    atlasSelectedTileY = atlasHoverY;
                 }
             
 
@@ -116,19 +116,19 @@ public class MapEditor : GameState {
                 Vector2 scaledPos = Vector2Divide(realPos, Vector2(zoom, zoom));
                 Vector2 adjustedPos = Vector2Subtract(scaledPos, offset);
                 if (adjustedPos.x >= 0 && adjustedPos.y >= 0) {
-                    selectionPositionX = cast(int)floor(adjustedPos.x / 16.0);
-                    selectionPositionY = cast(int)floor(adjustedPos.y / 16.0);
-                    if (selectionPositionX >= world.map.width || selectionPositionY >= world.map.height) {
-                        selectionPositionX = -1;
-                        selectionPositionY = -1;    
+                    mapSelectPosX = cast(int)floor(adjustedPos.x / 16.0);
+                    mapSelectPosY = cast(int)floor(adjustedPos.y / 16.0);
+                    if (mapSelectPosX >= world.map.width || mapSelectPosY >= world.map.height) {
+                        mapSelectPosX = -1;
+                        mapSelectPosY = -1;    
                     } else {
                         if (mouse.leftButtonPressed()) {
-                            writeln("place it at: ", selectionPositionX, selectionPositionY);
+                            writeln("place it at: ", mapSelectPosX, mapSelectPosY);
                         }
                     }
                 } else {
-                    selectionPositionX = -1;
-                    selectionPositionY = -1;
+                    mapSelectPosX = -1;
+                    mapSelectPosY = -1;
                 }
 
             }
@@ -156,8 +156,8 @@ public class MapEditor : GameState {
                     }
                 }
 
-                if (selectionPositionX > -1 && selectionPositionY > -1) {
-                    DrawRectangleLines(selectionPositionX * 16, selectionPositionY * 16, 16, 16, Color(57, 255, 20, 255));
+                if (mapSelectPosX > -1 && mapSelectPosY > -1) {
+                    DrawRectangleLines(mapSelectPosX * 16, mapSelectPosY * 16, 16, 16, Color(57, 255, 20, 255));
                 }
             }
         }
@@ -196,13 +196,13 @@ public class MapEditor : GameState {
                 DrawTexturePro(atlas, source, goal, Vector2(0,0), 0, Colors.WHITE);
             }
             {
-                int baseXSelection = selectedTileX == 0 ? 1 : cast(int)ceil(((selectedTileX * 16.0) + selectedTileX) * scaler);
-                int baseYSelection = selectedTileY == 0 ? 1 : cast(int)ceil(((selectedTileY * 16.0) + selectedTileY) * scaler);
+                int baseXSelection = atlasSelectedTileX == 0 ? 1 : cast(int)ceil(((atlasSelectedTileX * 16.0) + atlasSelectedTileX) * scaler);
+                int baseYSelection = atlasSelectedTileY == 0 ? 1 : cast(int)ceil(((atlasSelectedTileY * 16.0) + atlasSelectedTileY) * scaler);
 
                 DrawRectangleLines(baseXSelection, baseYSelection, cast(int)floor(16 * scaler), cast(int)floor(16 * scaler), Color(255, 0, 0, 255));
 
-                int baseXHover = atlasSelectionX == 0 ? 1 : cast(int)ceil(((atlasSelectionX * 16.0) + atlasSelectionX) * scaler);
-                int baseYHover = atlasSelectionY == 0 ? 1 : cast(int)ceil(((atlasSelectionY * 16.0) + atlasSelectionY) * scaler);
+                int baseXHover = atlasHoverX == 0 ? 1 : cast(int)ceil(((atlasHoverX * 16.0) + atlasHoverX) * scaler);
+                int baseYHover = atlasHoverY == 0 ? 1 : cast(int)ceil(((atlasHoverY * 16.0) + atlasHoverY) * scaler);
 
                 DrawRectangleLines(baseXHover, baseYHover, cast(int)floor(16 * scaler), cast(int)floor(16 * scaler), Color(57, 255, 20, 255));
             }
