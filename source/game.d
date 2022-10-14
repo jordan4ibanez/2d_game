@@ -7,8 +7,8 @@ import camera;
 import texture;
 import time_keeper;
 import mouse;
-import game_state;
-import map_editor;
+import game_states.game_state;
+import game_states.map_editor;
 
 public class Game {
 

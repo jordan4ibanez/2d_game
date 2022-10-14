@@ -1,4 +1,4 @@
-module game_state;
+module game_states.game_state;
 
 import game;
 import std.stdio;

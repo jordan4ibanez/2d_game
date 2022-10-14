@@ -1,7 +1,7 @@
-module map_editor;
+module game_states.map_editor;
 
 import std.stdio;
-import game_state;
+import game_states.game_state;
 import game;
 import raylib;
 import world;
