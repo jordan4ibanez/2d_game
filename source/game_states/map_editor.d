@@ -62,20 +62,14 @@ public class MapEditor : GameState {
 
         if (atlasBrowserMode) {
 
-                Vector2 mousePosition = mouse.getPosition();
+                immutable Vector2 mousePosition = mouse.getPosition();
 
-                Vector2 windowSize = window.getSize();
+                immutable Vector2 windowSize = window.getSize();
 
-                
-                float scaler;
-                float scalerX = cast(float)windowSize.x / cast(float)atlas.width;
-                float scalerY = cast(float)windowSize.y / cast(float)atlas.height;
+                immutable float scalerX = cast(float)windowSize.x / cast(float)atlas.width;
+                immutable float scalerY = cast(float)windowSize.y / cast(float)atlas.height;
 
-                if (scalerX > scalerY) {
-                    scaler = scalerY;
-                } else {
-                    scaler = scalerX;
-                }
+                immutable float scaler = scalerX > scalerY ? scalerY : scalerX;
 
                 // This is imprecise, but we only care about generalities in the selection (1 pixel extra because border)
                 atlasHoverX = cast(int)floor(mousePosition.x / (17 * scaler));
@@ -115,13 +109,13 @@ public class MapEditor : GameState {
                 }
             } else {
                 // Too much math!
-                Vector2 mousePos = mouse.getPosition();
-                Vector2 center = window.getCenter();
-                Vector2 offset = camera.getOffset();
-                Vector2 realPos = Vector2Subtract(mousePos, center);
-                float zoom = camera.getZoom();
-                Vector2 scaledPos = Vector2Divide(realPos, Vector2(zoom, zoom));
-                Vector2 adjustedPos = Vector2Subtract(scaledPos, offset);
+                immutable Vector2 mousePos = mouse.getPosition();
+                immutable Vector2 center = window.getCenter();
+                immutable Vector2 offset = camera.getOffset();
+                immutable Vector2 realPos = Vector2Subtract(mousePos, center);
+                immutable float zoom = camera.getZoom();
+                immutable Vector2 scaledPos = Vector2Divide(realPos, Vector2(zoom, zoom));
+                immutable Vector2 adjustedPos = Vector2Subtract(scaledPos, offset);
                 if (adjustedPos.x >= 0 && adjustedPos.y >= 0) {
                     mapSelectPosX = cast(int)floor(adjustedPos.x / 16.0);
                     mapSelectPosY = cast(int)floor(adjustedPos.y / 16.0);
@@ -160,25 +154,25 @@ public class MapEditor : GameState {
 
             }
 
-            float scrollDelta = mouse.getScrollDelta();
-            float zoom = camera.getZoom();
+            immutable float scrollDelta = mouse.getScrollDelta();
+            immutable float zoom = camera.getZoom();
             camera.setZoom(zoom + (scrollDelta / 10));
         }
     }
 
     void drawTile(int posX, int posY, int tileX, int tileY, int border) {
 
-        int baseX = tileX == 0 ? 0 : (tileX * 16) + (tileX * border);        
-        int baseY = tileY == 0 ? 0 : (tileY * 16) + (tileY * border);
+        immutable int baseX = tileX == 0 ? 0 : (tileX * 16) + (tileX * border);        
+        immutable int baseY = tileY == 0 ? 0 : (tileY * 16) + (tileY * border);
 
-        Rectangle source = Rectangle(
+        immutable Rectangle source = Rectangle(
             baseX,
             baseY,
             16,
             16
         );
 
-        Rectangle goal = Rectangle(
+        immutable Rectangle goal = Rectangle(
             posX * 16,
             posY * 16,
             16,
@@ -220,25 +214,20 @@ public class MapEditor : GameState {
             Vector2 windowSize = window.getSize();
 
             
-            float scaler;
             float scalerX = cast(float)windowSize.x / cast(float)atlas.width;
             float scalerY = cast(float)windowSize.y / cast(float)atlas.height;
 
-            if (scalerX > scalerY) {
-                scaler = scalerY;
-            } else {
-                scaler = scalerX;
-            }
+            immutable float scaler = scalerX > scalerY ? scalerY : scalerX;
 
             {
-                Rectangle source = Rectangle(
+                immutable Rectangle source = Rectangle(
                     0,
                     0,
                     atlas.width,
                     atlas.height
                 );
                 
-                Rectangle goal = Rectangle(
+                immutable Rectangle goal = Rectangle(
                     0,
                     0,
                     atlas.width * scaler,
@@ -248,13 +237,13 @@ public class MapEditor : GameState {
                 DrawTexturePro(atlas, source, goal, Vector2(0,0), 0, Colors.WHITE);
             }
             {
-                int baseXSelection = atlasSelectedTileX == 0 ? 1 : cast(int)ceil(((atlasSelectedTileX * 16.0) + atlasSelectedTileX) * scaler);
-                int baseYSelection = atlasSelectedTileY == 0 ? 1 : cast(int)ceil(((atlasSelectedTileY * 16.0) + atlasSelectedTileY) * scaler);
+                immutable int baseXSelection = atlasSelectedTileX == 0 ? 1 : cast(int)ceil(((atlasSelectedTileX * 16.0) + atlasSelectedTileX) * scaler);
+                immutable int baseYSelection = atlasSelectedTileY == 0 ? 1 : cast(int)ceil(((atlasSelectedTileY * 16.0) + atlasSelectedTileY) * scaler);
 
                 DrawRectangleLines(baseXSelection, baseYSelection, cast(int)floor(16 * scaler), cast(int)floor(16 * scaler), Color(255, 0, 0, 255));
 
-                int baseXHover = atlasHoverX == 0 ? 1 : cast(int)ceil(((atlasHoverX * 16.0) + atlasHoverX) * scaler);
-                int baseYHover = atlasHoverY == 0 ? 1 : cast(int)ceil(((atlasHoverY * 16.0) + atlasHoverY) * scaler);
+                immutable int baseXHover = atlasHoverX == 0 ? 1 : cast(int)ceil(((atlasHoverX * 16.0) + atlasHoverX) * scaler);
+                immutable int baseYHover = atlasHoverY == 0 ? 1 : cast(int)ceil(((atlasHoverY * 16.0) + atlasHoverY) * scaler);
 
                 DrawRectangleLines(baseXHover, baseYHover, cast(int)floor(16 * scaler), cast(int)floor(16 * scaler), Color(57, 255, 20, 255));
             }
