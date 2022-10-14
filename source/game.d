@@ -46,9 +46,10 @@ public class Game {
 
     void run() {
         while (!window.shouldClose()) {
-            
+
             mouse.update();
             timeKeeper.calculateDelta();
+            camera.update();
 
             GameState state = states[currentState];
 
