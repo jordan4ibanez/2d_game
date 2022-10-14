@@ -1,5 +1,6 @@
 module camera;
 
+import std.stdio;
 import raylib;
 import game;
 import std.algorithm.comparison: clamp;
@@ -12,6 +13,8 @@ public class Cam {
 
     Color background;
 
+    Vector2 offset = Vector2(0,0);
+
     this(Game game) {
         this.game = game;
         this.camera = Camera2D(Vector2(0,0),Vector2(0,0), 0, 5);
@@ -19,7 +22,10 @@ public class Cam {
     }
 
     void update() {
-        
+        Vector2 windowSize = game.window.getSize();
+        windowSize.x /= 2.0;
+        windowSize.y /= 2.0;
+        this.camera.offset = Vector2Add(offset, windowSize);
     }
 
     void setClearColor(ubyte r, ubyte g, ubyte b, ubyte a) {
@@ -31,7 +37,7 @@ public class Cam {
     }
 
     void setOffset(Vector2 offset) {
-        this.camera.offset = offset;
+        this.offset = offset;
     }
 
     void setTarget(Vector2 target) {
