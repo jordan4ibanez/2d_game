@@ -22,32 +22,6 @@ public class World {
     void uploadAtlas(Texture atlas) {
         this.atlas = atlas;
     }
-    /*
-    void drawTile(int posX, int posY, int tileX, int tileY, int border) {
-
-        int baseX = tileX == 0 ? 0 : (tileX * 16) + (tileX * border);        
-        int baseY = tileY == 0 ? 0 : (tileY * 16) + (tileY * border);
-
-        Rectangle source = Rectangle(
-            baseX,
-            baseY,
-            16,
-            16
-        );
-
-        Rectangle goal = Rectangle(
-            posX * 16,
-            posY * 16,
-            16,
-            16,
-        );
-
-        DrawTexturePro(atlas, source, goal, Vector2(0,0), 0, Colors.WHITE);
-        // DrawRectangle(cast(int)goal.x, cast(int)goal.y + 16, cast(int)goal.width, cast(int)goal.height, Colors.BLACK);
-
-    } 
-    */
-
 }
 
 /// The world has a map
