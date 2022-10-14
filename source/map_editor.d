@@ -27,7 +27,12 @@ public class MapEditor : GameState {
         float zoom = camera.getZoom();
         camera.setZoom(zoom + (scrollDelta / 10));
 
-        writeln(zoom);
+        if (mouse.leftButton) {
+            Vector2 mouseDelta = mouse.getDelta();
+            camera.addOffset(mouseDelta);
+        }
+
+        // writeln(zoom);
 
     }
 
