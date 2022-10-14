@@ -51,6 +51,7 @@ public class Game {
         while (!window.shouldClose()) {
 
             mouse.update();
+            keyboard.update();
             timeKeeper.calculateDelta();
             camera.update();
 

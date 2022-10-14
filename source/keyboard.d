@@ -9,7 +9,7 @@ import std.conv: to;
 alias Key = KeyboardKey;
 
 public class Keyboard {
-    
+
     int[string] keys;
     bool[string] pressed;
     bool[string] down;
@@ -29,6 +29,14 @@ public class Keyboard {
             keys[stringKey] = thisKey;
             pressed[stringKey] = false;
             down[stringKey] = false;
+        }
+    }
+
+    void update() {
+        // duplicate keys, can parse one for both iterators (press/down)
+        foreach (key, value; keys){
+            down[key] = IsKeyDown(value);
+            pressed[key] = IsKeyPressed(value);
         }
     }
 
