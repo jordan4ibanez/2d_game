@@ -62,7 +62,7 @@ public class Cam {
     }
 
     void setZoom(float zoom) {
-        this.camera.zoom = clamp(zoom, 5, 12);
+        this.camera.zoom = clamp(zoom, 3, 12);
     }
 
     float getZoom() {
