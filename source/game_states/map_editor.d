@@ -6,9 +6,11 @@ import game;
 import raylib;
 import world;
 import std.math: floor, ceil;
-
+import utility.map_exporter;
 
 public class MapEditor : GameState {
+
+    MapExporter exporter;
 
     int size = 10;
     bool up = true;
@@ -42,6 +44,7 @@ public class MapEditor : GameState {
         super(game);
         this.world = new World(100, 100);
         atlas = cache.get("atlas").get();
+        this.exporter = new MapExporter(this);
     }
     
     override
@@ -58,6 +61,9 @@ public class MapEditor : GameState {
 
         if (keyboard.isPressed("tab")) {
             atlasBrowserMode = !atlasBrowserMode;
+        }
+        if (keyboard.isPressed("f5")) {
+            exporter.flushToDisk();
         }
 
         if (atlasBrowserMode) {
