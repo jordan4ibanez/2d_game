@@ -8,6 +8,8 @@ import world;
 import std.math: floor, ceil;
 import utility.map_exporter;
 
+// TODO: clean this mess up
+
 public class MapEditor : GameState {
 
     MapExporter exporter;
@@ -51,7 +53,7 @@ public class MapEditor : GameState {
     void start() {
         camera.setClearColor(0,0,0,0);
         // Let this thing run faster than any monitor on the market
-        // Setting a target FPS lower creates frustrating issues with placing
+        // !Setting a target FPS lower creates frustrating issues with placing
         SetTargetFPS(500);
     }    
 
