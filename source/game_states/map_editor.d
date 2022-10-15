@@ -62,30 +62,28 @@ public class MapEditor : GameState {
 
         if (atlasBrowserMode) {
 
-                immutable Vector2 mousePosition = mouse.getPosition();
+            immutable Vector2 mousePosition = mouse.getPosition();
 
-                immutable Vector2 windowSize = window.getSize();
+            immutable Vector2 windowSize = window.getSize();
 
-                immutable float scalerX = cast(float)windowSize.x / cast(float)atlas.width;
-                immutable float scalerY = cast(float)windowSize.y / cast(float)atlas.height;
+            immutable float scalerX = cast(float)windowSize.x / cast(float)atlas.width;
+            immutable float scalerY = cast(float)windowSize.y / cast(float)atlas.height;
 
-                immutable float scaler = scalerX > scalerY ? scalerY : scalerX;
+            immutable float scaler = scalerX > scalerY ? scalerY : scalerX;
 
-                // This is imprecise, but we only care about generalities in the selection (1 pixel extra because border)
-                atlasHoverX = cast(int)floor(mousePosition.x / (17 * scaler));
-                atlasHoverY = cast(int)floor(mousePosition.y / (17 * scaler));                
+            // This is imprecise, but we only care about generalities in the selection (1 pixel extra because border)
+            atlasHoverX = cast(int)floor(mousePosition.x / (17 * scaler));
+            atlasHoverY = cast(int)floor(mousePosition.y / (17 * scaler));                
 
-                if (atlasHoverX >= 37 || atlasHoverY >= 28 || atlasHoverX < 0 || atlasHoverY < 0) {
-                    atlasHoverX = 0;
-                    atlasHoverY = 0;
-                }
+            if (atlasHoverX >= 37 || atlasHoverY >= 28 || atlasHoverX < 0 || atlasHoverY < 0) {
+                atlasHoverX = 0;
+                atlasHoverY = 0;
+            }
 
-                if (mouse.leftButtonPressed()) {
-                    atlasSelectedTileX = atlasHoverX;
-                    atlasSelectedTileY = atlasHoverY;
-                }
-            
-
+            if (mouse.leftButtonPressed()) {
+                atlasSelectedTileX = atlasHoverX;
+                atlasSelectedTileY = atlasHoverY;
+            }
 
         } else {
 
