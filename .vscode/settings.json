@@ -1,0 +1,5 @@
+{
+    "code-runner.executorMap": {
+        "d": "cd $workspaceRoot && dub run",
+    }
+}
