@@ -19,7 +19,8 @@ public class Keyboard {
         Key[] newKeys = [
             Key.KEY_LEFT_CONTROL,
             Key.KEY_LEFT_SHIFT,
-            Key.KEY_TAB
+            Key.KEY_TAB,
+            Key.KEY_F5
         ];
         insertKeys(newKeys);
     }
