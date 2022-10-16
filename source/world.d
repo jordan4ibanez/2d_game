@@ -3,6 +3,8 @@ module world;
 import game;
 import std.stdio;
 import raylib;
+import std.conv: to;
+import std.json;
 
 /// World is what the game takes place in
 public class World {
@@ -85,6 +87,12 @@ public class MapTile {
         this.x = x;
         this.y = y;
     }
+
+    public JSONValue asJSON() const @system {
+        JSONValue returningValue = ["MapTile" : true, "x" : x, "y" : y];
+        return returningValue;
+    }
+    alias asJSON this;
 
     bool equals(MapTile other) {
         return this.x == other.x && this.y == other.y;
