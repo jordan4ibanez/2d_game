@@ -14,8 +14,9 @@ public class MapEditor : GameState {
 
     MapExporter exporter;
 
-    int size = 10;
-    bool up = true;
+    Texture atlas;
+
+    World world;
 
     /*
     modes:
@@ -23,28 +24,26 @@ public class MapEditor : GameState {
     1 - add/remove
     2 - flood fill
     */
+
+    // GUI fields
+    int fontSize = 20;
+
+    // Editor fields
     int mode = 1;
-
-    World world;
-
     int mapSelectPosX = -1;
     int mapSelectPosY = -1;
-
-    Texture atlas;
-
-    bool atlasBrowserMode = true;
-
-    int atlasLimit = 37 * 28;
-
-    int atlasHoverX = 0;
-    int atlasHoverY = 0;
-
-    int atlasSelectedTileX = 0;
-    int atlasSelectedTileY = 0;
-
     bool layer = 0;
 
-    int fontSize = 20;
+
+    // Atlas browser fields
+    int atlasLimit = 37 * 28;
+    int atlasHoverX = 0;
+    int atlasHoverY = 0;
+    int atlasSelectedTileX = 0;
+    int atlasSelectedTileY = 0;
+    bool atlasBrowserMode = true;
+
+
     
     this(Game game) {
         super(game);
@@ -89,6 +88,7 @@ public class MapEditor : GameState {
 
             immutable Vector2 windowSize = window.getSize();
 
+            
             immutable float scalerX = cast(float)windowSize.x / cast(float)atlas.width;
             immutable float scalerY = cast(float)windowSize.y / cast(float)atlas.height;
 
