@@ -41,6 +41,8 @@ public class MapEditor : GameState {
 
     int atlasSelectedTileX = 0;
     int atlasSelectedTileY = 0;
+
+    int layer = 0;
     
     this(Game game) {
         super(game);
@@ -125,28 +127,28 @@ public class MapEditor : GameState {
                 if (adjustedPos.x >= 0 && adjustedPos.y >= 0) {
                     mapSelectPosX = cast(int)floor(adjustedPos.x / 16.0);
                     mapSelectPosY = cast(int)floor(adjustedPos.y / 16.0);
-                    if (mapSelectPosX >= world.map.width || mapSelectPosY >= world.map.height) {
+                    if (mapSelectPosX >= world.width || mapSelectPosY >= world.height) {
                         mapSelectPosX = -1;
                         mapSelectPosY = -1;    
                     } else {
                         if (mode == 1) {
                             if (mouse.leftButtonDown()) {
-                                world.map.set(mapSelectPosX, mapSelectPosY,atlasSelectedTileX, atlasSelectedTileY);
+                                world.map[layer].set(mapSelectPosX, mapSelectPosY,atlasSelectedTileX, atlasSelectedTileY);
                             } else if (mouse.rightButtonDown()) {
-                                world.map.remove(mapSelectPosX, mapSelectPosY);
+                                world.map[layer].remove(mapSelectPosX, mapSelectPosY);
                             }
                         } else if (mode == 2) {
                             if (mouse.leftButtonDown()) {
                                 
-                                MapTile currentSelection = world.map.get(mapSelectPosX, mapSelectPosY);
+                                MapTile currentSelection = world.map[layer].get(mapSelectPosX, mapSelectPosY);
 
-                                foreach (x; 0..world.map.width) {
-                                    foreach (y; 0..world.map.height) {
+                                foreach (x; 0..world.map[layer].width) {
+                                    foreach (y; 0..world.map[layer].height) {
                                         if (
-                                        currentSelection is null && world.map.get(x,y) is null) {// ||
+                                        currentSelection is null && world.map[layer].get(x,y) is null) {// ||
                                         // This needs a crawler algorithm to work better
                                         // (currentSelection !is null && world.map.get(x,y) !is null && world.map.get(x,y).equals(currentSelection)) ) {
-                                            world.map.set(x, y,atlasSelectedTileX, atlasSelectedTileY);
+                                            world.map[layer].set(x, y,atlasSelectedTileX, atlasSelectedTileY);
                                         }
                                     }
                                 }
@@ -196,9 +198,9 @@ public class MapEditor : GameState {
             camera.clear();
 
             if (!atlasBrowserMode) {
-                foreach (x; 0..world.map.width) {
-                    foreach (y; 0..world.map.height) {
-                        MapTile thisTile = world.map.get(x,y);
+                foreach (x; 0..world.map[layer].width) {
+                    foreach (y; 0..world.map[layer].height) {
+                        MapTile thisTile = world.map[layer].get(x,y);
                         if (thisTile is null) {
                             DrawRectangleLines(x * 16, y * 16, 16, 16, Colors.WHITE);
                         } else {
@@ -260,18 +262,31 @@ public class MapEditor : GameState {
         } else {
             final switch (mode) {
                 case 0: {
-                    DrawText("MODE: MOVE", 4,2, 38, Colors.BLACK);
-                    DrawText("MODE: MOVE", 2,0, 38, Color(57, 255, 20, 255));
+                    DrawText("MOVE", 4,2, 38, Colors.BLACK);
+                    DrawText("MOVE", 2,0, 38, Color(57, 255, 20, 255));
                     break;
                 }
                 case 1: {
-                    DrawText("MODE: EDITING", 4,2, 38, Colors.BLACK);
-                    DrawText("MODE: EDITING", 2,0, 38, Color(57, 255, 20, 255));
+                    DrawText("EDIT", 4,2, 38, Colors.BLACK);
+                    DrawText("EDIT", 2,0, 38, Color(57, 255, 20, 255));
                     break;
                 }
                 case 2: {
-                    DrawText("MODE: FLOOD FILL", 4,2, 38, Colors.BLACK);
-                    DrawText("MODE: FLOOD FILL", 2,0, 38, Color(57, 255, 20, 255));
+                    DrawText("FLOOD FILL", 4,2, 38, Colors.BLACK);
+                    DrawText("FLOOD FILL", 2,0, 38, Color(57, 255, 20, 255));
+                    break;
+                }
+            }
+
+            final switch (layer) {
+                case 0: {
+                    DrawText("BACKGROUND", 4,32, 38, Colors.BLACK);
+                    DrawText("BACKGROUND", 2,30, 38, Color(57, 255, 20, 255));
+                    break;
+                }
+                case 1: {
+                    DrawText("FOREGROUND", 4,32, 38, Colors.BLACK);
+                    DrawText("FOREGROUND", 2,30, 38, Color(57, 255, 20, 255));
                     break;
                 }
             }

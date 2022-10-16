@@ -7,12 +7,19 @@ import raylib;
 /// World is what the game takes place in
 public class World {
 
-    Map map;
+    // background, foreground
+    Map[2] map;
 
     Texture atlas;
 
+    immutable int width;
+    immutable int height;
+
     this(int width, int height) {
-        map = new Map(width, height);
+        this.width = width;
+        this.height = height;
+        map[0] = new Map(width, height);
+        map[1] = new Map(width, height);
     }
 
     void cleanUp() {
@@ -67,9 +74,9 @@ public class Map {
 
 }
 
+
 /// The map has map tiles
 public class MapTile {
-    // change this to layer array! (foreground/background instead?)
 
     int x;
     int y;
@@ -82,9 +89,4 @@ public class MapTile {
     bool equals(MapTile other) {
         return this.x == other.x && this.y == other.y;
     }
-}
-
-/// The map tiles have layers
-public class Layer {
-    
 }
