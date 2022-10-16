@@ -39,7 +39,7 @@ public class MapEditor : GameState {
     bool layer = 0;
     Vector2 oldEditorOffset = Vector2(0,0);
     float oldEditorZoom;
-    string mapName = "tempMap";
+    string mapName = "tempmap";
     bool namingMode = false;
     static immutable string[] typingInputLetters = [
         "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
@@ -47,6 +47,9 @@ public class MapEditor : GameState {
     static immutable string[] typingInputNumbers = [
         "zero","one","two","three","four","five","six","seven","eight","nine"
     ];
+    float saveIndicatorTimeout = 0;
+    float loadIndicatorTimeout = 0;
+    bool loadFailure = false;
 
 
     // Atlas browser fields
@@ -97,9 +100,33 @@ public class MapEditor : GameState {
 
     override
     void update() {
+        float delta = timeKeeper.getDelta();
+
+        if (saveIndicatorTimeout > 0) {            
+            saveIndicatorTimeout -= delta;
+            if (saveIndicatorTimeout <= 0) {
+                saveIndicatorTimeout = 0;
+            }
+        }
+        if (loadIndicatorTimeout > 0) {
+            loadIndicatorTimeout -= delta;
+            if (loadIndicatorTimeout <= 0) {
+                loadIndicatorTimeout = 0;
+            }
+        }
 
         if (keyboard.f1_pressed) {
             namingMode = !namingMode;
+        }
+
+        if (keyboard.f2_pressed) {
+            if (exporter.loadMap(mapName)) {
+                loadIndicatorTimeout = 3;
+                loadFailure = false;
+            } else {
+                loadIndicatorTimeout = 3;
+                loadFailure = true;
+            }
         }
 
         if (keyboard.minus_pressed) {
@@ -146,6 +173,7 @@ public class MapEditor : GameState {
             }
         } else if (keyboard.f5_pressed) {
             exporter.flushToDisk(mapName);
+            saveIndicatorTimeout = 3;
         } else if (keyboard.grave_pressed) {
             layer = !layer;
         }
@@ -365,8 +393,22 @@ public class MapEditor : GameState {
 
         if (namingMode) {
             Vector2 position = window.getCenter();
-            DrawText(toStringz(mapName), cast(int)(position.x - ((mapName.length / 2) * (fontSize / 2)))    ,cast(int)position.y + 2, fontSize, Colors.BLACK);
-            DrawText(toStringz(mapName), cast(int)(position.x - ((mapName.length / 2) * (fontSize / 2))) + 2,cast(int)position.y    , fontSize, Color(57, 255, 20, 255));
+            DrawText(toStringz("Name: " ~ mapName), cast(int)(position.x - ((mapName.length / 2) * (fontSize / 2)))    ,cast(int)position.y + 2, fontSize, Colors.BLACK);
+            DrawText(toStringz("Name: " ~ mapName), cast(int)(position.x - ((mapName.length / 2) * (fontSize / 2))) + 2,cast(int)position.y    , fontSize, Color(57, 255, 20, 255));
+        }
+
+        if (saveIndicatorTimeout > 0) {
+            DrawText(toStringz(mapName ~ " SAVED!"), 4,(fontSize * 2) + 2, fontSize, Colors.BLACK);
+            DrawText(toStringz(mapName ~ " SAVED!"), 2,(fontSize * 2)    , fontSize, Color(57, 255, 20, 255));
+        }
+        if (loadIndicatorTimeout > 0) {
+            if (loadFailure) {
+                DrawText(toStringz(mapName ~ " DOES NOT EXIST!"), 4,(fontSize * 3) + 2, fontSize, Colors.BLACK);
+                DrawText(toStringz(mapName ~ " DOES NOT EXIST!"), 2,(fontSize * 3)    , fontSize, Color(57, 255, 20, 255));
+            } else {
+                DrawText(toStringz(mapName ~ " LOADED!"), 4,(fontSize * 3) + 2, fontSize, Colors.BLACK);
+                DrawText(toStringz(mapName ~ " LOADED!"), 2,(fontSize * 3)    , fontSize, Color(57, 255, 20, 255));
+            }
         }
 
         EndDrawing();
