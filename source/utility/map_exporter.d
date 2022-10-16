@@ -46,12 +46,17 @@ public class MapExporter {
         }
         ubyte[] compressed = compress(data);
         std.file.write("maps/" ~ mapName ~ ".map", compressed);
-
-        loadMap("maps/" ~ mapName ~ ".map");
     }
 
-    void loadMap(string fileLocation) {
-        void[] compressed = std.file.read(fileLocation);
+    bool loadMap(string mapName) {
+        // Nothing to load
+        if (!std.file.exists("maps")) {
+            return false;
+        }
+        if (!std.file.exists("maps/" ~ mapName ~ ".map")) {
+            return false;
+        }
+        void[] compressed = std.file.read("maps/" ~ mapName ~ ".map");
         string decompressed = cast(string)uncompress(compressed);
 
         JSONValue mapJson = parseJSON(decompressed);
@@ -81,5 +86,7 @@ public class MapExporter {
         }
 
         editor.world = world;
+
+        return true;
     }
 }
