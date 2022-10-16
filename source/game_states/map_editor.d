@@ -111,11 +111,8 @@ public class MapEditor : GameState {
 
             if (mode == 0) {
                 if (mouse.leftButtonDown()) {
-                    Vector2 mouseDelta = mouse.getDelta();
-                    float zoom = camera.getZoom();
-                    mouseDelta.x /= zoom;
-                    mouseDelta.y /= zoom;
-
+                    immutable float zoom = camera.getZoom();
+                    immutable Vector2 mouseDelta = Vector2Divide(mouse.getDelta(), Vector2(zoom, zoom));
                     camera.addOffset(mouseDelta);
                 }
             } else {
