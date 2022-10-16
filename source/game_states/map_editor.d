@@ -42,7 +42,7 @@ public class MapEditor : GameState {
     int atlasSelectedTileX = 0;
     int atlasSelectedTileY = 0;
 
-    int layer = 0;
+    bool layer = 0;
     
     this(Game game) {
         super(game);
