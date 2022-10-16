@@ -70,7 +70,7 @@ public class MapEditor : GameState {
             exporter.flushToDisk();
         }
         if (keyboard.isPressed("grave")) {
-            writeln("squigglin!");
+            layer = !layer;
         }
 
         if (atlasBrowserMode) {
@@ -203,13 +203,15 @@ public class MapEditor : GameState {
             if (!atlasBrowserMode) {
                 foreach (x; 0..world.map[layer].width) {
                     foreach (y; 0..world.map[layer].height) {
-                        MapTile thisTile = world.map[layer].get(x,y);
-                        if (thisTile is null) {
-                            DrawRectangleLines(x * 16, y * 16, 16, 16, Colors.WHITE);
-                        } else {
-                            drawTile(x, y, thisTile.x, thisTile.y, 1);
+
+                        foreach (layerIndex; 0..2) {
+                            MapTile thisTile = world.map[layerIndex].get(x,y);
+                            if (thisTile is null) {
+                                DrawRectangleLines(x * 16, y * 16, 16, 16, Colors.WHITE);
+                            } else {
+                                drawTile(x, y, thisTile.x, thisTile.y, 1);
+                            }
                         }
-                        // world.drawTile(x,y,x,y,1);
                     }
                 }
 
