@@ -62,6 +62,17 @@ public class MapEditor : GameState {
         SetTargetFPS(500);
     }    
 
+    Vector2 getMousePositionOnMap() {
+        // Too much math!
+        immutable Vector2 mousePos = mouse.getPosition();
+        immutable Vector2 center = window.getCenter();
+        immutable Vector2 offset = camera.getOffset();
+        immutable Vector2 realPos = Vector2Subtract(mousePos, center);
+        immutable float zoom = camera.getZoom();
+        immutable Vector2 scaledPos = Vector2Divide(realPos, Vector2(zoom, zoom));
+        immutable Vector2 adjustedPos = Vector2Subtract(scaledPos, offset);
+        return adjustedPos;
+    }
 
     override
     void update() {
@@ -148,14 +159,8 @@ public class MapEditor : GameState {
         } else {
 
             if (mode != 0) {
-                // Too much math!
-                immutable Vector2 mousePos = mouse.getPosition();
-                immutable Vector2 center = window.getCenter();
-                immutable Vector2 offset = camera.getOffset();
-                immutable Vector2 realPos = Vector2Subtract(mousePos, center);
-                immutable float zoom = camera.getZoom();
-                immutable Vector2 scaledPos = Vector2Divide(realPos, Vector2(zoom, zoom));
-                immutable Vector2 adjustedPos = Vector2Subtract(scaledPos, offset);
+                immutable Vector2 adjustedPos = getMousePositionOnMap();
+
                 if (adjustedPos.x >= 0 && adjustedPos.y >= 0) {
                     mapSelectPosX = cast(int)floor(adjustedPos.x / 16.0);
                     mapSelectPosY = cast(int)floor(adjustedPos.y / 16.0);
