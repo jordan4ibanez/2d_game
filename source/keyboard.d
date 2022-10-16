@@ -1,7 +1,7 @@
 module keyboard;
 
 import raylib;
-import std.stdio;
+import std.stdio: writeln;
 import std.uni: toLower;
 import std.string: strip;
 import std.conv: to;
