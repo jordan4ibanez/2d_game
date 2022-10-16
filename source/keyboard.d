@@ -3,10 +3,8 @@ module keyboard;
 import raylib;
 import std.stdio: writeln;
 import std.uni: toLower;
-import std.string: strip;
 import std.conv: to;
 import std.array: replace;
-import std.variant: Variant;
 
 alias Key = KeyboardKey;
 
