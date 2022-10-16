@@ -36,6 +36,7 @@ public class MapEditor : GameState {
     bool layer = 0;
     Vector2 oldEditorOffset = Vector2(0,0);
     float oldEditorZoom;
+    string mapName = "tempMap";
 
 
     // Atlas browser fields
@@ -103,7 +104,7 @@ public class MapEditor : GameState {
                 }
             }
         } else if (keyboard.f5_pressed) {
-            exporter.flushToDisk();
+            exporter.flushToDisk(mapName);
         } else if (keyboard.grave_pressed) {
             layer = !layer;
         } else if (keyboard.minus_pressed) {
