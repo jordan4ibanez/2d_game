@@ -22,7 +22,9 @@ public class Keyboard {
             Key.KEY_LEFT_SHIFT,
             Key.KEY_TAB,
             Key.KEY_F5,
-            Key.KEY_GRAVE // Squiggly boi "~"
+            Key.KEY_GRAVE, // Squiggly boi "~"
+            Key.KEY_EQUAL,
+            Key.KEY_MINUS
         ];
         insertKeys(newKeys);
     }

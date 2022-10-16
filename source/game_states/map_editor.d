@@ -74,6 +74,14 @@ public class MapEditor : GameState {
         if (keyboard.isPressed("grave")) {
             layer = !layer;
         }
+        if (keyboard.isPressed("minus")) {
+            fontSize -= 1;
+            if (fontSize < 5) {
+                fontSize = 5;
+            }
+        } else if (keyboard.isPressed("equal")){
+            fontSize += 1;
+        }
 
         if (atlasBrowserMode) {
 
@@ -284,13 +292,13 @@ public class MapEditor : GameState {
 
             final switch (layer) {
                 case 0: {
-                    DrawText("BACKGROUND", 4,32, fontSize, Colors.BLACK);
-                    DrawText("BACKGROUND", 2,30, fontSize, Color(57, 255, 20, 255));
+                    DrawText("BACKGROUND", 4,fontSize + 2, fontSize, Colors.BLACK);
+                    DrawText("BACKGROUND", 2,fontSize    , fontSize, Color(57, 255, 20, 255));
                     break;
                 }
                 case 1: {
-                    DrawText("FOREGROUND", 4,32, fontSize, Colors.BLACK);
-                    DrawText("FOREGROUND", 2,30, fontSize, Color(57, 255, 20, 255));
+                    DrawText("FOREGROUND", 4,fontSize + 2, fontSize, Colors.BLACK);
+                    DrawText("FOREGROUND", 2,fontSize    , fontSize, Color(57, 255, 20, 255));
                     break;
                 }
             }
