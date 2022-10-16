@@ -9,3 +9,8 @@ How to use map editor:
 3. Left click is place, right click is delete
 4. Hold left shift, and then drag while holding the left mouse button to move around
 5. Todo: Export to JSON or something on save button :P
+
+
+### Here is a preview of the map editor:
+
+![](https://github.com/jordan4ibanez/2d_game/blob/main/textures/project_preview.png?raw=true)
