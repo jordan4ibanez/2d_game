@@ -7,8 +7,6 @@ import std.conv: to;
 import std.array: replace;
 import std.traits: EnumMembers;
 
-alias Key = KeyboardKey;
-
 // Thanks for the help Schveiguy!
 public class Keyboard {
      
@@ -19,7 +17,7 @@ public class Keyboard {
 
     this() {
         // string interface becomes left_control, left_shift, etc
-        foreach (thisKey; EnumMembers!Key){
+        foreach (thisKey; EnumMembers!KeyboardKey){
             string stringKey = to!string(thisKey).toLower.replace("key_", "");
             this.keys[stringKey] = thisKey;
             this[stringKey ~ "_down"] = false;
