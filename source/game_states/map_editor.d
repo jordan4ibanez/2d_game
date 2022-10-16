@@ -33,6 +33,7 @@ public class MapEditor : GameState {
     int mapSelectPosX = -1;
     int mapSelectPosY = -1;
     bool layer = 0;
+    Vector2 oldEditorOffset = Vector2(0,0);
 
 
     // Atlas browser fields
@@ -42,6 +43,7 @@ public class MapEditor : GameState {
     int atlasSelectedTileX = 0;
     int atlasSelectedTileY = 0;
     bool atlasBrowserMode = true;
+    Vector2 oldAtlasBrowserOffset = Vector2(0,0);
 
 
     
@@ -66,6 +68,17 @@ public class MapEditor : GameState {
 
         if (keyboard.isPressed("tab")) {
             atlasBrowserMode = !atlasBrowserMode;
+
+            final switch(atlasBrowserMode) {
+                case true: {
+                    camera.setOffset(oldAtlasBrowserOffset);
+                    break;
+                }
+                case false: {
+                    camera.setOffset(oldEditorOffset);
+                    break;
+                }
+            }
         }
         if (keyboard.isPressed("f5")) {
             exporter.flushToDisk();
@@ -82,8 +95,36 @@ public class MapEditor : GameState {
             fontSize += 1;
         }
 
-        if (atlasBrowserMode) {
+        // Hold shift to be able to drag the camera around
+        if (keyboard.isDown("left_shift")) {
+            mode = 0;
+        } else if (keyboard.isDown("left_control")) {
+            mode = 2;
+        } else {
+            mode = 1;
+        }
 
+        if (mode == 0 && mouse.leftButtonDown()) {
+            immutable float zoom = camera.getZoom();
+            immutable Vector2 mouseDelta = Vector2Divide(mouse.getDelta(), Vector2(zoom, zoom));
+            camera.addOffset(mouseDelta);
+
+            final switch(atlasBrowserMode) {
+                case true: {
+                    oldAtlasBrowserOffset = camera.getOffset();
+                    writeln("browser: ", oldAtlasBrowserOffset);
+                    break;
+                }
+                case false: {
+                    oldEditorOffset = camera.getOffset();
+                    writeln("editor: ",oldEditorOffset);
+                    break;
+                }
+            }
+        }
+
+        if (atlasBrowserMode) {
+            /*
             immutable Vector2 mousePosition = mouse.getPosition();
             immutable Vector2 windowSize = window.getSize();
             immutable float scalerX = cast(float)windowSize.x / cast(float)atlas.width;
@@ -102,25 +143,11 @@ public class MapEditor : GameState {
                 atlasSelectedTileX = atlasHoverX;
                 atlasSelectedTileY = atlasHoverY;
             }
+            */
 
         } else {
 
-            // Hold shift to be able to drag the camera around
-            if (keyboard.isDown("left_shift")) {
-                mode = 0;
-            } else if (keyboard.isDown("left_control")) {
-                mode = 2;
-            } else {
-                mode = 1;
-            }
-
-            if (mode == 0) {
-                if (mouse.leftButtonDown()) {
-                    immutable float zoom = camera.getZoom();
-                    immutable Vector2 mouseDelta = Vector2Divide(mouse.getDelta(), Vector2(zoom, zoom));
-                    camera.addOffset(mouseDelta);
-                }
-            } else {
+            if (mode != 0) {
                 // Too much math!
                 immutable Vector2 mousePos = mouse.getPosition();
                 immutable Vector2 center = window.getCenter();
@@ -202,7 +229,10 @@ public class MapEditor : GameState {
         {
             camera.clear();
 
-            if (!atlasBrowserMode) {
+            if (atlasBrowserMode) {
+                
+
+            } else {
                 foreach (x; 0..world.map[layer].width) {
                     foreach (y; 0..world.map[layer].height) {
 
