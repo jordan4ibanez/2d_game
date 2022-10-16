@@ -97,7 +97,7 @@ public class MapEditor : GameState {
                 atlasHoverX = 0;
                 atlasHoverY = 0;
             }
-            
+
             if (mouse.leftButtonPressed()) {
                 atlasSelectedTileX = atlasHoverX;
                 atlasSelectedTileY = atlasHoverY;
@@ -224,6 +224,7 @@ public class MapEditor : GameState {
         }
         EndMode2D();
 
+        /*
         if (atlasBrowserMode) {
 
             Vector2 windowSize = window.getSize();
@@ -267,6 +268,8 @@ public class MapEditor : GameState {
             // DrawText("TILE SELECTION", 4,2, 38, Colors.BLACK);
             // DrawText("TILE SELECTION", 2,0, 38, Color(57, 255, 20, 255));
         } else {
+        */
+        if (!atlasBrowserMode) {
             final switch (mode) {
                 case 0: {
                     DrawText("MOVE", 4,2, fontSize, Colors.BLACK);
@@ -298,6 +301,7 @@ public class MapEditor : GameState {
                 }
             }
         }
+
         EndDrawing();
     }
 
