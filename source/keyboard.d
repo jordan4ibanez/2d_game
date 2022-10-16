@@ -6,14 +6,19 @@ import std.uni: toLower;
 import std.string: strip;
 import std.conv: to;
 import std.array: replace;
+import std.variant: Variant;
 
 alias Key = KeyboardKey;
 
 public class Keyboard {
 
+    @property 
     private int[string] keys;
-    private bool[string] pressed;
-    private bool[string] down;
+
+    @property 
+    private Variant[string] values;
+
+    alias values this;
 
     this() {
         // string interface becomes left_control, left_shift, etc
@@ -33,25 +38,27 @@ public class Keyboard {
     void insertKeys(KeyboardKey[] newKeys) {
         foreach (thisKey; newKeys) {
             string stringKey = to!string(thisKey).toLower.replace("key_", "");
-            keys[stringKey] = thisKey;
-            pressed[stringKey] = false;
-            down[stringKey] = false;
+            this.keys[stringKey] = thisKey;
+            this[stringKey ~ "_down"] = false;
+            this[stringKey ~ "_pressed"] = false;
         }
+    }
+
+    @property
+    Variant opDispatch(string name)() {
+        return values[name];
+    }
+
+    @property
+    void opDispatch(string name, T)(T value) {
+        values[name] = value;
     }
 
     void update() {
         // duplicate keys, can parse one for both iterators (press/down)
         foreach (key, value; keys){
-            down[key] = IsKeyDown(value);
-            pressed[key] = IsKeyPressed(value);
+            this[key ~ "_down"] = IsKeyDown(value);
+            this[key ~ "_pressed"] = IsKeyPressed(value);
         }
-    }
-
-    bool isDown(string keyName) {
-        return down[keyName];
-    }
-
-    bool isPressed(string keyName) {
-        return pressed[keyName];
     }
 }
