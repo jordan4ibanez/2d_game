@@ -7,6 +7,7 @@ import raylib;
 import world;
 import std.math: floor, ceil;
 import utility.map_exporter;
+import std.algorithm.comparison: clamp;
 
 // TODO: clean this mess up
 
@@ -34,16 +35,20 @@ public class MapEditor : GameState {
     int mapSelectPosY = -1;
     bool layer = 0;
     Vector2 oldEditorOffset = Vector2(0,0);
+    float oldEditorZoom;
 
 
     // Atlas browser fields
-    int atlasLimit = 37 * 28;
+    immutable int atlasWidth;
+    immutable int atlasHeight;
+    immutable int atlasLimit;
     int atlasHoverX = 0;
     int atlasHoverY = 0;
     int atlasSelectedTileX = 0;
     int atlasSelectedTileY = 0;
     bool atlasBrowserMode = true;
     Vector2 oldAtlasBrowserOffset = Vector2(0,0);
+    float oldAtlasBrowserZoom;
 
 
     
@@ -52,6 +57,11 @@ public class MapEditor : GameState {
         this.world = new World(100, 100);
         atlas = cache.get("atlas").get();
         this.exporter = new MapExporter(this);
+        atlasWidth = 37;
+        atlasHeight = 28;
+        atlasLimit = atlasWidth * atlasHeight;
+        oldEditorZoom = camera.getZoom();
+        oldAtlasBrowserZoom = camera.getZoom();
     }
     
     override
@@ -61,7 +71,7 @@ public class MapEditor : GameState {
         // !Setting a target FPS lower creates frustrating issues with placing
         SetTargetFPS(500);
     }    
-
+    
     Vector2 getMousePositionOnMap() {
         // Too much math!
         immutable Vector2 mousePos = mouse.getPosition();
@@ -82,22 +92,21 @@ public class MapEditor : GameState {
 
             final switch(atlasBrowserMode) {
                 case true: {
+                    camera.setZoom(oldAtlasBrowserZoom);
                     camera.setOffset(oldAtlasBrowserOffset);
                     break;
                 }
                 case false: {
+                    camera.setZoom(oldEditorZoom);
                     camera.setOffset(oldEditorOffset);
                     break;
                 }
             }
-        }
-        if (keyboard.isPressed("f5")) {
+        } else if (keyboard.isPressed("f5")) {
             exporter.flushToDisk();
-        }
-        if (keyboard.isPressed("grave")) {
+        } else if (keyboard.isPressed("grave")) {
             layer = !layer;
-        }
-        if (keyboard.isPressed("minus")) {
+        } else if (keyboard.isPressed("minus")) {
             fontSize -= 1;
             if (fontSize < 5) {
                 fontSize = 5;
@@ -115,6 +124,23 @@ public class MapEditor : GameState {
             mode = 1;
         }
 
+        { // !Scope zoom for clarity
+            immutable float scrollDelta = mouse.getScrollDelta();
+            immutable float zoom = camera.getZoom();
+            camera.setZoom(zoom + (scrollDelta / 10));
+            final switch(atlasBrowserMode) {
+                case true: {
+                    oldAtlasBrowserZoom = camera.getZoom();
+                    break;
+                }
+                case false: {
+                    oldEditorZoom = camera.getZoom();
+                    break;
+                }
+            }
+        }
+
+        // !Drag camera
         if (mode == 0 && mouse.leftButtonDown()) {
             immutable float zoom = camera.getZoom();
             immutable Vector2 mouseDelta = Vector2Divide(mouse.getDelta(), Vector2(zoom, zoom));
@@ -123,39 +149,24 @@ public class MapEditor : GameState {
             final switch(atlasBrowserMode) {
                 case true: {
                     oldAtlasBrowserOffset = camera.getOffset();
-                    writeln("browser: ", oldAtlasBrowserOffset);
                     break;
                 }
                 case false: {
                     oldEditorOffset = camera.getOffset();
-                    writeln("editor: ",oldEditorOffset);
                     break;
                 }
             }
         }
 
+        // Todo: Simplify this into 1 scope
         if (atlasBrowserMode) {
-            /*
-            immutable Vector2 mousePosition = mouse.getPosition();
-            immutable Vector2 windowSize = window.getSize();
-            immutable float scalerX = cast(float)windowSize.x / cast(float)atlas.width;
-            immutable float scalerY = cast(float)windowSize.y / cast(float)atlas.height;
-            immutable float scaler = scalerX > scalerY ? scalerY : scalerX;
-            // This is imprecise, but we only care about generalities in the selection (1 pixel extra because border)
-            atlasHoverX = cast(int)floor(mousePosition.x / (17 * scaler));
-            atlasHoverY = cast(int)floor(mousePosition.y / (17 * scaler));                
-
-            if (atlasHoverX >= 37 || atlasHoverY >= 28 || atlasHoverX < 0 || atlasHoverY < 0) {
-                atlasHoverX = 0;
-                atlasHoverY = 0;
-            }
-
-            if (mouse.leftButtonPressed()) {
+            immutable Vector2 adjustedPos = getMousePositionOnMap();
+            atlasHoverX = clamp(cast(int)floor(adjustedPos.x / 16.0), 0, atlasWidth  - 1);
+            atlasHoverY = clamp(cast(int)floor(adjustedPos.y / 16.0), 0, atlasHeight - 1);
+            if (mode != 0 && mouse.leftButtonPressed()) {
                 atlasSelectedTileX = atlasHoverX;
                 atlasSelectedTileY = atlasHoverY;
             }
-            */
-
         } else {
 
             if (mode != 0) {
@@ -175,7 +186,8 @@ public class MapEditor : GameState {
                                 world.map[layer].remove(mapSelectPosX, mapSelectPosY);
                             }
                         } else if (mode == 2) {
-                            if (mouse.leftButtonDown()) {
+                            // Do not allow flood filling the foreground, it's annoying
+                            if (mouse.leftButtonPressed() && layer == 0) {
                                 
                                 MapTile currentSelection = world.map[layer].get(mapSelectPosX, mapSelectPosY);
 
@@ -189,6 +201,20 @@ public class MapEditor : GameState {
                                         }
                                     }
                                 }
+                            } else if (mouse.rightButtonPressed() && layer == 0) {
+                                MapTile currentSelection = world.map[layer].get(mapSelectPosX, mapSelectPosY);
+
+                                foreach (x; 0..world.map[layer].width) {
+                                    foreach (y; 0..world.map[layer].height) {
+                                        MapTile gottenTile = world.map[layer].get(x,y);
+                                        if (
+                                        currentSelection !is null && gottenTile !is null && gottenTile.equals(currentSelection)) {// ||
+                                        // This needs a crawler algorithm to work better
+                                        // (currentSelection !is null && world.map.get(x,y) !is null && world.map.get(x,y).equals(currentSelection)) ) {
+                                            world.map[layer].remove(x,y);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -198,10 +224,6 @@ public class MapEditor : GameState {
                 }
 
             }
-
-            immutable float scrollDelta = mouse.getScrollDelta();
-            immutable float zoom = camera.getZoom();
-            camera.setZoom(zoom + (scrollDelta / 10));
         }
     }
 
@@ -235,16 +257,27 @@ public class MapEditor : GameState {
             camera.clear();
 
             if (atlasBrowserMode) {
-                
-
+                foreach (x; 0..atlasWidth) {
+                    foreach (y; 0..atlasHeight) {
+                        drawTile(x,y,x,y,1);
+                    }
+                }
+                DrawRectangleLines(atlasHoverX * 16, atlasHoverY * 16, 16, 16, Color(57, 255, 20, 255));
+                DrawRectangleLines(atlasSelectedTileX * 16, atlasSelectedTileY * 16, 16, 16, Color(255, 0, 20, 255));
             } else {
+                Color filler;
+                if (layer == 0) {
+                    filler = Color(255,255,255,255);
+                } else {
+                    filler = Color(0,  0,  255,255);
+                }
                 foreach (x; 0..world.map[layer].width) {
                     foreach (y; 0..world.map[layer].height) {
 
                         foreach (layerIndex; 0..2) {
                             MapTile thisTile = world.map[layerIndex].get(x,y);
                             if (thisTile is null) {
-                                DrawRectangleLines(x * 16, y * 16, 16, 16, Colors.WHITE);
+                                DrawRectangleLines(x * 16, y * 16, 16, 16, filler);
                             } else {
                                 drawTile(x, y, thisTile.x, thisTile.y, 1);
                             }
@@ -259,52 +292,10 @@ public class MapEditor : GameState {
         }
         EndMode2D();
 
-        /*
         if (atlasBrowserMode) {
-
-            Vector2 windowSize = window.getSize();
-
-            
-            float scalerX = cast(float)windowSize.x / cast(float)atlas.width;
-            float scalerY = cast(float)windowSize.y / cast(float)atlas.height;
-
-            immutable float scaler = scalerX > scalerY ? scalerY : scalerX;
-
-            {
-                immutable Rectangle source = Rectangle(
-                    0,
-                    0,
-                    atlas.width,
-                    atlas.height
-                );
-                
-                immutable Rectangle goal = Rectangle(
-                    0,
-                    0,
-                    atlas.width * scaler,
-                    atlas.height * scaler,
-                );
-
-                DrawTexturePro(atlas, source, goal, Vector2(0,0), 0, Colors.WHITE);
-            }
-            {
-                immutable int baseXSelection = atlasSelectedTileX == 0 ? 1 : cast(int)ceil(((atlasSelectedTileX * 16.0) + atlasSelectedTileX) * scaler);
-                immutable int baseYSelection = atlasSelectedTileY == 0 ? 1 : cast(int)ceil(((atlasSelectedTileY * 16.0) + atlasSelectedTileY) * scaler);
-
-                DrawRectangleLines(baseXSelection, baseYSelection, cast(int)floor(16 * scaler), cast(int)floor(16 * scaler), Color(255, 0, 0, 255));
-
-                immutable int baseXHover = atlasHoverX == 0 ? 1 : cast(int)ceil(((atlasHoverX * 16.0) + atlasHoverX) * scaler);
-                immutable int baseYHover = atlasHoverY == 0 ? 1 : cast(int)ceil(((atlasHoverY * 16.0) + atlasHoverY) * scaler);
-
-                DrawRectangleLines(baseXHover, baseYHover, cast(int)floor(16 * scaler), cast(int)floor(16 * scaler), Color(57, 255, 20, 255));
-            }
-
-
-            // DrawText("TILE SELECTION", 4,2, 38, Colors.BLACK);
-            // DrawText("TILE SELECTION", 2,0, 38, Color(57, 255, 20, 255));
+            DrawText("ATLAS BROWSER", 4,2, fontSize, Colors.BLACK);
+            DrawText("ATLAS BROWSER", 2,0, fontSize, Color(57, 255, 20, 255));
         } else {
-        */
-        if (!atlasBrowserMode) {
             final switch (mode) {
                 case 0: {
                     DrawText("MOVE", 4,2, fontSize, Colors.BLACK);
