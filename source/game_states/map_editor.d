@@ -50,6 +50,7 @@ public class MapEditor : GameState {
     float saveIndicatorTimeout = 0;
     float loadIndicatorTimeout = 0;
     bool loadFailure = false;
+    bool guideGrid = true;
 
 
     // Atlas browser fields
@@ -127,6 +128,10 @@ public class MapEditor : GameState {
                 loadIndicatorTimeout = 3;
                 loadFailure = true;
             }
+        }
+        
+        if (keyboard.f3_pressed) {
+            guideGrid = !guideGrid;
         }
 
         if (keyboard.minus_pressed) {
@@ -339,9 +344,9 @@ public class MapEditor : GameState {
 
                         foreach (layerIndex; 0..2) {
                             MapTile thisTile = world.map[layerIndex].get(x,y);
-                            if (thisTile is null) {
+                            if (thisTile is null && guideGrid) {
                                 DrawRectangleLines(x * 16, y * 16, 16, 16, filler);
-                            } else {
+                            } else if (thisTile !is null) {
                                 drawTile(x, y, thisTile.x, thisTile.y, 1);
                             }
                         }
