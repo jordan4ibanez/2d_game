@@ -5,6 +5,7 @@ import std.stdio;
 import std.uni: toLower;
 import std.string: strip;
 import std.conv: to;
+import std.array: replace;
 
 alias Key = KeyboardKey;
 
@@ -20,7 +21,8 @@ public class Keyboard {
             Key.KEY_LEFT_CONTROL,
             Key.KEY_LEFT_SHIFT,
             Key.KEY_TAB,
-            Key.KEY_F5
+            Key.KEY_F5,
+            Key.KEY_GRAVE // Squiggly boi "~"
         ];
         insertKeys(newKeys);
     }
@@ -28,7 +30,7 @@ public class Keyboard {
     private
     void insertKeys(KeyboardKey[] newKeys) {
         foreach (thisKey; newKeys) {
-            string stringKey = strip(to!string(thisKey).toLower, "key_");
+            string stringKey = to!string(thisKey).toLower.replace("key_", "");
             keys[stringKey] = thisKey;
             pressed[stringKey] = false;
             down[stringKey] = false;
