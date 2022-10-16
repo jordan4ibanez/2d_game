@@ -8,6 +8,9 @@ import world;
 import std.math: floor, ceil;
 import utility.map_exporter;
 import std.algorithm.comparison: clamp;
+import std.string: toStringz;
+import std.array;
+import std.conv: to;
 
 // TODO: clean this mess up
 
@@ -37,6 +40,13 @@ public class MapEditor : GameState {
     Vector2 oldEditorOffset = Vector2(0,0);
     float oldEditorZoom;
     string mapName = "tempMap";
+    bool namingMode = false;
+    static immutable string[] typingInputLetters = [
+        "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
+    ];
+    static immutable string[] typingInputNumbers = [
+        "zero","one","two","three","four","five","six","seven","eight","nine"
+    ];
 
 
     // Atlas browser fields
@@ -88,6 +98,37 @@ public class MapEditor : GameState {
     override
     void update() {
 
+        if (keyboard.f1_pressed) {
+            namingMode = !namingMode;
+        }
+
+        if (keyboard.minus_pressed) {
+            fontSize -= 1;
+            if (fontSize < 5) {
+                fontSize = 5;
+            }
+        } else if (keyboard.equal_pressed){
+            fontSize += 1;
+        }
+
+        if (namingMode) {
+            mode = 0;
+            foreach (letter; typingInputLetters.dup) {
+                if (keyboard[letter ~ "_pressed"]) {    
+                    mapName ~= letter;
+                }
+            }
+            foreach (actual, number; typingInputNumbers) {
+                if (keyboard[number ~ "_pressed"]) {
+                    mapName ~= to!string(actual);
+                }
+            }
+            if (keyboard.backspace_pressed && mapName.length > 0) {
+                mapName.popBack();
+            }
+            return;
+        }
+
         if (keyboard.tab_pressed) {
             atlasBrowserMode = !atlasBrowserMode;
 
@@ -107,13 +148,6 @@ public class MapEditor : GameState {
             exporter.flushToDisk(mapName);
         } else if (keyboard.grave_pressed) {
             layer = !layer;
-        } else if (keyboard.minus_pressed) {
-            fontSize -= 1;
-            if (fontSize < 5) {
-                fontSize = 5;
-            }
-        } else if (keyboard.equal_pressed){
-            fontSize += 1;
         }
 
         // Hold shift to be able to drag the camera around
@@ -327,6 +361,12 @@ public class MapEditor : GameState {
                     break;
                 }
             }
+        }
+
+        if (namingMode) {
+            Vector2 position = window.getCenter();
+            DrawText(toStringz(mapName), cast(int)(position.x - ((mapName.length / 2) * (fontSize / 2)))    ,cast(int)position.y + 2, fontSize, Colors.BLACK);
+            DrawText(toStringz(mapName), cast(int)(position.x - ((mapName.length / 2) * (fontSize / 2))) + 2,cast(int)position.y    , fontSize, Color(57, 255, 20, 255));
         }
 
         EndDrawing();
