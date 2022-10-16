@@ -10,13 +10,11 @@ import std.variant: Variant;
 
 alias Key = KeyboardKey;
 
+// Thanks for the help Scheiguy!
 public class Keyboard {
-
-    @property 
+     
     private int[string] keys;
-
-    @property 
-    private Variant[string] values;
+    private bool[string] values;
 
     alias values this;
 
@@ -45,13 +43,13 @@ public class Keyboard {
     }
 
     @property
-    Variant opDispatch(string name)() {
+    bool opDispatch(string name)() {
         return values[name];
     }
 
     @property
-    void opDispatch(string name, T)(T value) {
-        values[name] = value;
+    void opDispatch(string name)(bool val) {
+        values[name] = val;
     }
 
     void update() {
