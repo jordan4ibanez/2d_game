@@ -53,11 +53,11 @@ public class Game {
             mouse.update();
             keyboard.update();
             timeKeeper.calculateDelta();
+            GameState state = states[currentState];
+            state.update();
+            // !Camera must update after state in case of camera changes!
             camera.update();
 
-            GameState state = states[currentState];
-
-            state.update();
             state.render();
         }
     }
