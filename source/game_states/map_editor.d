@@ -87,7 +87,7 @@ public class MapEditor : GameState {
     override
     void update() {
 
-        if (keyboard.isPressed("tab")) {
+        if (keyboard.tab_pressed) {
             atlasBrowserMode = !atlasBrowserMode;
 
             final switch(atlasBrowserMode) {
@@ -102,23 +102,23 @@ public class MapEditor : GameState {
                     break;
                 }
             }
-        } else if (keyboard.isPressed("f5")) {
+        } else if (keyboard.f5_pressed) {
             exporter.flushToDisk();
-        } else if (keyboard.isPressed("grave")) {
+        } else if (keyboard.grave_pressed) {
             layer = !layer;
-        } else if (keyboard.isPressed("minus")) {
+        } else if (keyboard.minus_pressed) {
             fontSize -= 1;
             if (fontSize < 5) {
                 fontSize = 5;
             }
-        } else if (keyboard.isPressed("equal")){
+        } else if (keyboard.equal_pressed){
             fontSize += 1;
         }
 
         // Hold shift to be able to drag the camera around
-        if (keyboard.isDown("left_shift")) {
+        if (keyboard.left_shift_down) {
             mode = 0;
-        } else if (keyboard.isDown("left_control")) {
+        } else if (keyboard.left_control_down) {
             mode = 2;
         } else {
             mode = 1;
