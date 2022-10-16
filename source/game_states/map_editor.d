@@ -43,6 +43,8 @@ public class MapEditor : GameState {
     int atlasSelectedTileY = 0;
 
     bool layer = 0;
+
+    int fontSize = 20;
     
     this(Game game) {
         super(game);
@@ -264,31 +266,31 @@ public class MapEditor : GameState {
         } else {
             final switch (mode) {
                 case 0: {
-                    DrawText("MOVE", 4,2, 38, Colors.BLACK);
-                    DrawText("MOVE", 2,0, 38, Color(57, 255, 20, 255));
+                    DrawText("MOVE", 4,2, fontSize, Colors.BLACK);
+                    DrawText("MOVE", 2,0, fontSize, Color(57, 255, 20, 255));
                     break;
                 }
                 case 1: {
-                    DrawText("EDIT", 4,2, 38, Colors.BLACK);
-                    DrawText("EDIT", 2,0, 38, Color(57, 255, 20, 255));
+                    DrawText("EDIT", 4,2, fontSize, Colors.BLACK);
+                    DrawText("EDIT", 2,0, fontSize, Color(57, 255, 20, 255));
                     break;
                 }
                 case 2: {
-                    DrawText("FLOOD FILL", 4,2, 38, Colors.BLACK);
-                    DrawText("FLOOD FILL", 2,0, 38, Color(57, 255, 20, 255));
+                    DrawText("FLOOD FILL", 4,2, fontSize, Colors.BLACK);
+                    DrawText("FLOOD FILL", 2,0, fontSize, Color(57, 255, 20, 255));
                     break;
                 }
             }
 
             final switch (layer) {
                 case 0: {
-                    DrawText("BACKGROUND", 4,32, 38, Colors.BLACK);
-                    DrawText("BACKGROUND", 2,30, 38, Color(57, 255, 20, 255));
+                    DrawText("BACKGROUND", 4,32, fontSize, Colors.BLACK);
+                    DrawText("BACKGROUND", 2,30, fontSize, Color(57, 255, 20, 255));
                     break;
                 }
                 case 1: {
-                    DrawText("FOREGROUND", 4,32, 38, Colors.BLACK);
-                    DrawText("FOREGROUND", 2,30, 38, Color(57, 255, 20, 255));
+                    DrawText("FOREGROUND", 4,32, fontSize, Colors.BLACK);
+                    DrawText("FOREGROUND", 2,30, fontSize, Color(57, 255, 20, 255));
                     break;
                 }
             }
