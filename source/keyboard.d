@@ -11,7 +11,7 @@ import std.traits: EnumMembers;
 public class Keyboard {
      
     private int[string] keys;
-    private bool[string] values;
+    bool[string] values;
 
     alias values this;
 
