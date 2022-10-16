@@ -5,6 +5,7 @@ import world;
 import std.stdio;
 import std.conv: to;
 import std.json;
+import std.variant;
 
 // This makes -1 sense but everything is an object!
 public class MapExporter {
@@ -19,15 +20,20 @@ public class MapExporter {
 
         string[string] data;
 
+        JSONValue mapJson = ["GameMap" : true];
+        mapJson.object["width"] = JSONValue(editor.world.width);
+        mapJson.object["height"] = JSONValue(editor.world.height);
+
         foreach (x; 0..editor.world.map[0].width) {
             foreach (y; 0..editor.world.map[0].height) {
-                
+                MapTile thisTile = editor.world.map[0].get(x,y);
+                if (thisTile is null) {
+                    mapJson.object[to!string(x) ~ " " ~ to!string(y)] = JSONValue(null);
+                } else {
+                    mapJson.object[to!string(x) ~ " " ~ to!string(y)] = JSONValue(thisTile);
+                }                
             }
         }
-
-        // writeln(blah);
-
-        // JSONValue blah = [ "language": "D" ];
         
     }
 }
