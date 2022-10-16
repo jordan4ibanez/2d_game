@@ -69,6 +69,9 @@ public class MapEditor : GameState {
         if (keyboard.isPressed("f5")) {
             exporter.flushToDisk();
         }
+        if (keyboard.isPressed("grave")) {
+            writeln("squigglin!");
+        }
 
         if (atlasBrowserMode) {
 
