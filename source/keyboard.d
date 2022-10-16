@@ -24,6 +24,7 @@ public class Keyboard {
             this[stringKey ~ "_pressed"] = false;
         }
     }
+    
     @property
     bool opDispatch(string name)() {
         return values[name];
