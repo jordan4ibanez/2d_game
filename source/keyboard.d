@@ -8,7 +8,7 @@ import std.array: replace;
 
 alias Key = KeyboardKey;
 
-// Thanks for the help Scheiguy!
+// Thanks for the help Schveiguy!
 public class Keyboard {
      
     private int[string] keys;
