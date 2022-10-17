@@ -8,7 +8,7 @@ import world;
 import std.math: floor, ceil;
 import utility.map_exporter;
 import std.algorithm.comparison: clamp;
-import std.string: toStringz;
+import std.string: toStringz, capitalize;
 import std.array;
 import std.conv: to;
 
@@ -146,8 +146,12 @@ public class MapEditor : GameState {
         if (namingMode) {
             mode = 0;
             foreach (letter; typingInputLetters.dup) {
-                if (keyboard[letter ~ "_pressed"]) {    
-                    mapName ~= letter;
+                if (keyboard[letter ~ "_pressed"]) {
+                    if (keyboard.left_shift_down || keyboard.right_shift_down) {
+                        mapName ~= letter.capitalize;
+                    } else {
+                        mapName ~= letter;
+                    }
                 }
             }
             foreach (actual, number; typingInputNumbers) {
