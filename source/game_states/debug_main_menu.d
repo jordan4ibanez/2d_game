@@ -8,8 +8,13 @@ import utility.gui;
 
 public class MainMenu : GameState {
 
+    GUI gui;
+
     this(Game game) {
         super(game);
+
+        gui = new GUI();
+        gui.addText("debug", "my test");
     }
 
     override
@@ -32,6 +37,9 @@ public class MainMenu : GameState {
 
         }
         EndMode2D();
+
+        gui.render();
+
         EndDrawing();
         
     }

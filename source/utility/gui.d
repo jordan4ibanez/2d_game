@@ -1,6 +1,25 @@
 module utility.gui;
 
 import raylib;
+import std.stdio;
+
+// Needs to expose externally
+static immutable enum Anchor {
+    // Corners
+    TOP_LEFT,
+    TOP_RIGHT,
+    BOTTOM_LEFT,
+    BOTTOM_RIGHT,
+
+    // Center edges
+    TOP,
+    BOTTOM,
+    LEFT,
+    RIGHT,
+
+    // Center
+    CENTER
+}
 
 //! I've never made a generic GUI before so this might be a disaster
 public class GUI {
@@ -19,25 +38,19 @@ public class GUI {
         WINDOW
     }
 
-    static immutable enum Anchor {
-        // Corners
-        TOP_LEFT,
-        TOP_RIGHT,
-        BOTTOM_LEFT,
-        BOTTOM_RIGHT,
+    
 
-        // Center edges
-        TOP,
-        BOTTOM,
-        LEFT,
-        RIGHT,
+    GUIElement[string] elements;
 
-        // Center
-        CENTER
+    void render() {
+        foreach (element; elements) {
+            element.render();
+        }
     }
 
-    GUIElement[string] nodes;
-    
+    void removeElement(string ID) {
+        this.elements.remove(ID);
+    }
 
     private class GUIElement {
 
@@ -50,6 +63,8 @@ public class GUI {
         private Vector2 position;
         // ? holds a pointer or what? it's on the heap anyways
         private Texture texture;
+
+        private bool visible = true;
 
         Texture getTexture() {
             return texture;
@@ -82,8 +97,24 @@ public class GUI {
         void setScale(float scale) {
             this.scale = scale;
         }
-    }    
 
+        bool isVisible() {
+            return visible;
+        }
+
+        void setVisible(bool visibility) {
+            this.visible = visibility;
+        }
+
+        void render() {
+            throw new Exception("Render is not implemented for this element!");
+        }
+    }
+
+
+    void addText(string ID, string text) {
+        this.elements[ID] = new GUIText(text);
+    }
 
     private class GUIText : GUIElement {
 
@@ -102,7 +133,10 @@ public class GUI {
         void setText(string text) {
             this.text = text;
         }
+
+        override
+        void render() {
+            writeln("rendering " ~ text);
+        }
     }
-
-
 }
