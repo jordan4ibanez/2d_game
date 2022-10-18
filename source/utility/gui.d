@@ -8,10 +8,7 @@ public class GUI {
 
     //! Literally no idea what to put here
     static immutable enum ElementType {
-        // I don't think I have to explain this one :P
         NULL,
-        // Root node ignores everything
-        ROOT,
         TEXT,
         ANIMATED_TEXT,
         INPUT,
@@ -23,21 +20,30 @@ public class GUI {
     }
 
     static immutable enum Anchor {
-        // None means it is relative to the root node
-        NONE,
+        // Corners
+        TOP_LEFT,
+        TOP_RIGHT,
+        BOTTOM_LEFT,
+        BOTTOM_RIGHT,
+
+        // Center edges
         TOP,
-        BOTTOM, 
+        BOTTOM,
         LEFT,
-        RIGHT
+        RIGHT,
+
+        // Center
+        CENTER
     }
 
     GUIElement[string] nodes;
-
-
+    
 
     private class GUIElement {
 
         ElementType elementType = ElementType.NULL;
+
+        Anchor anchor = Anchor.TOP_LEFT;
 
         private float scale;
         private Vector2 size;
