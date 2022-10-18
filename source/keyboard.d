@@ -6,58 +6,42 @@ import std.uni: toLower;
 import std.conv: to;
 import std.traits: EnumMembers;
 import std.string;
+import std.typecons: tuple, Tuple;
 
 // Thanks for the help Schveiguy!
 public class Keyboard {
 
-    class MicroKey {
-        int key;
-        this(int key) {
-            this.key = key;
+    Tuple!(int, "key", bool, "type") decompile(string input) {
+
+        long breaker = input.lastIndexOf("_");
+        string key = input[0..breaker];
+        string command = input[breaker+1..input.length];
+        
+        static foreach (thisKey; EnumMembers!KeyboardKey) {
+            if (to!string(thisKey)[4..$].toLower == key) {
+                return tuple!("key", "type")(cast(int)thisKey, command == "pressed" ? false : true);
+            }
         }
-        bool action() {
-            return false;
-        }
-    }
-    class MicroKeyPressed : MicroKey{
-        this(int key) {
-            super(key);
-        }
-        override
-        bool action() {
-            return IsKeyPressed(this.key);
-        }
-    }
-    class MicroKeyDown : MicroKey {
-        this(int key) {
-            super(key);
-        }
-        override
-        bool action() {
-            return IsKeyDown(this.key);
-        }
+        throw new Exception(key ~ " is not a keyboard key!");
     }
 
-    private MicroKey[string] redirects;
-
-    this() {
-        // string interface becomes left_control, left_shift, etc
-        foreach (thisKey; EnumMembers!KeyboardKey){
-            string stringKey = to!string(thisKey).toLower.replace("key_", "");
-            this.redirects[stringKey ~ "_pressed"] = new MicroKeyPressed(thisKey);
-            this.redirects[stringKey ~ "_down"] = new MicroKeyDown(thisKey);
+    bool interpret(string name) {
+        auto input = decompile(name);
+        final switch(input.type) {
+            case false: return IsKeyPressed(input.key);
+            case true: return IsKeyDown(input.key);
         }
+        
     }
 
     @property
     bool opIndex()(string name) {
-        return this.redirects[name].action();        
+        return interpret(name);
     }
-
 
     @property
     bool opDispatch(string name)() {
-        return this.redirects[name].action();
+        return interpret(name);
     }
     
 }
