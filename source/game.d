@@ -10,6 +10,7 @@ import mouse;
 import keyboard;
 import game_states.game_state;
 import game_states.map_editor;
+import game_states.debug_main_menu;
 
 public class Game {
 
@@ -20,7 +21,7 @@ public class Game {
     Mouse mouse;
     Keyboard keyboard;
     
-    string currentState = "MapEditor";
+    string currentState;
 
     GameState[string] states;
 
@@ -40,13 +41,14 @@ public class Game {
         // world.uploadAtlas(cache.get("atlas").get());
 
         states["MapEditor"] = new MapEditor(this);
+        states["MainMenu"]  = new MainMenu(this);
 
         SetTargetFPS(60);
     }
 
     void run() {
 
-        setState("MapEditor");
+        setState("MainMenu");
 
         while (!window.shouldClose()) {
 
@@ -76,7 +78,9 @@ public class Game {
     }
 
     void setState(string newState) {
-        states[currentState].cleanUp();
+        if (currentState != "") {
+            states[currentState].cleanUp();
+        }
         currentState = newState;
         states[currentState].start();
     }
