@@ -4,10 +4,8 @@ import raylib;
 import std.stdio: writeln;
 import std.uni: toLower;
 import std.conv: to;
-import std.array: split;
 import std.traits: EnumMembers;
 import std.string;
-import std.uni;
 
 // Thanks for the help Schveiguy!
 public class Keyboard {
