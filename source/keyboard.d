@@ -47,12 +47,13 @@ public class Keyboard {
         foreach (thisKey; EnumMembers!KeyboardKey){
             string stringKey = to!string(thisKey).toLower.replace("key_", "");
             this.redirects[stringKey ~ "_pressed"] = new MicroKeyPressed(thisKey);
+            this.redirects[stringKey ~ "_down"] = new MicroKeyDown(thisKey);
         }
     }
 
     @property
-    bool opDispatch(KeyboardKey thisKey)() {
-                
+    bool opIndex()(string name) {
+        return this.redirects[name].action();        
     }
 
 
