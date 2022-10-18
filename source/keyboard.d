@@ -9,8 +9,9 @@ import std.string;
 import std.typecons: tuple, Tuple;
 
 // Thanks for the help Schveiguy!
-public class Keyboard {
+public static class Keyboard {
 
+    static
     Tuple!(int, "key", bool, "type") decompile(string input) {
 
         long breaker = input.lastIndexOf("_");
@@ -25,23 +26,22 @@ public class Keyboard {
         throw new Exception(key ~ " is not a keyboard key!");
     }
 
-    bool interpret(string name) {
+    @property
+    bool opIndex()(string name) {
         auto input = decompile(name);
         final switch(input.type) {
             case false: return IsKeyPressed(input.key);
             case true: return IsKeyDown(input.key);
         }
-        
-    }
-
-    @property
-    bool opIndex()(string name) {
-        return interpret(name);
     }
 
     @property
     bool opDispatch(string name)() {
-        return interpret(name);
+        enum input = decompile(name);
+        final switch(input.type) {
+            case false: return IsKeyPressed(input.key);
+            case true: return IsKeyDown(input.key);
+        }
     }
     
 }
