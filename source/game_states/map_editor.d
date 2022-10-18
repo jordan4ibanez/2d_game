@@ -36,8 +36,8 @@ public class MapEditor : GameState {
 
     // Editor fields
     int mode = 1;
-    int mapSelectPosX = -1;
-    int mapSelectPosY = -1;
+    int mapSelectPosX = 0;
+    int mapSelectPosY = 0;
     bool layer = 0;
     Vector2 oldEditorOffset = Vector2(0,0);
     float oldEditorZoom;
@@ -246,56 +246,47 @@ public class MapEditor : GameState {
 
             if (mode != 0) {
                 immutable Vector2 adjustedPos = getMousePositionOnMap();
+            
+                mapSelectPosX = clamp(cast(int)floor(adjustedPos.x / 16.0), 0, world.width);
+                mapSelectPosY = clamp(cast(int)floor(adjustedPos.y / 16.0), 0, world.height);
+            
+                if (mode == 1) {
+                    if (mouse.leftButtonDown()) {
+                        world.map[layer].set(mapSelectPosX, mapSelectPosY,atlasSelectedTileX, atlasSelectedTileY);
+                    } else if (mouse.rightButtonDown()) {
+                        world.map[layer].remove(mapSelectPosX, mapSelectPosY);
+                    }
+                } else if (mode == 2) {
+                    // Do not allow flood filling the foreground, it's annoying
+                    if (mouse.leftButtonPressed() && layer == 0) {
+                        
+                        MapTile currentSelection = world.map[layer].get(mapSelectPosX, mapSelectPosY);
 
-                if (adjustedPos.x >= 0 && adjustedPos.y >= 0) {
-                    mapSelectPosX = cast(int)floor(adjustedPos.x / 16.0);
-                    mapSelectPosY = cast(int)floor(adjustedPos.y / 16.0);
-                    if (mapSelectPosX >= world.width || mapSelectPosY >= world.height) {
-                        mapSelectPosX = -1;
-                        mapSelectPosY = -1;    
-                    } else {
-                        if (mode == 1) {
-                            if (mouse.leftButtonDown()) {
-                                world.map[layer].set(mapSelectPosX, mapSelectPosY,atlasSelectedTileX, atlasSelectedTileY);
-                            } else if (mouse.rightButtonDown()) {
-                                world.map[layer].remove(mapSelectPosX, mapSelectPosY);
-                            }
-                        } else if (mode == 2) {
-                            // Do not allow flood filling the foreground, it's annoying
-                            if (mouse.leftButtonPressed() && layer == 0) {
-                                
-                                MapTile currentSelection = world.map[layer].get(mapSelectPosX, mapSelectPosY);
-
-                                foreach (x; 0..world.map[layer].width) {
-                                    foreach (y; 0..world.map[layer].height) {
-                                        if (
-                                        currentSelection is null && world.map[layer].get(x,y) is null) {// ||
-                                        // This needs a crawler algorithm to work better
-                                        // (currentSelection !is null && world.map.get(x,y) !is null && world.map.get(x,y).equals(currentSelection)) ) {
-                                            world.map[layer].set(x, y,atlasSelectedTileX, atlasSelectedTileY);
-                                        }
-                                    }
+                        foreach (x; 0..world.map[layer].width) {
+                            foreach (y; 0..world.map[layer].height) {
+                                if (
+                                currentSelection is null && world.map[layer].get(x,y) is null) {// ||
+                                // This needs a crawler algorithm to work better
+                                // (currentSelection !is null && world.map.get(x,y) !is null && world.map.get(x,y).equals(currentSelection)) ) {
+                                    world.map[layer].set(x, y,atlasSelectedTileX, atlasSelectedTileY);
                                 }
-                            } else if (mouse.rightButtonPressed() && layer == 0) {
-                                MapTile currentSelection = world.map[layer].get(mapSelectPosX, mapSelectPosY);
+                            }
+                        }
+                    } else if (mouse.rightButtonPressed() && layer == 0) {
+                        MapTile currentSelection = world.map[layer].get(mapSelectPosX, mapSelectPosY);
 
-                                foreach (x; 0..world.map[layer].width) {
-                                    foreach (y; 0..world.map[layer].height) {
-                                        MapTile gottenTile = world.map[layer].get(x,y);
-                                        if (
-                                        currentSelection !is null && gottenTile !is null && gottenTile.equals(currentSelection)) {// ||
-                                        // This needs a crawler algorithm to work better
-                                        // (currentSelection !is null && world.map.get(x,y) !is null && world.map.get(x,y).equals(currentSelection)) ) {
-                                            world.map[layer].remove(x,y);
-                                        }
-                                    }
+                        foreach (x; 0..world.map[layer].width) {
+                            foreach (y; 0..world.map[layer].height) {
+                                MapTile gottenTile = world.map[layer].get(x,y);
+                                if (
+                                currentSelection !is null && gottenTile !is null && gottenTile.equals(currentSelection)) {// ||
+                                // This needs a crawler algorithm to work better
+                                // (currentSelection !is null && world.map.get(x,y) !is null && world.map.get(x,y).equals(currentSelection)) ) {
+                                    world.map[layer].remove(x,y);
                                 }
                             }
                         }
                     }
-                } else {
-                    mapSelectPosX = -1;
-                    mapSelectPosY = -1;
                 }
 
             }
@@ -359,10 +350,9 @@ public class MapEditor : GameState {
                         }
                     }
                 }
-
-                if (mapSelectPosX > -1 && mapSelectPosY > -1) {
-                    DrawRectangleLines(mapSelectPosX * 16, mapSelectPosY * 16, 16, 16, Color(57, 255, 20, 255));
-                }
+                
+                DrawRectangleLines(mapSelectPosX * 16, mapSelectPosY * 16, 16, 16, Color(57, 255, 20, 255));
+                
             }
         }
         EndMode2D();
