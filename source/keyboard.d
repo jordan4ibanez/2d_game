@@ -4,42 +4,61 @@ import raylib;
 import std.stdio: writeln;
 import std.uni: toLower;
 import std.conv: to;
-import std.array: replace;
+import std.array: split;
 import std.traits: EnumMembers;
+import std.string;
+import std.uni;
 
 // Thanks for the help Schveiguy!
 public class Keyboard {
-     
-    private int[string] keys;
-    bool[string] values;
 
-    alias values this;
+    class MicroKey {
+        int key;
+        this(int key) {
+            this.key = key;
+        }
+        bool action() {
+            return false;
+        }
+    }
+    class MicroKeyPressed : MicroKey{
+        this(int key) {
+            super(key);
+        }
+        override
+        bool action() {
+            return IsKeyPressed(this.key);
+        }
+    }
+    class MicroKeyDown : MicroKey {
+        this(int key) {
+            super(key);
+        }
+        override
+        bool action() {
+            return IsKeyDown(this.key);
+        }
+    }
+
+    private MicroKey[string] redirects;
 
     this() {
         // string interface becomes left_control, left_shift, etc
         foreach (thisKey; EnumMembers!KeyboardKey){
             string stringKey = to!string(thisKey).toLower.replace("key_", "");
-            this.keys[stringKey] = thisKey;
-            this[stringKey ~ "_down"] = false;
-            this[stringKey ~ "_pressed"] = false;
+            this.redirects[stringKey ~ "_pressed"] = new MicroKeyPressed(thisKey);
         }
     }
-    
+
+    @property
+    bool opDispatch(KeyboardKey thisKey)() {
+                
+    }
+
+
     @property
     bool opDispatch(string name)() {
-        return values[name];
+        return this.redirects[name].action();
     }
-
-    @property
-    void opDispatch(string name)(bool val) {
-        values[name] = val;
-    }
-
-    void update() {
-        // duplicate keys, can parse one for both iterators (press/down)
-        foreach (key, value; keys){
-            this[key ~ "_down"] = IsKeyDown(value);
-            this[key ~ "_pressed"] = IsKeyPressed(value);
-        }
-    }
+    
 }
