@@ -82,14 +82,7 @@ public class GUI {
         void setScale(float scale) {
             this.scale = scale;
         }
-    }
-
-    private class GUIRoot : GUIElement {
-        this(Vector2 position, Vector2 size) {
-            this.position = position;
-            this.size = size;
-        }
-    }
+    }    
 
 
     private class GUIText : GUIElement {
