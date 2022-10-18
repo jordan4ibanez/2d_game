@@ -22,6 +22,15 @@ public class GUI {
         WINDOW
     }
 
+    static immutable enum Anchor {
+        // None means it is relative to the root node
+        NONE,
+        TOP,
+        BOTTOM, 
+        LEFT,
+        RIGHT
+    }
+
     GUIElement[string] nodes;
 
 
