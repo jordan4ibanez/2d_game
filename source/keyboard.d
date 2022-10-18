@@ -38,9 +38,10 @@ public static class Keyboard {
     @property
     bool opDispatch(string name)() {
         enum input = decompile(name);
-        final switch(input.type) {
-            case false: return IsKeyPressed(input.key);
-            case true: return IsKeyDown(input.key);
+        static if (input.type) {
+            return IsKeyDown(input.key);
+        } else {
+            return IsKeyPressed(input.key);
         }
     }
     
