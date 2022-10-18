@@ -31,6 +31,7 @@ public class MapEditor : GameState {
     */
 
     // GUI fields
+    GUI gui;
     int fontSize = 20;
 
     // Editor fields
@@ -78,6 +79,7 @@ public class MapEditor : GameState {
         atlasLimit = atlasWidth * atlasHeight;
         oldEditorZoom = camera.getZoom();
         oldAtlasBrowserZoom = camera.getZoom();
+        gui = new GUI();
     }
     
     override
