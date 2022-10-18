@@ -11,6 +11,7 @@ import std.algorithm.comparison: clamp;
 import std.string: toStringz, capitalize;
 import std.array;
 import std.conv: to;
+import utility.gui;
 
 // TODO: clean this mess up
 
