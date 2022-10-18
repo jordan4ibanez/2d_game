@@ -51,7 +51,6 @@ public class Game {
         while (!window.shouldClose()) {
 
             mouse.update();
-            keyboard.update();
             timeKeeper.calculateDelta();
             GameState state = states[currentState];
             state.update();
