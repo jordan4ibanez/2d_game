@@ -3,23 +3,26 @@ module utility.gui;
 import raylib;
 import std.stdio;
 import window;
+import std.string: toStringz;
 
 // Needs to expose externally
+// Todo: Check if these calculations are even correct
+
 static immutable enum Anchor {
     // Corners
-    TOP_LEFT,
-    TOP_RIGHT,
-    BOTTOM_LEFT,
-    BOTTOM_RIGHT,
+    TOP_LEFT     = Vector2(0,0),
+    TOP_RIGHT    = Vector2(1,0),
+    BOTTOM_LEFT  = Vector2(0,1),
+    BOTTOM_RIGHT = Vector2(1,1),
 
     // Center edges
-    TOP,
-    BOTTOM,
-    LEFT,
-    RIGHT,
+    TOP     = Vector2(0.5, 0  ),
+    BOTTOM  = Vector2(0.5, 1  ),
+    LEFT    = Vector2(0  , 0.5),
+    RIGHT   = Vector2(1  , 0.5),
 
     // Center
-    CENTER
+    CENTER = Vector2(0.5 , 0.5)
 }
 
 //! I've never made a generic GUI before so this might be a disaster
@@ -74,7 +77,8 @@ public class GUI {
 
         private float scale;
         private Vector2 size;
-        private Vector2 position;
+        private Vector2 offset;
+
         // ? holds a pointer or what? it's on the heap anyways
         private Texture texture;
 
@@ -88,12 +92,12 @@ public class GUI {
             this.texture = texture;
         }
 
-        Vector2 getPosition() {
-            return position;
+        Vector2 getOffset() {
+            return offset;
         }
 
-        void setPosition(Vector2 position) {
-            this.position = position;
+        void setOffset(Vector2 offset) {
+            this.offset = offset;
         }
 
         Vector2 getSize() {
@@ -126,8 +130,8 @@ public class GUI {
     }
 
 
-    void addText(string ID, string text) {
-        this.elements[ID] = new GUIText(text);
+    void addText(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize) {
+        this.elements[ID] = new GUIText(anchor, offsetX,offsetY, text, fontSize);
     }
 
     private class GUIText : GUIElement {
@@ -137,12 +141,16 @@ public class GUI {
         private bool shadowed;
         private int fontSize;
         private int length;
+        private Vector2 textSize;
 
-        this(int offsetX, int offsetY, string text, int fontSize) {
+        this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize) {
             this.text = text;
             this.elementType = ElementType.TEXT;
             this.fontSize = fontSize;
-            this.length = text.length;
+            this.length = cast(int)text.length;
+            this.offset = Vector2(offsetX, offsetY);
+            this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize,0);
+            this.anchor = anchor;
         }
 
         string getText() {
@@ -151,13 +159,36 @@ public class GUI {
 
         void setText(string text) {
             this.text = text;
-            this.length = text.length;
+            this.length = cast(int)text.length;
+            this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize,0);
+        }
+
+        int getFontSize() {
+            return fontSize;
+        }
+
+        void setFontSize(int fontSize) {
+            this.fontSize = fontSize;
+            this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize,0);
         }
 
         override
         void render() {
+
+            // !float here, cast later
+            float widthAdjust = anchor.x == 1? length : length / 2.0;
             
-            
+
+            float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * fontSize)) + offset.x;
+            float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * fontSize)) + offset.y;
+
+            DrawText(
+                toStringz(text),
+                cast(int)positionRenderX,
+                cast(int)positionRenderY,
+                fontSize,
+                Color(255,255,255,255)
+            );
         }
     }
 }
