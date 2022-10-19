@@ -157,7 +157,6 @@ public class GUIText : GUIElement {
     private string text;
     private bool shadowed;
     private int fontSize;
-    private int length;
     private Vector2 textSize;
     float spacing;
     Color color;
@@ -167,7 +166,6 @@ public class GUIText : GUIElement {
         this.elementType = ElementType.TEXT;
         this.anchor = anchor;
         this.fontSize = fontSize;
-        this.length = cast(int)text.length;
         this.offset = Vector2(offsetX, offsetY);
         this.spacing = fontSize/GetFontDefault().baseSize;
         this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
@@ -180,7 +178,6 @@ public class GUIText : GUIElement {
 
     void setText(string text) {
         this.text = text;
-        this.length = cast(int)text.length;
         this.spacing = fontSize/GetFontDefault().baseSize;
         this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
     }
