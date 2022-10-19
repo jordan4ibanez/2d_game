@@ -13,7 +13,7 @@ public class MainMenu : GameState {
     this(Game game) {
         super(game);
 
-        gui = new GUI();
+        gui = new GUI(window);
         gui.addText("debug", "my test");
     }
 

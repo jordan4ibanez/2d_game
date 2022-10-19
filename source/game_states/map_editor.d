@@ -79,7 +79,7 @@ public class MapEditor : GameState {
         atlasLimit = atlasWidth * atlasHeight;
         oldEditorZoom = camera.getZoom();
         oldAtlasBrowserZoom = camera.getZoom();
-        gui = new GUI();
+        gui = new GUI(window);
     }
     
     override
