@@ -4,6 +4,7 @@ import raylib;
 import std.stdio;
 import window;
 import std.string: toStringz;
+import std.conv: to;
 
 // Needs to expose externally
 // Todo: Check if these calculations are even correct
@@ -76,9 +77,9 @@ public class GUI {
         return this.textElements[ID];
     }
     
-    //! Animated Text Elements
-    void addAnimatedTextElement(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize, Color color, bool shadowed) {
-        this.textElements[ID] = new GUIText(anchor, offsetX,offsetY, text, fontSize, color, shadowed);
+    //! Animated Text Elements    
+    void addAnimatedTextElement(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize, Color color, bool shadowed, void delegate(GUITextAnimated, float) func) {
+        this.textElements[ID] = new GUITextAnimated(anchor, offsetX,offsetY, text, fontSize, color, shadowed, func);
     }
     void removeAnimatedTextElement(string ID) {
         this.textElements.remove(ID);
@@ -242,17 +243,86 @@ public class GUIText : GUIElement {
     }
 }
 
+/*
+ * This is designed for single line only! No carriage returns!
+ */
 public class GUITextAnimated : GUIText {
 
-    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed) {
+    bool[] boolMemory;
+    int[] intMemory;
+
+    Vector2[] offsetMemory;
+
+    void delegate(GUITextAnimated, float) func;
+
+    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, void delegate(GUITextAnimated, float) func) {
         super(anchor, offsetX, offsetY, text, fontSize, color, shadowed);
+        this.func = func;
+        ulong size = text.length;
+        boolMemory   = new bool[size];
+        intMemory    = new int[size];
+        offsetMemory = new Vector2[size];
+    }
+    
+    override
+    void setText(string text) {
+        this.text = text;
+        this.spacing = fontSize/GetFontDefault().baseSize;
+        this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
+        ulong size = text.length;
+        boolMemory   = new bool[size];
+        intMemory    = new int[size];
+        offsetMemory = new Vector2[size];
     }
 
     override
     void update(int windowWidth, int windowHeight, float delta) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
-        
+        this.func(this, delta);
+    }
+
+    override
+    void render() {
+
+        float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
+        float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
+        //* This is extremely inaccurate, but it's animated so you won't notice anyways
+        float rightShifter = (textSize.x / cast(float) text.length) + (spacing / GetFontDefault().baseSize);
+
+
+        int i = 0;
+        foreach (character; text) {
+            //! Weird reconversion due to C unsafely shoveling in pointers, can't iterate by index either
+            immutable(char)* letter = toStringz(to!string(character));
+
+            Vector2 position = Vector2(
+                positionRenderX + offsetMemory[i].x,
+                positionRenderY + offsetMemory[i].y
+            );
+
+            if (shadowed) {
+                DrawTextEx(
+                    GetFontDefault(),
+                    letter,
+                    Vector2(position.x + 2, position.y + 2),
+                    fontSize,
+                    spacing,
+                    Colors.BLACK
+                );    
+            }
+            DrawTextEx(
+                GetFontDefault(),
+                letter,
+                position,
+                fontSize,
+                spacing,
+                color
+            );
+
+            positionRenderX += rightShifter;
+            i++;
+        }
     }
 }
 

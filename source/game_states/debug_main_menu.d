@@ -21,7 +21,7 @@ public class MainMenu : GameState {
     Music music;
 
 
-    string[9] runners = [
+    string[8] runners = [
         "debug1",
         "debug2",
         "debug3",
@@ -30,7 +30,7 @@ public class MainMenu : GameState {
         "debug6",
         "debug7",
         "debug8",
-        "debug9",
+        // "debug9",
     ];
 
     this(Game game) {
@@ -49,8 +49,20 @@ public class MainMenu : GameState {
         gui.addTextElement(Anchor.BOTTOM_RIGHT, "debug6", "my test", 0,0, 20, pumpkinOrange, true);
 
         gui.addTextElement(Anchor.LEFT,         "debug7", "my test", 0,0, 20, pumpkinOrange, true);
-        gui.addTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 20, pumpkinOrange, true);
+        //gui.addTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 20, pumpkinOrange, true);
         gui.addTextElement(Anchor.RIGHT,        "debug8", "my test", 0,0, 20, pumpkinOrange, true);
+        
+
+        
+        void test(float delta) {
+            writeln(delta);
+        }
+
+        gui.addAnimatedTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 20, pumpkinOrange, true,
+            (GUITextAnimated object, float delta) {
+                // writeln(object.getText());
+            }
+        );
 
         // gui.addTextElement(Anchor.CENTER,       "HAPPY", "HAPPY", 0, -150, 50, Colors.BLACK, true);
         // gui.addTextElement(Anchor.CENTER,       "HALLOWEEN", "HALLOWEEN", 0, 150, 50, Colors.BLACK, true);
