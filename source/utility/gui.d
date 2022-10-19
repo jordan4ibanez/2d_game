@@ -47,7 +47,9 @@ public class GUI {
 
     Window window;
 
+    // todo: layers?
     GUIText[string] textElements;
+    GUIImage[string] imageElements;
 
     this(Window window) {
         this.window = window;
@@ -59,9 +61,12 @@ public class GUI {
         windowWidth = cast(int)wSize.x;
         windowHeight = cast(int)wSize.y;
 
-        
         foreach (element; textElements) {
             element.render();
+        }
+
+        foreach (element; imageElements) {
+            element.render();            
         }
     }
 
@@ -126,8 +131,10 @@ public class GUI {
     }
 
 
-    void addTextElement(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize) {
-        this.textElements[ID] = new GUIText(anchor, offsetX,offsetY, text, fontSize);
+
+
+    void addTextElement(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize, Color color) {
+        this.textElements[ID] = new GUIText(anchor, offsetX,offsetY, text, fontSize, color);
     }
 
     void removeTextElement(string ID) {
@@ -138,7 +145,7 @@ public class GUI {
         return this.textElements[ID];
     }
 
-    private class GUIText : GUIElement {
+    public class GUIText : GUIElement {
 
         //! Now with more words!
         private string text;
@@ -147,8 +154,9 @@ public class GUI {
         private int length;
         private Vector2 textSize;
         float spacing;
+        Color color;
 
-        this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize) {
+        this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color) {
             this.text = text;
             this.elementType = ElementType.TEXT;
             this.anchor = anchor;
@@ -157,7 +165,7 @@ public class GUI {
             this.offset = Vector2(offsetX, offsetY);
             this.spacing = fontSize/GetFontDefault().baseSize;
             this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
-            
+            this.color = color;
         }
 
         string getText() {
@@ -182,11 +190,7 @@ public class GUI {
         }
 
         override
-        void render() {
-
-            // !float here, cast later
-            // float widthAdjust = anchor.x == 1? length : length / 2.0;
-            int textWidth = MeasureText(toStringz(text),fontSize);
+        void render() {            
 
             float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
             float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
@@ -196,8 +200,49 @@ public class GUI {
                 cast(int)positionRenderX,
                 cast(int)positionRenderY,
                 fontSize,
-                Color(255,255,255,255)
+                color
             );
         }
+    }
+
+    void addImageElement(Anchor anchor, string ID, int offsetX, int offsetY, Texture texture, float scale) {
+        this.imageElements[ID] = new GUIImage(anchor, offsetX,offsetY, texture, scale);
+    }
+
+    void removeImageElement(string ID) {
+        this.imageElements.remove(ID);
+    }
+
+    GUIImage getImageElement(string ID) {
+        return this.imageElements[ID];
+    }
+
+    public class GUIImage : GUIElement {
+
+        private Texture texture;
+
+        float width;
+        float height;
+        float scale;
+
+        this(Anchor anchor, int offsetX, int offsetY, Texture texture, float scale) {
+            this.elementType = ElementType.IMAGE;
+            this.anchor = anchor;
+            this.offset = Vector2(offsetX, offsetY);
+            this.texture = texture;
+            this.scale = scale;
+            width = texture.width;
+            height = texture.height;
+        }
+
+        override
+        void render() {
+
+            float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * width * scale)) + offset.x;
+            float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * height * scale)) + offset.y;
+            
+            DrawTextureEx(texture, Vector2(positionRenderX, positionRenderY), 0, scale, Colors.WHITE);            
+        }
+
     }
 }
