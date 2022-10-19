@@ -5,11 +5,19 @@ import game_states.game_state;
 import game;
 import utility.gui;
 import std.random;
+import std.stdio: writeln;
+import std.math.rounding: floor;
 
 
 public class MainMenu : GameState {
 
     GUI gui;
+
+    float progress = 0;
+    static immutable Vector3 startClearColor = Vector3(0,0,0);
+    static immutable Vector3 goalClearColor = Vector3(255, 117, 24);
+    bool up = true;
+    Texture pumpkin;
 
     string[9] runners = [
         "debug1",
@@ -28,29 +36,69 @@ public class MainMenu : GameState {
 
         gui = new GUI(window);
 
-        gui.addTextElement(Anchor.TOP_LEFT,     "debug1", "my test",0,0,20);
-        gui.addTextElement(Anchor.TOP,          "debug2", "my test",0,0,20);
-        gui.addTextElement(Anchor.TOP_RIGHT,    "debug3", "my test",0,0,20);
+        Color pumpkinOrange = Color(255, 117, 24,255);
 
-        gui.addTextElement(Anchor.BOTTOM_LEFT,  "debug4", "my test",0,0,20);
-        gui.addTextElement(Anchor.BOTTOM,       "debug5", "my test",0,0,20);
-        gui.addTextElement(Anchor.BOTTOM_RIGHT, "debug6", "my test",0,0,20);
+        gui.addTextElement(Anchor.TOP_LEFT,     "debug1", "my test", 0,0, 20, pumpkinOrange);
+        gui.addTextElement(Anchor.TOP,          "debug2", "my test", 0,0, 20, pumpkinOrange);
+        gui.addTextElement(Anchor.TOP_RIGHT,    "debug3", "my test", 0,0, 20, pumpkinOrange);
 
-        gui.addTextElement(Anchor.LEFT,         "debug7", "my test",0,0,20);
-        gui.addTextElement(Anchor.CENTER,       "debug9", "my test",0,0,20);
-        gui.addTextElement(Anchor.RIGHT,        "debug8", "my test",0,0,20);
+        gui.addTextElement(Anchor.BOTTOM_LEFT,  "debug4", "my test", 0,0, 20, pumpkinOrange);
+        gui.addTextElement(Anchor.BOTTOM,       "debug5", "my test", 0,0, 20, pumpkinOrange);
+        gui.addTextElement(Anchor.BOTTOM_RIGHT, "debug6", "my test", 0,0, 20, pumpkinOrange);
+
+        gui.addTextElement(Anchor.LEFT,         "debug7", "my test", 0,0, 20, pumpkinOrange);
+        gui.addTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 20, pumpkinOrange);
+        gui.addTextElement(Anchor.RIGHT,        "debug8", "my test", 0,0, 20, pumpkinOrange);
+
+        gui.addTextElement(Anchor.CENTER,       "HAPPY", "HAPPY", 0, -150, 50, Colors.BLACK);
+        gui.addTextElement(Anchor.CENTER,       "HALLOWEEN", "HALLOWEEN", 0, 150, 50, Colors.BLACK);
+
+
+        cache.upload("jackolantern", "textures/jackolantern.png");
+
+        pumpkin = cache.get("jackolantern").get();
+
+        gui.addImageElement(Anchor.CENTER, "pumpkin", 10,0, pumpkin, 0.75);
 
     }
 
     override
     void start() {
-
         camera.setClearColor(0,0,0,255);
-        
+
+        camera.setOffset(Vector2(0,0));
     }
 
     override
     void update() {
+
+        float delta = timeKeeper.getDelta();
+
+        final switch (up) {
+            case true: {
+                progress += delta / 10.0;
+                up = progress >= 1.0 ? false : true;
+                // Don't allow interpolation overshoot
+                progress = up ? progress : 1.0;
+                break;
+            }
+            case false: {
+                progress -= delta / 10.0;
+                up = progress <= 0.0 ? true : false;
+                // Don't allow interpolation overshoot
+                progress = up ? 0.0 : progress;
+                break;
+            }
+        }
+
+        Vector3 clearColor = Vector3Lerp(startClearColor, goalClearColor, progress);
+
+        camera.setClearColor(
+            cast(ubyte)floor(clearColor.x),
+            cast(ubyte)floor(clearColor.y),
+            cast(ubyte)floor(clearColor.z),
+            255
+        );
 
         Random randy;
 
@@ -82,7 +130,6 @@ public class MainMenu : GameState {
         BeginMode2D(camera.get());
         {
             camera.clear();
-
         }
         EndMode2D();
 
