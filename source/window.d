@@ -2,6 +2,7 @@ module window;
 
 import raylib;
 import game;
+import std.string: toStringz;
 
 public class Window {
 
@@ -27,6 +28,10 @@ public class Window {
 
     Vector2 getCenter() {
         return Vector2(GetRenderWidth() / 2.0, GetRenderHeight() / 2.0);
+    }
+
+    void setTitle(string newTitle) {
+        SetWindowTitle(toStringz(newTitle));
     }
 
 }
