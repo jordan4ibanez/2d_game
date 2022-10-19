@@ -250,6 +250,8 @@ public class GUITextAnimated : GUIText {
 
     bool[] boolMemory;
     int[] intMemory;
+    int singularIntMemory;
+    bool singularBoolMemory;
 
     Vector2[] offsetMemory;
 
