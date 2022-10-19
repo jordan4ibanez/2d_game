@@ -51,11 +51,13 @@ public class MainMenu : GameState {
 
     override
     void update() {
+
+        Random randy;
+
         foreach (key; runners) {
 
             string blorf;
 
-            Random randy = Random(unpredictableSeed());
             foreach (_; 0..uniform(5,15, randy)) {
                 randy = Random(unpredictableSeed());
                 blorf ~= cast(char)uniform(0, 127, randy);
@@ -64,6 +66,14 @@ public class MainMenu : GameState {
             gui.getTextElement(key).setText(blorf);
             
         }
+
+        string shmoop;
+        foreach (_; 0..uniform(5,15, randy)) {
+            randy = Random(unpredictableSeed());
+            shmoop ~= cast(char)uniform(0, 127, randy);
+        }
+
+        window.setTitle(shmoop);
     }
 
     override
