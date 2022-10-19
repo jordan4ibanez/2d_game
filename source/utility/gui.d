@@ -43,6 +43,8 @@ public class GUI {
     
     int windowWidth;
     int windowHeight;
+    int windowOffsetX;
+    int windowOffsetY;
 
     Window window;
 
@@ -52,11 +54,20 @@ public class GUI {
 
     this(Window window) {
         this.window = window;
+        windowOffsetX = 0;
+        windowOffsetY = 0;
     }
 
+    /* 
+    todo: window constructor
+    this(Window window, bool isWindow) {
+        this.window = window;
+    }
+    */
+
     //! Text Elements
-    void addTextElement(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize, Color color) {
-        this.textElements[ID] = new GUIText(anchor, offsetX,offsetY, text, fontSize, color);
+    void addTextElement(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize, Color color, bool shadowed) {
+        this.textElements[ID] = new GUIText(anchor, offsetX,offsetY, text, fontSize, color, shadowed);
     }
     void removeTextElement(string ID) {
         this.textElements.remove(ID);
@@ -161,7 +172,7 @@ public class GUIText : GUIElement {
     float spacing;
     Color color;
 
-    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color) {
+    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed) {
         this.text = text;
         this.elementType = ElementType.TEXT;
         this.anchor = anchor;
@@ -170,6 +181,7 @@ public class GUIText : GUIElement {
         this.spacing = fontSize/GetFontDefault().baseSize;
         this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
         this.color = color;
+        this.shadowed = shadowed;
     }
 
     string getText() {
@@ -197,6 +209,16 @@ public class GUIText : GUIElement {
 
         float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
         float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
+    
+        if (shadowed) {
+            DrawText(
+                toStringz(text),
+                cast(int)positionRenderX + 2,
+                cast(int)positionRenderY + 2,
+                fontSize,
+                Color(0,0,0,255)
+            );
+        }
 
         DrawText(
             toStringz(text),

@@ -40,20 +40,20 @@ public class MainMenu : GameState {
 
         Color pumpkinOrange = Color(255, 117, 24,255);
 
-        gui.addTextElement(Anchor.TOP_LEFT,     "debug1", "my test", 0,0, 20, pumpkinOrange);
-        gui.addTextElement(Anchor.TOP,          "debug2", "my test", 0,0, 20, pumpkinOrange);
-        gui.addTextElement(Anchor.TOP_RIGHT,    "debug3", "my test", 0,0, 20, pumpkinOrange);
+        gui.addTextElement(Anchor.TOP_LEFT,     "debug1", "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement(Anchor.TOP,          "debug2", "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement(Anchor.TOP_RIGHT,    "debug3", "my test", 0,0, 20, pumpkinOrange, true);
 
-        gui.addTextElement(Anchor.BOTTOM_LEFT,  "debug4", "my test", 0,0, 20, pumpkinOrange);
-        gui.addTextElement(Anchor.BOTTOM,       "debug5", "my test", 0,0, 20, pumpkinOrange);
-        gui.addTextElement(Anchor.BOTTOM_RIGHT, "debug6", "my test", 0,0, 20, pumpkinOrange);
+        gui.addTextElement(Anchor.BOTTOM_LEFT,  "debug4", "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement(Anchor.BOTTOM,       "debug5", "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement(Anchor.BOTTOM_RIGHT, "debug6", "my test", 0,0, 20, pumpkinOrange, true);
 
-        gui.addTextElement(Anchor.LEFT,         "debug7", "my test", 0,0, 20, pumpkinOrange);
-        gui.addTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 20, pumpkinOrange);
-        gui.addTextElement(Anchor.RIGHT,        "debug8", "my test", 0,0, 20, pumpkinOrange);
+        gui.addTextElement(Anchor.LEFT,         "debug7", "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement(Anchor.RIGHT,        "debug8", "my test", 0,0, 20, pumpkinOrange, true);
 
-        gui.addTextElement(Anchor.CENTER,       "HAPPY", "HAPPY", 0, -150, 50, Colors.BLACK);
-        gui.addTextElement(Anchor.CENTER,       "HALLOWEEN", "HALLOWEEN", 0, 150, 50, Colors.BLACK);
+        gui.addTextElement(Anchor.CENTER,       "HAPPY", "HAPPY", 0, -150, 50, Colors.BLACK, true);
+        gui.addTextElement(Anchor.CENTER,       "HALLOWEEN", "HALLOWEEN", 0, 150, 50, Colors.BLACK, true);
 
 
         cache.upload("jackolantern", "textures/jackolantern.png");
