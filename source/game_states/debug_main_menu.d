@@ -52,8 +52,8 @@ public class MainMenu : GameState {
         gui.addTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 20, pumpkinOrange, true);
         gui.addTextElement(Anchor.RIGHT,        "debug8", "my test", 0,0, 20, pumpkinOrange, true);
 
-        gui.addTextElement(Anchor.CENTER,       "HAPPY", "HAPPY", 0, -150, 50, Colors.BLACK, true);
-        gui.addTextElement(Anchor.CENTER,       "HALLOWEEN", "HALLOWEEN", 0, 150, 50, Colors.BLACK, true);
+        // gui.addTextElement(Anchor.CENTER,       "HAPPY", "HAPPY", 0, -150, 50, Colors.BLACK, true);
+        // gui.addTextElement(Anchor.CENTER,       "HALLOWEEN", "HALLOWEEN", 0, 150, 50, Colors.BLACK, true);
 
 
         cache.upload("jackolantern", "textures/jackolantern.png");
@@ -143,7 +143,7 @@ public class MainMenu : GameState {
         }
         EndMode2D();
 
-        gui.render();
+        gui.render(timeKeeper.getDelta());
 
         EndDrawing();
         

@@ -26,8 +26,8 @@ static immutable enum Anchor {
 }
 
 static immutable enum ElementType {
-    NULL,
-    TEXT,
+    NULL,          //! DONE
+    TEXT,          //! DONE
     ANIMATED_TEXT,
     INPUT,
     BUTTON,
@@ -75,6 +75,17 @@ public class GUI {
     GUIText getTextElement(string ID) {
         return this.textElements[ID];
     }
+    
+    //! Animated Text Elements
+    void addAnimatedTextElement(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize, Color color, bool shadowed) {
+        this.textElements[ID] = new GUIText(anchor, offsetX,offsetY, text, fontSize, color, shadowed);
+    }
+    void removeAnimatedTextElement(string ID) {
+        this.textElements.remove(ID);
+    }
+    GUIText getAnimatedTextElement(string ID) {
+        return this.textElements[ID];
+    }
 
     //! Image Elements
     void addImageElement(Anchor anchor, string ID, int offsetX, int offsetY, Texture texture, float scale) {
@@ -86,20 +97,21 @@ public class GUI {
     GUIImage getImageElement(string ID) {
         return this.imageElements[ID];
     }
+    
 
-    void render() {
+    void render(float delta) {
 
         Vector2 wSize = window.getSize();
         windowWidth = cast(int)wSize.x;
         windowHeight = cast(int)wSize.y;
 
         foreach (element; textElements) {
-            element.updateParams(windowWidth, windowHeight);
+            element.update(windowWidth, windowHeight, delta);
             element.render();
         }
 
         foreach (element; imageElements) {
-            element.updateParams(windowWidth, windowHeight);
+            element.update(windowWidth, windowHeight, delta);
             element.render();            
         }
     }
@@ -120,7 +132,7 @@ private class GUIElement {
 
     private bool visible = true;
 
-    void updateParams(int windowWidth, int windowHeight) {
+    void update(int windowWidth, int windowHeight, float delta) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
     }
@@ -227,6 +239,20 @@ public class GUIText : GUIElement {
             fontSize,
             color
         );
+    }
+}
+
+public class GUITextAnimated : GUIText {
+
+    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed) {
+        super(anchor, offsetX, offsetY, text, fontSize, color, shadowed);
+    }
+
+    override
+    void update(int windowWidth, int windowHeight, float delta) {
+        this.windowWidth = windowWidth;
+        this.windowHeight = windowHeight;
+        
     }
 }
 
