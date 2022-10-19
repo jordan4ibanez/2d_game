@@ -47,7 +47,7 @@ public class GUI {
 
     Window window;
 
-    GUIElement[string] elements;
+    GUIText[string] textElements;
 
     this(Window window) {
         this.window = window;
@@ -60,13 +60,9 @@ public class GUI {
         windowHeight = cast(int)wSize.y;
 
         
-        foreach (element; elements) {
+        foreach (element; textElements) {
             element.render();
         }
-    }
-
-    void removeElement(string ID) {
-        this.elements.remove(ID);
     }
 
     private class GUIElement {
@@ -130,8 +126,16 @@ public class GUI {
     }
 
 
-    void addText(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize) {
-        this.elements[ID] = new GUIText(anchor, offsetX,offsetY, text, fontSize);
+    void addTextElement(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize) {
+        this.textElements[ID] = new GUIText(anchor, offsetX,offsetY, text, fontSize);
+    }
+
+    void removeTextElement(string ID) {
+        this.textElements.remove(ID);
+    }
+
+    GUIText getTextElement(string ID) {
+        return this.textElements[ID];
     }
 
     private class GUIText : GUIElement {
