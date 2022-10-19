@@ -27,7 +27,9 @@ public class TextureCache {
     TextureContainer[string] cache;
 
     void upload(string name, string textureLocation) {
-        cache[name] = new TextureContainer(textureLocation);
+        if (name !in cache) {
+            cache[name] = new TextureContainer(textureLocation);
+        }
     }
 
     TextureContainer get(string name) {
