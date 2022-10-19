@@ -134,10 +134,15 @@ public class GUI {
 
         //! Now with more words!
         private string text;
+        private bool shadowed;
+        private int fontSize;
+        private int length;
 
-        this(string text) {
+        this(int offsetX, int offsetY, string text, int fontSize) {
             this.text = text;
             this.elementType = ElementType.TEXT;
+            this.fontSize = fontSize;
+            this.length = text.length;
         }
 
         string getText() {
@@ -146,12 +151,13 @@ public class GUI {
 
         void setText(string text) {
             this.text = text;
+            this.length = text.length;
         }
 
         override
         void render() {
-            writeln("rendering " ~ text);
-            writeln("the window size is: ", windowWidth, " ", windowHeight);
+            
+            
         }
     }
 }
