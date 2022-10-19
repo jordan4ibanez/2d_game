@@ -14,12 +14,19 @@ public class MainMenu : GameState {
         super(game);
 
         gui = new GUI(window);
+        
         gui.addText(Anchor.TOP_LEFT,     "debug1", "my test",0,0,20);
         gui.addText(Anchor.TOP,          "debug2", "my test",0,0,20);
         gui.addText(Anchor.TOP_RIGHT,    "debug3", "my test",0,0,20);
+
         gui.addText(Anchor.BOTTOM_LEFT,  "debug4", "my test",0,0,20);
         gui.addText(Anchor.BOTTOM,       "debug5", "my test",0,0,20);
         gui.addText(Anchor.BOTTOM_RIGHT, "debug6", "my test",0,0,20);
+
+        gui.addText(Anchor.LEFT,         "debug7", "my test",0,0,20);
+        gui.addText(Anchor.CENTER,       "debug9", "my test",0,0,20);
+        gui.addText(Anchor.RIGHT,        "debug8", "my test",0,0,20);
+
     }
 
     override
