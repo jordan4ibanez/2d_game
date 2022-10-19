@@ -2,6 +2,7 @@ module utility.gui;
 
 import raylib;
 import std.stdio;
+import window;
 
 // Needs to expose externally
 static immutable enum Anchor {
@@ -38,11 +39,24 @@ public class GUI {
         WINDOW
     }
 
-    
+    int windowWidth;
+    int windowHeight;
+
+    Window window;
 
     GUIElement[string] elements;
 
+    this(Window window) {
+        this.window = window;
+    }
+
     void render() {
+
+        Vector2 wSize = window.getSize();
+        windowWidth = cast(int)wSize.x;
+        windowHeight = cast(int)wSize.y;
+
+        
         foreach (element; elements) {
             element.render();
         }
@@ -137,6 +151,7 @@ public class GUI {
         override
         void render() {
             writeln("rendering " ~ text);
+            writeln("the window size is: ", windowWidth, " ", windowHeight);
         }
     }
 }
