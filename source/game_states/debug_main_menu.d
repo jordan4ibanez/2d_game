@@ -18,6 +18,8 @@ public class MainMenu : GameState {
     static immutable Vector3 goalClearColor = Vector3(255, 117, 24);
     bool up = true;
     Texture pumpkin;
+    Music music;
+
 
     string[9] runners = [
         "debug1",
@@ -67,10 +69,18 @@ public class MainMenu : GameState {
         camera.setClearColor(0,0,0,255);
 
         camera.setOffset(Vector2(0,0));
+
+        InitAudioDevice();
+
+        music = LoadMusicStream("music/a_distant_memory.ogg");
+
+        PlayMusicStream(music);
     }
 
     override
     void update() {
+
+        UpdateMusicStream(music);
 
         float delta = timeKeeper.getDelta();
 
@@ -146,6 +156,8 @@ public class MainMenu : GameState {
 
     override
     void cleanUp() {
+        UnloadMusicStream(music);
+        CloseAudioDevice();
         
     }
 
