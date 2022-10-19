@@ -142,15 +142,18 @@ public class GUI {
         private int fontSize;
         private int length;
         private Vector2 textSize;
+        float spacing;
 
         this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize) {
             this.text = text;
             this.elementType = ElementType.TEXT;
+            this.anchor = anchor;
             this.fontSize = fontSize;
             this.length = cast(int)text.length;
             this.offset = Vector2(offsetX, offsetY);
-            this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize,0);
-            this.anchor = anchor;
+            this.spacing = fontSize/GetFontDefault().baseSize;
+            this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
+            
         }
 
         string getText() {
@@ -160,7 +163,8 @@ public class GUI {
         void setText(string text) {
             this.text = text;
             this.length = cast(int)text.length;
-            this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize,0);
+            this.spacing = fontSize/GetFontDefault().baseSize;
+            this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
         }
 
         int getFontSize() {
@@ -169,18 +173,19 @@ public class GUI {
 
         void setFontSize(int fontSize) {
             this.fontSize = fontSize;
-            this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize,0);
+            this.spacing = fontSize/GetFontDefault().baseSize;
+            this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
         }
 
         override
         void render() {
 
             // !float here, cast later
-            float widthAdjust = anchor.x == 1? length : length / 2.0;
-            
+            // float widthAdjust = anchor.x == 1? length : length / 2.0;
+            int textWidth = MeasureText(toStringz(text),fontSize);
 
-            float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * fontSize)) + offset.x;
-            float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * fontSize)) + offset.y;
+            float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
+            float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
 
             DrawText(
                 toStringz(text),
