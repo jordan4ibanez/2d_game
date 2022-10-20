@@ -248,12 +248,15 @@ public class GUIText : GUIElement {
  */
 public class GUITextAnimated : GUIText {
 
+    //* If you need more memory, voilà​​ 
     bool[] boolMemory;
     int[] intMemory;
-    int singularIntMemory;
+    float[] floatMemory;
+    //* If you don't need much, here you are
     bool singularBoolMemory;
+    int singularIntMemory;
     float singularFloatMemory = 0.0;
-
+    //* The offsets you are modifying with the animation. These are the side effects you put your data into.
     Vector2[] offsetMemory;
 
     void delegate(GUITextAnimated, float) func;
@@ -261,11 +264,7 @@ public class GUITextAnimated : GUIText {
     this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, void delegate(GUITextAnimated) initialFunc, void delegate(GUITextAnimated, float) func) {
         super(anchor, offsetX, offsetY, text, fontSize, color, shadowed);
         this.func = func;
-        ulong size = text.length;
-        boolMemory   = new bool[size];
-        intMemory    = new int[size];
-        offsetMemory = new Vector2[size];
-
+        offsetMemory = new Vector2[text.length];
         initialFunc(this);
     }
     
@@ -274,10 +273,7 @@ public class GUITextAnimated : GUIText {
         this.text = text;
         this.spacing = fontSize/GetFontDefault().baseSize;
         this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
-        ulong size = text.length;
-        boolMemory   = new bool[size];
-        intMemory    = new int[size];
-        offsetMemory = new Vector2[size];
+        offsetMemory = new Vector2[text.length];
     }
 
     override
