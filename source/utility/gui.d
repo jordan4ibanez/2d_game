@@ -288,8 +288,7 @@ public class GUITextAnimated : GUIText {
 
         float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
         float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
-        //* This is extremely inaccurate, but it's animated so you won't notice anyways
-        float rightShifter = (textSize.x / cast(float) text.length) + (spacing / GetFontDefault().baseSize);
+        
 
 
         int i = 0;
@@ -302,7 +301,7 @@ public class GUITextAnimated : GUIText {
                 positionRenderX + offsetMemory[i].x,
                 positionRenderY - offsetMemory[i].y
             );
-
+            /*
             if (shadowed) {
                 DrawTextEx(
                     GetFontDefault(),
@@ -313,6 +312,7 @@ public class GUITextAnimated : GUIText {
                     Colors.BLACK
                 );    
             }
+            */
             DrawTextEx(
                 GetFontDefault(),
                 letter,
@@ -321,6 +321,12 @@ public class GUITextAnimated : GUIText {
                 spacing,
                 color
             );
+
+            int bytes;
+            char thisChar = text[i];
+            int codepoint = GetCodepoint(&thisChar, &bytes);
+            int glyphIndex = GetGlyphIndex(GetFontDefault(), codepoint);
+            float rightShifter = GetFontDefault().recs[glyphIndex].width * spacing + spacing;
 
             positionRenderX += rightShifter;
             i++;
