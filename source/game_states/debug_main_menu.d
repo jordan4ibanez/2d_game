@@ -53,13 +53,12 @@ public class MainMenu : GameState {
         gui.addTextElement(Anchor.RIGHT,        "debug8", "my test", 0,0, 20, pumpkinOrange, true);
         
 
-        gui.addAnimatedTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 60, pumpkinOrange, true,
+        gui.addAnimatedTextElement(Anchor.CENTER,       "debug9", "BOUNCING AROUND", 0,0, 20, pumpkinOrange, true,
             // Constructor function
             (GUITextAnimated animation) {
                 animation.singularIntMemory = 1;
                 animation.singularBoolMemory = true;
                 animation.singularFloatMemory = 0;
-                writeln("I'm alive!");
             },
             // Bouncing text - treating the entire object as the animation
             (GUITextAnimated animation, float delta) {
