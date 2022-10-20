@@ -53,19 +53,72 @@ public class MainMenu : GameState {
         gui.addTextElement(Anchor.RIGHT,        "debug8", "my test", 0,0, 20, pumpkinOrange, true);
         
 
-        
-        void test(float delta) {
-            writeln(delta);
-        }
+        gui.addAnimatedTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 60, pumpkinOrange, true,
+            // Bouncing text - treating the entire object as the animation
+            (GUITextAnimated animation, float delta) {
 
-        gui.addAnimatedTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 20, pumpkinOrange, true,
-            (GUITextAnimated object, float delta) {
-                // writeln(object.getText());
+                // This should be turned into an initial constructor
+                if (animation.singularIntMemory == 0) {
+                    animation.singularIntMemory = 1;
+                    animation.singularBoolMemory = true;
+                    animation.singularFloatMemory = 0;
+                }
+                
+                string text = animation.getText();
+                int textLength = cast(int) text.length;
+
+                bool  goUp        = animation.singularBoolMemory;
+                float height      = animation.singularFloatMemory;
+                int   stage       = animation.singularIntMemory;
+
+                static immutable float bounceAmount = 7;
+                static immutable float bounceSpeed = 50;
+
+                writeln(height);
+
+                if (goUp) {
+                    height += delta * bounceSpeed;
+                    if (height >= bounceAmount) {
+                        stage += 1;
+                        goUp = false;
+                        height = bounceAmount;
+                    }
+                } else {
+                    height -= delta * bounceSpeed;
+                    if (height <= 0) {
+                        stage += 1;
+                        goUp = true;
+                        height = 0;
+                    }
+                }
+                if (stage > 4) {
+                    stage = 1;
+                }
+
+
+                bool odd = true;
+                foreach (i; 0..textLength){
+                    if (stage < 3) {
+                        if (odd) {                            
+                            animation.offsetMemory[i].y = height;
+                        }
+                    } else {
+                        if (!odd) {                            
+                            animation.offsetMemory[i].y = height;
+                        }
+                    }
+                    odd = !odd;
+                }
+
+                animation.singularBoolMemory = goUp;
+                animation.singularFloatMemory = height;
+                animation.singularIntMemory = stage;
+
             }
         );
 
-        // gui.addTextElement(Anchor.CENTER,       "HAPPY", "HAPPY", 0, -150, 50, Colors.BLACK, true);
-        // gui.addTextElement(Anchor.CENTER,       "HALLOWEEN", "HALLOWEEN", 0, 150, 50, Colors.BLACK, true);
+        gui.addTextElement(Anchor.CENTER,       "HAPPY", "HAPPY", 0, -150, 50, Colors.BLACK, true);
+        gui.addTextElement(Anchor.CENTER,       "HALLOWEEN", "HALLOWEEN", 0, 150, 50, Colors.BLACK, true);
 
 
         cache.upload("jackolantern", "textures/jackolantern.png");
