@@ -78,8 +78,8 @@ public class GUI {
     }
     
     //! Animated Text Elements    
-    void addAnimatedTextElement(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize, Color color, bool shadowed, void delegate(GUITextAnimated, float) func) {
-        this.textElements[ID] = new GUITextAnimated(anchor, offsetX,offsetY, text, fontSize, color, shadowed, func);
+    void addAnimatedTextElement(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize, Color color, bool shadowed, void delegate(GUITextAnimated) initialFunc, void delegate(GUITextAnimated, float) func) {
+        this.textElements[ID] = new GUITextAnimated(anchor, offsetX,offsetY, text, fontSize, color, shadowed, initialFunc, func);
     }
     void removeAnimatedTextElement(string ID) {
         this.textElements.remove(ID);
@@ -258,13 +258,15 @@ public class GUITextAnimated : GUIText {
 
     void delegate(GUITextAnimated, float) func;
 
-    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, void delegate(GUITextAnimated, float) func) {
+    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, void delegate(GUITextAnimated) initialFunc, void delegate(GUITextAnimated, float) func) {
         super(anchor, offsetX, offsetY, text, fontSize, color, shadowed);
         this.func = func;
         ulong size = text.length;
         boolMemory   = new bool[size];
         intMemory    = new int[size];
         offsetMemory = new Vector2[size];
+
+        initialFunc(this);
     }
     
     override

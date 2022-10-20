@@ -54,15 +54,15 @@ public class MainMenu : GameState {
         
 
         gui.addAnimatedTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 60, pumpkinOrange, true,
+            // Constructor function
+            (GUITextAnimated animation) {
+                animation.singularIntMemory = 1;
+                animation.singularBoolMemory = true;
+                animation.singularFloatMemory = 0;
+                writeln("I'm alive!");
+            },
             // Bouncing text - treating the entire object as the animation
             (GUITextAnimated animation, float delta) {
-
-                // This should be turned into an initial constructor
-                if (animation.singularIntMemory == 0) {
-                    animation.singularIntMemory = 1;
-                    animation.singularBoolMemory = true;
-                    animation.singularFloatMemory = 0;
-                }
                 
                 string text = animation.getText();
                 int textLength = cast(int) text.length;
@@ -73,8 +73,6 @@ public class MainMenu : GameState {
 
                 static immutable float bounceAmount = 7;
                 static immutable float bounceSpeed = 50;
-
-                writeln(height);
 
                 if (goUp) {
                     height += delta * bounceSpeed;
@@ -110,9 +108,9 @@ public class MainMenu : GameState {
                     odd = !odd;
                 }
 
-                animation.singularBoolMemory = goUp;
+                animation.singularBoolMemory  = goUp;
                 animation.singularFloatMemory = height;
-                animation.singularIntMemory = stage;
+                animation.singularIntMemory  = stage;
 
             }
         );
