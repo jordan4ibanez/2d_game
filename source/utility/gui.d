@@ -252,6 +252,7 @@ public class GUITextAnimated : GUIText {
     int[] intMemory;
     int singularIntMemory;
     bool singularBoolMemory;
+    float singularFloatMemory = 0.0;
 
     Vector2[] offsetMemory;
 
@@ -298,9 +299,10 @@ public class GUITextAnimated : GUIText {
             //! Weird reconversion due to C unsafely shoveling in pointers, can't iterate by index either
             immutable(char)* letter = toStringz(to!string(character));
 
+            // Do this in relative position, invert it
             Vector2 position = Vector2(
                 positionRenderX + offsetMemory[i].x,
-                positionRenderY + offsetMemory[i].y
+                positionRenderY - offsetMemory[i].y
             );
 
             if (shadowed) {
