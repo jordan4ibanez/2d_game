@@ -322,6 +322,7 @@ public class GUITextAnimated : GUIText {
                 color
             );
 
+            //! This was a nightmare to reverse engineer
             int bytes;
             char thisChar = text[i];
             int codepoint = GetCodepoint(&thisChar, &bytes);
