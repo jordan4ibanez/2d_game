@@ -32,7 +32,7 @@ static immutable enum ElementType {
     NULL,          //! DONE
     TEXT,          //! DONE
     ANIMATED_TEXT, //! DONE
-    INPUT,
+    INPUT,         
     BUTTON,
     IMAGE,
     DROP_MENU,
@@ -142,8 +142,8 @@ public class GUI {
     }
 
     //! Text Input Element
-    void addTextInputElement(string ID, string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {
-        this.textInputElements[ID] = new GUIInput(initialText, textPlaceHolder, anchor, offsetX, offsetY, textLimit, inputBoxWidth, fontSize, fontColor, textPlaceHolderColor, backgroundColor, borderColor);
+    void addTextInputElement(string ID, string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, int padding, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {
+        this.textInputElements[ID] = new GUIInput(initialText, textPlaceHolder, anchor, offsetX, offsetY, textLimit, inputBoxWidth, fontSize, padding, fontColor, textPlaceHolderColor, backgroundColor, borderColor);
     }
     void removeTextInputElement(string ID) {
         this.textInputElements.remove(ID);
@@ -420,18 +420,19 @@ public class GUIInput : GUIText{
     immutable string textPlaceHolder;
     int textLimit = 10;
     int inputBoxWidth;
-    float height = 0.0;
+    float height;
     bool focused;
     Color textPlaceHolderColor;
     Color backgroundColor;
     Color borderColor;    
     bool cursor;
     float cursorTimer = 0;
+    int padding;
 
     float deleteHoldTimer = 0;
     bool deleteHold = false;
 
-    this(string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {        
+    this(string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, int padding, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {        
         super(anchor, offsetX, offsetY, initialText, fontSize, fontColor, false);
         this.textPlaceHolder = textPlaceHolder;
         this.textLimit = textLimit;
@@ -439,6 +440,7 @@ public class GUIInput : GUIText{
         this.textPlaceHolderColor = textPlaceHolderColor;
         this.backgroundColor = backgroundColor;
         this.borderColor = borderColor;
+        this.padding = padding;
         this.height = measureBoxHeightPadded();
     }
 
@@ -452,8 +454,7 @@ public class GUIInput : GUIText{
     }
 
     private float measureBoxHeightPadded() {
-        // Todo: + 5 is height spacing, make this an argument!
-        return MeasureTextEx(GetFontDefault(), toStringz("abgcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), fontSize, fontSize / GetFontDefault().baseSize).y + 5;
+        return Vector2Add(MeasureTextEx(GetFontDefault(), toStringz("abgcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), fontSize, fontSize / GetFontDefault().baseSize), Vector2(padding, padding)).y;
     }
 
     override
@@ -519,10 +520,11 @@ public class GUIInput : GUIText{
 
         //! Impl scissoring!
 
-        float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * inputBoxWidth)) + offset.x;
+        float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * inputBoxWidth) - padding) + offset.x;
         float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * height)) + offset.y;
 
-        DrawRectangle(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth, cast(int)height, backgroundColor);
+        DrawRectangle(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth + padding, cast(int)height, backgroundColor);
+        DrawRectangleLines(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth + padding, cast(int)height, borderColor);
 
         if (text == "" && !focused) {
             // cursor blink goes here
@@ -530,21 +532,21 @@ public class GUIInput : GUIText{
             positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
             DrawText(
                 toStringz(textPlaceHolder),
-                cast(int)positionRenderX,
+                cast(int)positionRenderX + padding,
                 cast(int)positionRenderY,
                 fontSize,
                 textPlaceHolderColor
             );
         } else {
             // positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
-            if (textSize.x > inputBoxWidth) {
-                positionRenderX -= textSize.x - inputBoxWidth;
+            if (textSize.x + padding > inputBoxWidth) {
+                positionRenderX -= textSize.x - inputBoxWidth + padding;
             }
             positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
             // By some insane coincidence 0 and 1 match up to the chars of " " and "_"
             DrawText(
                 toStringz(text ~ cursor),
-                cast(int)positionRenderX,
+                cast(int)positionRenderX + padding,
                 cast(int)positionRenderY,
                 fontSize,
                 color
