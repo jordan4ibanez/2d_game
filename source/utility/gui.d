@@ -360,7 +360,7 @@ public class GUIInput : GUIText{
     bool focused;
     Color textPlaceHolderColor;
     Color backgroundColor;
-    Color borderColor;    
+    Color borderColor;
 
     this(string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {
         writeln(textPlaceHolder);
