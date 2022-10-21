@@ -39,10 +39,10 @@ static immutable enum ElementType {
     WINDOW
 }
 
-static immutable string[] typingInputLetters = [
+static immutable string[] alphabeticKeys = [
     "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
 ];
-static immutable string[] typingInputNumbers = [
+static immutable string[] numericKeys = [
     "zero","one","two","three","four","five","six","seven","eight","nine"
 ];
 static immutable enum Symbols {
@@ -434,11 +434,16 @@ public class GUIInput : GUIText{
             cursorTimer = 0;
         }
 
-        static foreach (key; typingInputLetters) {
+        static foreach (key; alphabeticKeys) {
             if (keyboard[key ~ "_pressed"]) {
                 setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? toUpper(key[0]) : key[0]);
             }
-        }  
+        }
+        static foreach (i; 0..numericKeys.length) {
+            if (keyboard[to!string(numericKeys[i]) ~ "_pressed"]) {
+                setText(text ~= to!string(i));
+            }
+        }
     }
 
     override
