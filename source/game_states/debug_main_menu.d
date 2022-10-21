@@ -51,71 +51,68 @@ public class MainMenu : GameState {
         gui.addTextElement(Anchor.LEFT,         "debug7", "my test", 0,0, 20, pumpkinOrange, true);
         //gui.addTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 20, pumpkinOrange, true);
         gui.addTextElement(Anchor.RIGHT,        "debug8", "my test", 0,0, 20, pumpkinOrange, true);
-        
 
-        gui.addAnimatedTextElement(Anchor.CENTER,       "debug9", "BOUNCING AROUND", 0,0, 60, pumpkinOrange, true,
-            // Constructor function
-            (GUITextAnimated animation) {
-                animation.singularIntMemory = 1;
-                animation.singularBoolMemory = true;
-                animation.singularFloatMemory = 0;
-            },
-            // Bouncing text - treating the entire object as the animation
-            (GUITextAnimated animation, float delta) {
-                
-                string text = animation.getText();
-                int textLength = cast(int) text.length;
+        // Constructor function
+        void init(GUITextAnimated animation) {
+            animation.singularIntMemory = 1;
+            animation.singularBoolMemory = true;
+            animation.singularFloatMemory = 0;
+        }
 
-                bool  goUp        = animation.singularBoolMemory;
-                float height      = animation.singularFloatMemory;
-                int   stage       = animation.singularIntMemory;
+        // Bouncing text - treating the entire object as the animation
+        void update(GUITextAnimated animation, float delta) {                
+            string text = animation.getText();
+            int textLength = cast(int) text.length;
 
-                static immutable float bounceAmount = 7;
-                static immutable float bounceSpeed = 50;
+            bool  goUp        = animation.singularBoolMemory;
+            float height      = animation.singularFloatMemory;
+            int   stage       = animation.singularIntMemory;
 
-                if (goUp) {
-                    height += delta * bounceSpeed;
-                    if (height >= bounceAmount) {
-                        stage += 1;
-                        goUp = false;
-                        height = bounceAmount;
+            static immutable float bounceAmount = 7;
+            static immutable float bounceSpeed = 50;
+
+            if (goUp) {
+                height += delta * bounceSpeed;
+                if (height >= bounceAmount) {
+                    stage += 1;
+                    goUp = false;
+                    height = bounceAmount;
+                }
+            } else {
+                height -= delta * bounceSpeed;
+                if (height <= 0) {
+                    stage += 1;
+                    goUp = true;
+                    height = 0;
+                }
+            }
+            if (stage > 4) {
+                stage = 1;
+            }
+
+
+            bool odd = true;
+            foreach (i; 0..textLength){
+                if (stage < 3) {
+                    if (odd) {                            
+                        animation.offsetMemory[i].y = height;
                     }
                 } else {
-                    height -= delta * bounceSpeed;
-                    if (height <= 0) {
-                        stage += 1;
-                        goUp = true;
-                        height = 0;
+                    if (!odd) {                            
+                        animation.offsetMemory[i].y = height;
                     }
                 }
-                if (stage > 4) {
-                    stage = 1;
-                }
-
-
-                bool odd = true;
-                foreach (i; 0..textLength){
-                    if (stage < 3) {
-                        if (odd) {                            
-                            animation.offsetMemory[i].y = height;
-                        }
-                    } else {
-                        if (!odd) {                            
-                            animation.offsetMemory[i].y = height;
-                        }
-                    }
-                    odd = !odd;
-                }
-
-                animation.singularBoolMemory  = goUp;
-                animation.singularFloatMemory = height;
-                animation.singularIntMemory  = stage;
-
+                odd = !odd;
             }
-        );
 
-        gui.addTextElement(Anchor.CENTER,       "HAPPY", "HAPPY", 0, -150, 50, Colors.BLACK, true);
-        gui.addTextElement(Anchor.CENTER,       "HALLOWEEN", "HALLOWEEN", 0, 150, 50, Colors.BLACK, true);
+            animation.singularBoolMemory  = goUp;
+            animation.singularFloatMemory = height;
+            animation.singularIntMemory  = stage;
+
+        }
+        
+        gui.addAnimatedTextElement(Anchor.CENTER,       "HAPPY", "HAPPY", 0, -150, 50, Colors.BLACK, false, &init, &update);
+        gui.addAnimatedTextElement(Anchor.CENTER,       "HALLOWEEN", "HALLOWEEN", 0, 150, 50, Colors.BLACK, false, &init, &update);
 
 
         cache.upload("jackolantern", "textures/jackolantern.png");
