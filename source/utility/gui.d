@@ -92,6 +92,9 @@ static immutable enum KeyIndexes {
     backslash     = ["\\", "|" ], // Key: '\'
     right_bracket = ["]",  "}" ], // Key: ]
     grave         = ["`",  "~" ], // Key: `
+
+    //! Space - The final frontier
+    space        = [" ", " "],
 }
 
 //! I've never made a generic GUI before so this might be a disaster
