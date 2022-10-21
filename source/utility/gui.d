@@ -7,6 +7,7 @@ import std.string: toStringz;
 import std.conv: to;
 import mouse;
 import keyboard;
+import std.ascii: toUpper;
 
 // Needs to expose externally
 static immutable enum Anchor {
@@ -414,7 +415,11 @@ public class GUIInput : GUIText{
     void update(int windowWidth, int windowHeight, float delta, Mouse mouse, Keyboard keyboard) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
-        
+        static foreach (key; typingInputLetters) {
+            if (keyboard[key ~ "_pressed"]) {
+                text ~= keyboard.left_shift_down || keyboard.right_shift_down ? toUpper(key[0]) : key[0];
+            }
+        }  
     }
 
     override
