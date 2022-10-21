@@ -65,7 +65,7 @@ public class GUI {
     */
 
     //! Text Elements
-    void addTextElement(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize, Color color, bool shadowed) {
+    void addTextElement(string ID, Anchor anchor, string text, int offsetX, int offsetY, int fontSize, Color color, bool shadowed) {
         this.textElements[ID] = new GUIText(anchor, offsetX,offsetY, text, fontSize, color, shadowed);
     }
     void removeTextElement(string ID) {
@@ -76,7 +76,7 @@ public class GUI {
     }
     
     //! Animated Text Elements    
-    void addAnimatedTextElement(Anchor anchor, string ID, string text, int offsetX, int offsetY, int fontSize, Color color, bool shadowed, void delegate(GUITextAnimated) initialFunc, void delegate(GUITextAnimated, float) func) {
+    void addAnimatedTextElement(string ID, Anchor anchor, string text, int offsetX, int offsetY, int fontSize, Color color, bool shadowed, void delegate(GUITextAnimated) initialFunc, void delegate(GUITextAnimated, float) func) {
         this.textElements[ID] = new GUITextAnimated(anchor, offsetX,offsetY, text, fontSize, color, shadowed, initialFunc, func);
     }
     void removeAnimatedTextElement(string ID) {
@@ -87,7 +87,7 @@ public class GUI {
     }
 
     //! Image Elements
-    void addImageElement(Anchor anchor, string ID, int offsetX, int offsetY, Texture texture, float scale) {
+    void addImageElement(string ID, Anchor anchor, int offsetX, int offsetY, Texture texture, float scale) {
         this.imageElements[ID] = new GUIImage(anchor, offsetX,offsetY, texture, scale);
     }
     void removeImageElement(string ID) {

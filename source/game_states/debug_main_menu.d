@@ -40,17 +40,17 @@ public class MainMenu : GameState {
 
         Color pumpkinOrange = Color(255, 117, 24,255);
 
-        gui.addTextElement(Anchor.TOP_LEFT,     "debug1", "my test", 0,0, 20, pumpkinOrange, true);
-        gui.addTextElement(Anchor.TOP,          "debug2", "my test", 0,0, 20, pumpkinOrange, true);
-        gui.addTextElement(Anchor.TOP_RIGHT,    "debug3", "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement("debug1", Anchor.TOP_LEFT,     "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement("debug2", Anchor.TOP,          "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement("debug3", Anchor.TOP_RIGHT,    "my test", 0,0, 20, pumpkinOrange, true);
 
-        gui.addTextElement(Anchor.BOTTOM_LEFT,  "debug4", "my test", 0,0, 20, pumpkinOrange, true);
-        gui.addTextElement(Anchor.BOTTOM,       "debug5", "my test", 0,0, 20, pumpkinOrange, true);
-        gui.addTextElement(Anchor.BOTTOM_RIGHT, "debug6", "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement("debug4", Anchor.BOTTOM_LEFT,  "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement("debug5", Anchor.BOTTOM,       "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement("debug6", Anchor.BOTTOM_RIGHT, "my test", 0,0, 20, pumpkinOrange, true);
 
-        gui.addTextElement(Anchor.LEFT,         "debug7", "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement("debug7", Anchor.LEFT,         "my test", 0,0, 20, pumpkinOrange, true);
         //gui.addTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 20, pumpkinOrange, true);
-        gui.addTextElement(Anchor.RIGHT,        "debug8", "my test", 0,0, 20, pumpkinOrange, true);
+        gui.addTextElement("debug8", Anchor.RIGHT,        "my test", 0,0, 20, pumpkinOrange, true);
 
         // Constructor function
         void init(GUITextAnimated animation) {
@@ -111,15 +111,15 @@ public class MainMenu : GameState {
 
         }
         
-        gui.addAnimatedTextElement(Anchor.CENTER,       "HAPPY", "HAPPY", 0, -150, 50, Colors.BLACK, false, &init, &update);
-        gui.addAnimatedTextElement(Anchor.CENTER,       "HALLOWEEN", "HALLOWEEN", 0, 150, 50, Colors.BLACK, false, &init, &update);
+        gui.addAnimatedTextElement("HAPPY",     Anchor.CENTER, "HAPPY",     0, -150, 50, Colors.BLACK, false, &init, &update);
+        gui.addAnimatedTextElement("HALLOWEEN", Anchor.CENTER, "HALLOWEEN", 0,  150, 50, Colors.BLACK, false, &init, &update);
 
 
         cache.upload("jackolantern", "textures/jackolantern.png");
 
         pumpkin = cache.get("jackolantern").get();
 
-        gui.addImageElement(Anchor.CENTER, "pumpkin", 10,0, pumpkin, 0.75);
+        gui.addImageElement("pumpkin", Anchor.CENTER, 10,0, pumpkin, 0.75);
 
     }
 
