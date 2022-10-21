@@ -8,6 +8,7 @@ import std.conv: to;
 import mouse;
 import keyboard;
 import std.ascii: toUpper;
+import std.traits: EnumMembers;
 
 // Needs to expose externally
 static immutable enum Anchor {
@@ -46,16 +47,17 @@ static immutable string[] numericKeys = [
     "zero","one","two","three","four","five","six","seven","eight","nine"
 ];
 static immutable enum Symbols {
-    APOSTROPHE    = ["'",  "\""], // Key: '
-    COMMA         = [",",  "<" ], // Key: ,
-    MINUS         = ["-",  "_" ], // Key: -
-    PERIOD        = [".",  ">" ], // Key: .
-    SEMICOLON     = [";",  ":" ], // Key: ;
-    EQUAL         = ["=",  "+" ], // Key: =
-    LEFT_BRACKET  = ["[",  "{" ], // Key: [
-    BACKSLASH     = ["\\", "|" ], // Key: '\'
-    RIGHT_BRACKET = ["]",  "}" ], // Key: ]
-    GRAVE         = ["`",  "~" ], // Key: `
+    apostrophe    = ["'",  "\""], // Key: '
+    comma         = [",",  "<" ], // Key: ,
+    minus         = ["-",  "_" ], // Key: -
+    period        = [".",  ">" ], // Key: .
+    slash         = ["/",  "?" ], // Key: /
+    semicolon     = [";",  ":" ], // Key: ;
+    equal         = ["=",  "+" ], // Key: =
+    left_bracket  = ["[",  "{" ], // Key: [
+    backslash     = ["\\", "|" ], // Key: '\'
+    right_bracket = ["]",  "}" ], // Key: ]
+    grave         = ["`",  "~" ], // Key: `
 }
 
 //! I've never made a generic GUI before so this might be a disaster
@@ -442,6 +444,11 @@ public class GUIInput : GUIText{
         static foreach (i; 0..numericKeys.length) {
             if (keyboard[to!string(numericKeys[i]) ~ "_pressed"]) {
                 setText(text ~= to!string(i));
+            }
+        }
+        static foreach (key; EnumMembers!Symbols) {
+            if (keyboard[to!string(key) ~ "_pressed"]) {
+                setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[0] : key[1]);
             }
         }
     }
