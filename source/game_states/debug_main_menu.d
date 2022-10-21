@@ -39,6 +39,7 @@ public class MainMenu : GameState {
         gui = new GUI(window);
 
         Color pumpkinOrange = Color(255, 117, 24,255);
+        /*
 
         gui.addTextElement("debug1", Anchor.TOP_LEFT,     "my test", 0,0, 20, pumpkinOrange, true);
         gui.addTextElement("debug2", Anchor.TOP,          "my test", 0,0, 20, pumpkinOrange, true);
@@ -113,15 +114,16 @@ public class MainMenu : GameState {
         
         gui.addAnimatedTextElement("HAPPY",     Anchor.CENTER, "HAPPY",     0, -150, 50, Colors.BLACK, false, &init, &update);
         gui.addAnimatedTextElement("HALLOWEEN", Anchor.CENTER, "HALLOWEEN", 0,  150, 50, Colors.BLACK, false, &init, &update);
+        */
 
-        gui.addTextInputElement("typeWords", "", "Hello", Anchor.CENTER, 0, 0, 10, 220, 20, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE);
+        gui.addTextInputElement("typeWords", "", "*input text*", Anchor.CENTER, 0, 0, 10, 220, 20, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE);
 
 
-        cache.upload("jackolantern", "textures/jackolantern.png");
+        // cache.upload("jackolantern", "textures/jackolantern.png");
 
-        pumpkin = cache.get("jackolantern").get();
+        // pumpkin = cache.get("jackolantern").get();
 
-        gui.addImageElement("pumpkin", Anchor.CENTER, 10,0, pumpkin, 0.75);
+        // gui.addImageElement("pumpkin", Anchor.CENTER, 10,0, pumpkin, 0.75);
 
     }
 
@@ -141,20 +143,20 @@ public class MainMenu : GameState {
     override
     void update() {
 
-        UpdateMusicStream(music);
+        // UpdateMusicStream(music);
 
         float delta = timeKeeper.getDelta();
 
         final switch (up) {
             case true: {
-                progress += delta / 10.0;
+                progress += delta / 1.0;
                 up = progress >= 1.0 ? false : true;
                 // Don't allow interpolation overshoot
                 progress = up ? progress : 1.0;
                 break;
             }
             case false: {
-                progress -= delta / 10.0;
+                progress -= delta / 1.0;
                 up = progress <= 0.0 ? true : false;
                 // Don't allow interpolation overshoot
                 progress = up ? 0.0 : progress;
@@ -171,6 +173,7 @@ public class MainMenu : GameState {
             255
         );
 
+        /*
         Random randy;
 
         foreach (key; runners) {
@@ -193,6 +196,7 @@ public class MainMenu : GameState {
         }
 
         window.setTitle(shmoop);
+        */
     }
 
     override
