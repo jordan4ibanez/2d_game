@@ -116,7 +116,8 @@ public class MainMenu : GameState {
         gui.addAnimatedTextElement("HALLOWEEN", Anchor.CENTER, "HALLOWEEN", 0,  150, 50, Colors.BLACK, false, &init, &update);
         */
 
-        gui.addTextInputElement("typeWords", "", "*input text*", Anchor.CENTER, 0, 0, 10, 220, 20, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE);
+        gui.addTextInputElement("typeWords", "", "*input text*", Anchor.RIGHT, 0, -20, 10, 220, 20, 3, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE);
+        gui.addTextInputElement("overlapText", "", "Focused?", Anchor.RIGHT, 0, 20, 10, 220, 20, 3, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE);
 
 
         // cache.upload("jackolantern", "textures/jackolantern.png");
