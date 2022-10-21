@@ -513,19 +513,31 @@ public class GUIInput : GUIText{
                 deleteHoldTimer = 0;
                 deleteHold = false;
             }
-        } else {
+        }
+
+        if (mouse.leftButtonPressed()) {
             // Poll mouse position
             Vector2 mousePos = mouse.getPosition();
-
-            
+            if (CheckCollisionPointRec(
+                mousePos,
+                Rectangle(
+                    cast(int)(((anchor.x * windowWidth)  - (anchor.x * inputBoxWidth)) + offset.x),
+                    cast(int)(((anchor.y * windowHeight) - (anchor.y * height)) + offset.y),
+                    inputBoxWidth,
+                    cast(int)height
+                )
+            )) {
+                focused = true;
+                
+            } else {
+                focused = false;
+            }
         }
+        
     }
 
     override
     void render() {
-
-
-        
 
         float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * inputBoxWidth)) + offset.x;
         float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * height)) + offset.y;
@@ -554,7 +566,7 @@ public class GUIInput : GUIText{
             positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
             // By some insane coincidence 0 and 1 match up to the chars of " " and "_"
             DrawText(
-                toStringz(text ~ cursor),
+                toStringz(text ~ (focused && cursor)),
                 cast(int)positionRenderX + padding,
                 cast(int)positionRenderY,
                 fontSize,
