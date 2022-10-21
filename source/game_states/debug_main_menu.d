@@ -36,7 +36,7 @@ public class MainMenu : GameState {
     this(Game game) {
         super(game);
 
-        gui = new GUI(window);
+        gui = new GUI(window, mouse, keyboard);
 
         Color pumpkinOrange = Color(255, 117, 24,255);
         /*
