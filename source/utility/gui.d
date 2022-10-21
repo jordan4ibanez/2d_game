@@ -58,8 +58,8 @@ public class GUI {
     GUIInput[string] textInputElements;
 
     this(Window window, Mouse mouse, Keyboard keyboard) {
-        this.window = window;
-        this.mouse = mouse;
+        this.window   = window;
+        this.mouse    = mouse;
         this.keyboard = keyboard;
         windowOffsetX = 0;
         windowOffsetY = 0;
@@ -124,17 +124,17 @@ public class GUI {
         windowHeight = cast(int)wSize.y;
 
         foreach (element; textElements) {
-            element.update(windowWidth, windowHeight, delta);
+            element.update(windowWidth, windowHeight, delta, mouse, keyboard);
             element.render();
         }
 
         foreach (element; imageElements) {
-            element.update(windowWidth, windowHeight, delta);
+            element.update(windowWidth, windowHeight, delta, mouse, keyboard);
             element.render();
         }
 
         foreach (element; textInputElements) {
-            element.update(windowWidth, windowHeight, delta);
+            element.update(windowWidth, windowHeight, delta, mouse, keyboard);
             element.render();
         }
     }
@@ -157,7 +157,7 @@ private class GUIElement {
 
     private bool visible = true;
 
-    void update(int windowWidth, int windowHeight, float delta) {
+    void update(int windowWidth, int windowHeight, float delta, Mouse mouse, Keyboard keyboard) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
     }
@@ -301,7 +301,7 @@ public class GUITextAnimated : GUIText {
     }
 
     override
-    void update(int windowWidth, int windowHeight, float delta) {
+    void update(int windowWidth, int windowHeight, float delta, Mouse mouse, Keyboard keyboard) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
         this.func(this, delta);
@@ -369,8 +369,7 @@ public class GUIInput : GUIText{
     Color backgroundColor;
     Color borderColor;
 
-    this(string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {
-        writeln(textPlaceHolder);
+    this(string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {        
         super(anchor, offsetX, offsetY, initialText, fontSize, fontColor, false);
         this.textPlaceHolder = textPlaceHolder;
         this.textLimit = textLimit;
