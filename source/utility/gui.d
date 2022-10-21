@@ -333,18 +333,39 @@ public class GUITextAnimated : GUIText {
     }
 }
 
-public class GUIInput : GUIElement{
-    
-    string inputText;
-    string placeHolder;
-    int width;
-    int fontSize;
+public class GUIInput : GUIText{
+
+    immutable string placeHolder;
+    int textLimit = 10;
+    int inputBoxWidth;
+    float height = 0.0;
     bool focused;
+    Color backgroundColor;
+    Color borderColor;    
 
-    this() {
-
-        
+    this(string initialText, string placeholder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, Color fontColor, Color backgroundColor, Color borderColor) {
+        super(anchor, offsetX, offsetY, initialText, fontSize, fontColor, false);
+        this.placeHolder = placeHolder;
+        this.textLimit = textLimit;
+        this.inputBoxWidth = inputBoxWidth;        
+        this.backgroundColor = backgroundColor;
+        this.borderColor = borderColor;
+        this.height = measureBoxHeight();
     }
+
+    private float measureBoxHeight() {
+        return MeasureTextEx(GetFontDefault(), toStringz("abgcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), fontSize, fontSize / GetFontDefault().baseSize).y;
+    }
+
+    override
+    void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
+        this.spacing = fontSize/GetFontDefault().baseSize;
+        this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
+        this.height = measureBoxHeight();
+    }
+
+    
 }
 
 
