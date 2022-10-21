@@ -29,7 +29,7 @@ static immutable enum Anchor {
 static immutable enum ElementType {
     NULL,          //! DONE
     TEXT,          //! DONE
-    ANIMATED_TEXT,
+    ANIMATED_TEXT, //! DONE
     INPUT,
     BUTTON,
     IMAGE,
@@ -310,7 +310,7 @@ public class GUITextAnimated : GUIText {
                     Colors.BLACK
                 );    
             }
-            
+
             DrawTextEx(
                 GetFontDefault(),
                 letter,
