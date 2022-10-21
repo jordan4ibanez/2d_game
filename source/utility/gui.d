@@ -518,10 +518,12 @@ public class GUIInput : GUIText{
     void render() {
 
 
-        //! Impl scissoring!
+        
 
         float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * inputBoxWidth) - padding) + offset.x;
         float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * height)) + offset.y;
+
+        BeginScissorMode(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth + padding, cast(int)height);
 
         DrawRectangle(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth + padding, cast(int)height, backgroundColor);
         DrawRectangleLines(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth + padding, cast(int)height, borderColor);
@@ -552,6 +554,8 @@ public class GUIInput : GUIText{
                 color
             );
         }
+
+        EndScissorMode();
     }
 
     
