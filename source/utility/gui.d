@@ -417,7 +417,7 @@ public class GUIInput : GUIText{
         this.windowHeight = windowHeight;
         static foreach (key; typingInputLetters) {
             if (keyboard[key ~ "_pressed"]) {
-                text ~= keyboard.left_shift_down || keyboard.right_shift_down ? toUpper(key[0]) : key[0];
+                text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? toUpper(key[0]) : key[0];
             }
         }  
     }
