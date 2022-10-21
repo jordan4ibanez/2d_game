@@ -376,7 +376,8 @@ public class GUIInput : GUIText{
     }
 
     private float measureBoxHeight() {
-        return MeasureTextEx(GetFontDefault(), toStringz("abgcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), fontSize, fontSize / GetFontDefault().baseSize).y;
+        // Todo: + 5 is height spacing, make this an argument!
+        return MeasureTextEx(GetFontDefault(), toStringz("abgcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), fontSize, fontSize / GetFontDefault().baseSize).y + 5;
     }
 
     override
@@ -389,9 +390,18 @@ public class GUIInput : GUIText{
 
     override
     void render() {
+
+
+        //! Impl scissoring!
+
+        float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * inputBoxWidth)) + offset.x;
+        float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * height)) + offset.y;
+
+        DrawRectangle(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth, cast(int)height, backgroundColor);
+
         if (text == "") {
-            float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textPlaceHolderSize.x)) + offset.x;
-            float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textPlaceHolderSize.y)) + offset.y;
+            positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textPlaceHolderSize.x)) + offset.x;
+            positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textPlaceHolderSize.y)) + offset.y;
             DrawText(
                 toStringz(textPlaceHolder),
                 cast(int)positionRenderX,
@@ -400,8 +410,8 @@ public class GUIInput : GUIText{
                 textPlaceHolderColor
             );
         } else {
-            float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
-            float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
+            positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
+            positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
             DrawText(
                 toStringz(text),
                 cast(int)positionRenderX,
