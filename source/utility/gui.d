@@ -43,10 +43,19 @@ static immutable enum ElementType {
 static immutable string[] alphabeticKeys = [
     "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
 ];
-static immutable string[] numericKeys = [
-    "zero","one","two","three","four","five","six","seven","eight","nine"
-];
-static immutable enum Symbols {
+static immutable enum NumericKeys = {
+    zero    = ["0", ")"],
+    one     = ["1", "!"],
+    two     = ["2", "@"],
+    three   = ["3", "#"],
+    four    = ["4", "$"],
+    five    = ["5", "%"],
+    six     = ["6", "^"],
+    seven   = ["7", "&"],
+    eight   = ["8", "*"],
+    nine    = ["9", "("],
+};
+static immutable enum SymbolicKeys {
     apostrophe    = ["'",  "\""], // Key: '
     comma         = [",",  "<" ], // Key: ,
     minus         = ["-",  "_" ], // Key: -
