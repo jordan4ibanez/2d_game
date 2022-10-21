@@ -385,7 +385,9 @@ public class GUIInput : GUIText{
     bool focused;
     Color textPlaceHolderColor;
     Color backgroundColor;
-    Color borderColor;
+    Color borderColor;    
+    bool cursor;
+    float cursorTimer = 0;
 
     this(string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {        
         super(anchor, offsetX, offsetY, initialText, fontSize, fontColor, false);
@@ -398,6 +400,15 @@ public class GUIInput : GUIText{
         this.height = measureBoxHeightPadded();
     }
 
+    override
+    void setText(string text) {
+        this.text = text;
+        this.spacing = fontSize/GetFontDefault().baseSize;
+        string temp = text ~ "_";
+        this.textSize = MeasureTextEx(GetFontDefault(),toStringz(temp), fontSize, spacing);
+        
+    }
+
     private float measureBoxHeightPadded() {
         // Todo: + 5 is height spacing, make this an argument!
         return MeasureTextEx(GetFontDefault(), toStringz("abgcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), fontSize, fontSize / GetFontDefault().baseSize).y + 5;
@@ -407,14 +418,22 @@ public class GUIInput : GUIText{
     void setFontSize(int fontSize) {
         this.fontSize = fontSize;
         this.spacing = fontSize/GetFontDefault().baseSize;
-        this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
-        this.height = measureBoxHeightPadded();
+        string temp = text ~ "_";
+        this.textSize = MeasureTextEx(GetFontDefault(),toStringz(temp), fontSize, spacing);
+        this.height = measureBoxHeightPadded();        
     }    
 
     override
     void update(int windowWidth, int windowHeight, float delta, Mouse mouse, Keyboard keyboard) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
+
+        cursorTimer += delta;
+        if (cursorTimer > 0.3) {
+            cursor = !cursor;
+            cursorTimer = 0;
+        }
+
         static foreach (key; typingInputLetters) {
             if (keyboard[key ~ "_pressed"]) {
                 setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? toUpper(key[0]) : key[0]);
@@ -450,8 +469,9 @@ public class GUIInput : GUIText{
                 positionRenderX -= textSize.x - inputBoxWidth;
             }
             positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
+            // By some insane coincidence 0 and 1 match up to the chars of " " and "_"
             DrawText(
-                toStringz(text),
+                toStringz(text ~ cursor),
                 cast(int)positionRenderX,
                 cast(int)positionRenderY,
                 fontSize,
