@@ -114,6 +114,8 @@ public class MainMenu : GameState {
         gui.addAnimatedTextElement("HAPPY",     Anchor.CENTER, "HAPPY",     0, -150, 50, Colors.BLACK, false, &init, &update);
         gui.addAnimatedTextElement("HALLOWEEN", Anchor.CENTER, "HALLOWEEN", 0,  150, 50, Colors.BLACK, false, &init, &update);
 
+        gui.addTextInputElement("typeWords", "", "Hello", Anchor.CENTER, 0, 0, 10, 220, 20, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE);
+
 
         cache.upload("jackolantern", "textures/jackolantern.png");
 

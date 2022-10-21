@@ -50,6 +50,7 @@ public class GUI {
     // todo: layers?
     GUIText[string] textElements;
     GUIImage[string] imageElements;
+    GUIInput[string] textInputElements;
 
     this(Window window) {
         this.window = window;
@@ -73,6 +74,17 @@ public class GUI {
     }
     GUIText getTextElement(string ID) {
         return this.textElements[ID];
+    }
+
+    //! Text Input Element
+    void addTextInputElement(string ID, string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {
+        this.textInputElements[ID] = new GUIInput(initialText, textPlaceHolder, anchor, offsetX, offsetY, textLimit, inputBoxWidth, fontSize, fontColor, textPlaceHolderColor, backgroundColor, borderColor);
+    }
+    void removeTextInputElement(string ID) {
+        this.textInputElements.remove(ID);
+    }
+    GUIInput getTextInputElement(string ID) {
+        return this.textInputElements[ID];
     }
     
     //! Animated Text Elements    
@@ -111,7 +123,12 @@ public class GUI {
 
         foreach (element; imageElements) {
             element.update(windowWidth, windowHeight, delta);
-            element.render();            
+            element.render();
+        }
+
+        foreach (element; textInputElements) {
+            element.update(windowWidth, windowHeight, delta);
+            element.render();
         }
     }
 }
@@ -335,19 +352,22 @@ public class GUITextAnimated : GUIText {
 
 public class GUIInput : GUIText{
 
-    immutable string placeHolder;
+    immutable string textPlaceHolder;
     int textLimit = 10;
     int inputBoxWidth;
     float height = 0.0;
     bool focused;
+    Color textPlaceHolderColor;
     Color backgroundColor;
     Color borderColor;    
 
-    this(string initialText, string placeholder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, Color fontColor, Color backgroundColor, Color borderColor) {
+    this(string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {
+        writeln(textPlaceHolder);
         super(anchor, offsetX, offsetY, initialText, fontSize, fontColor, false);
-        this.placeHolder = placeHolder;
+        this.textPlaceHolder = textPlaceHolder;
         this.textLimit = textLimit;
         this.inputBoxWidth = inputBoxWidth;        
+        this.textPlaceHolderColor = textPlaceHolderColor;
         this.backgroundColor = backgroundColor;
         this.borderColor = borderColor;
         this.height = measureBoxHeight();
@@ -363,6 +383,30 @@ public class GUIInput : GUIText{
         this.spacing = fontSize/GetFontDefault().baseSize;
         this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
         this.height = measureBoxHeight();
+    }
+
+    override
+    void render() {
+        float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
+        float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
+
+        if (text == "") {
+            DrawText(
+                toStringz(textPlaceHolder),
+                cast(int)positionRenderX,
+                cast(int)positionRenderY,
+                fontSize,
+                textPlaceHolderColor
+            );
+        } else {
+            DrawText(
+                toStringz(text),
+                cast(int)positionRenderX,
+                cast(int)positionRenderY,
+                fontSize,
+                color
+            );
+        }
     }
 
     
