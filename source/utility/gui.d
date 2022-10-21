@@ -409,7 +409,7 @@ public class GUIInput : GUIText{
         this.spacing = fontSize/GetFontDefault().baseSize;
         this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
         this.height = measureBoxHeightPadded();
-    }
+    }    
 
     override
     void update(int windowWidth, int windowHeight, float delta, Mouse mouse, Keyboard keyboard) {
@@ -417,7 +417,7 @@ public class GUIInput : GUIText{
         this.windowHeight = windowHeight;
         static foreach (key; typingInputLetters) {
             if (keyboard[key ~ "_pressed"]) {
-                text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? toUpper(key[0]) : key[0];
+                setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? toUpper(key[0]) : key[0]);
             }
         }  
     }
@@ -434,6 +434,7 @@ public class GUIInput : GUIText{
         DrawRectangle(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth, cast(int)height, backgroundColor);
 
         if (text == "" && !focused) {
+            // cursor blink goes here
             // positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textPlaceHolderSize.x)) + offset.x;
             positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
             DrawText(
@@ -445,6 +446,9 @@ public class GUIInput : GUIText{
             );
         } else {
             // positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
+            if (textSize.x > inputBoxWidth) {
+                positionRenderX -= textSize.x - inputBoxWidth;
+            }
             positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
             DrawText(
                 toStringz(text),
