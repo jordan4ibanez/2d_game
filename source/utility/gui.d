@@ -41,48 +41,46 @@ static immutable enum ElementType {
 }
 
 // Memory is cheap, predefine everything
-static immutable enum AlphabeticKeys {
-    a = ["a", "A"],
-    b = ["b", "B"],
-    c = ["c", "C"],
-    d = ["d", "D"],
-    e = ["e", "E"],
-    f = ["f", "F"],
-    g = ["g", "G"],
-    h = ["h", "H"],
-    i = ["i", "I"],
-    j = ["j", "J"],
-    k = ["k", "K"],
-    l = ["l", "L"],
-    m = ["m", "M"],
-    n = ["n", "N"],
-    o = ["o", "O"],
-    p = ["p", "P"],
-    q = ["q", "Q"],
-    r = ["r", "R"],
-    s = ["s", "S"],
-    t = ["t", "T"],
-    u = ["u", "U"],
-    v = ["v", "V"],
-    w = ["w", "W"],
-    x = ["x", "X"],
-    y = ["y", "Y"],
-    z = ["z", "Z"],
-}
-static immutable enum NumericKeys {
-    zero    = ["0", ")"],
-    one     = ["1", "!"],
-    two     = ["2", "@"],
-    three   = ["3", "#"],
-    four    = ["4", "$"],
-    five    = ["5", "%"],
-    six     = ["6", "^"],
-    seven   = ["7", "&"],
-    eight   = ["8", "*"],
-    nine    = ["9", "("],
-}
-
-static immutable enum SymbolicKeys {
+static immutable enum KeyIndexes {
+    //! Alphabetic
+    a             = ["a", "A"],
+    b             = ["b", "B"],
+    c             = ["c", "C"],
+    d             = ["d", "D"],
+    e             = ["e", "E"],
+    f             = ["f", "F"],
+    g             = ["g", "G"],
+    h             = ["h", "H"],
+    i             = ["i", "I"],
+    j             = ["j", "J"],
+    k             = ["k", "K"],
+    l             = ["l", "L"],
+    m             = ["m", "M"],
+    n             = ["n", "N"],
+    o             = ["o", "O"],
+    p             = ["p", "P"],
+    q             = ["q", "Q"],
+    r             = ["r", "R"],
+    s             = ["s", "S"],
+    t             = ["t", "T"],
+    u             = ["u", "U"],
+    v             = ["v", "V"],
+    w             = ["w", "W"],
+    x             = ["x", "X"],
+    y             = ["y", "Y"],
+    z             = ["z", "Z"],
+    //! Numeric
+    zero          = ["0", ")"],
+    one           = ["1", "!"],
+    two           = ["2", "@"],
+    three         = ["3", "#"],
+    four          = ["4", "$"],
+    five          = ["5", "%"],
+    six           = ["6", "^"],
+    seven         = ["7", "&"],
+    eight         = ["8", "*"],
+    nine          = ["9", "("],
+    //! Symbolic
     apostrophe    = ["'",  "\""], // Key: '
     comma         = [",",  "<" ], // Key: ,
     minus         = ["-",  "_" ], // Key: -
@@ -472,17 +470,7 @@ public class GUIInput : GUIText{
             cursorTimer = 0;
         }
 
-        static foreach (key; EnumMembers!AlphabeticKeys) {
-            if (keyboard[to!string(key) ~ "_pressed"]) {
-                setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[1] : key[0]);
-            }
-        }
-        static foreach (key; EnumMembers!NumericKeys) {
-            if (keyboard[to!string(key) ~ "_pressed"]) {
-                setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[1] : key[0]);
-            }
-        }
-        static foreach (key; EnumMembers!SymbolicKeys) {
+        static foreach (key; EnumMembers!KeyIndexes) {
             if (keyboard[to!string(key) ~ "_pressed"]) {
                 setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[1] : key[0]);
             }
