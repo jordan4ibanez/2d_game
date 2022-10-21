@@ -378,7 +378,6 @@ public class GUITextAnimated : GUIText {
 public class GUIInput : GUIText{
 
     immutable string textPlaceHolder;
-    Vector2 textPlaceHolderSize;
     int textLimit = 10;
     int inputBoxWidth;
     float height = 0.0;
@@ -395,11 +394,10 @@ public class GUIInput : GUIText{
         this.textPlaceHolderColor = textPlaceHolderColor;
         this.backgroundColor = backgroundColor;
         this.borderColor = borderColor;
-        this.height = measureBoxHeight();
-        this.textPlaceHolderSize = MeasureTextEx(GetFontDefault(),toStringz(textPlaceHolder), fontSize, spacing);
+        this.height = measureBoxHeightPadded();
     }
 
-    private float measureBoxHeight() {
+    private float measureBoxHeightPadded() {
         // Todo: + 5 is height spacing, make this an argument!
         return MeasureTextEx(GetFontDefault(), toStringz("abgcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), fontSize, fontSize / GetFontDefault().baseSize).y + 5;
     }
@@ -409,7 +407,7 @@ public class GUIInput : GUIText{
         this.fontSize = fontSize;
         this.spacing = fontSize/GetFontDefault().baseSize;
         this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
-        this.height = measureBoxHeight();
+        this.height = measureBoxHeightPadded();
     }
 
     override
@@ -432,7 +430,7 @@ public class GUIInput : GUIText{
 
         if (text == "" && !focused) {
             // positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textPlaceHolderSize.x)) + offset.x;
-            positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textPlaceHolderSize.y)) + offset.y;
+            positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
             DrawText(
                 toStringz(textPlaceHolder),
                 cast(int)positionRenderX,
