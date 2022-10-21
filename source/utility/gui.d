@@ -334,10 +334,15 @@ public class GUITextAnimated : GUIText {
 }
 
 public class GUIInput : GUIElement{
+    
     string inputText;
+    string placeHolder;
     int width;
+    int fontSize;
+    bool focused;
 
     this() {
+
         
     }
 }
