@@ -436,7 +436,7 @@ public class GUIInput : GUIText{
         super(anchor, offsetX, offsetY, initialText, fontSize, fontColor, false);
         this.textPlaceHolder = textPlaceHolder;
         this.textLimit = textLimit;
-        this.inputBoxWidth = inputBoxWidth;        
+        this.inputBoxWidth = inputBoxWidth + padding;        
         this.textPlaceHolderColor = textPlaceHolderColor;
         this.backgroundColor = backgroundColor;
         this.borderColor = borderColor;
@@ -471,46 +471,53 @@ public class GUIInput : GUIText{
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
 
-        cursorTimer += delta;
-        if (cursorTimer > 0.3) {
-            cursor = !cursor;
-            cursorTimer = 0;
-        }
-
-        static foreach (key; EnumMembers!KeyIndexes) {
-            if (keyboard[to!string(key) ~ "_pressed"]) {
-                setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[1] : key[0]);
+        if (focused) {
+            cursorTimer += delta;
+            if (cursorTimer > 0.3) {
+                cursor = !cursor;
+                cursorTimer = 0;
             }
-        }
 
-        // Simulate repeat key - Tapping delete to delete a bunch of chars is annoying
-        if (keyboard.backspace_down && text.length > 0) {
-            // Poll single press or holding
-            if (!deleteHold) {
-                if (deleteHoldTimer > 0) {
+            static foreach (key; EnumMembers!KeyIndexes) {
+                if (keyboard[to!string(key) ~ "_pressed"]) {
+                    setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[1] : key[0]);
+                }
+            }
+
+            // Simulate repeat key - Tapping delete to delete a bunch of chars is annoying
+            if (keyboard.backspace_down && text.length > 0) {
+                // Poll single press or holding
+                if (!deleteHold) {
+                    if (deleteHoldTimer > 0) {
+                        deleteHoldTimer += delta;
+                        if (deleteHoldTimer >= 0.5) {
+                            deleteHold = true;
+                            deleteHoldTimer = 0;
+                        }
+                    } else if (!deleteHold && deleteHoldTimer == 0) {
+                        text.length -= 1;
+                        setText(text);
+                        deleteHoldTimer += delta;
+                    }
+                // Begin the deletion repeat
+                } else {
                     deleteHoldTimer += delta;
-                    if (deleteHoldTimer >= 0.5) {
-                        deleteHold = true;
+                    if (deleteHoldTimer >= 0.1) {
+                        text.length -= 1;
+                        setText(text);
                         deleteHoldTimer = 0;
                     }
-                } else if (!deleteHold && deleteHoldTimer == 0) {
-                    text.length -= 1;
-                    setText(text);
-                    deleteHoldTimer += delta;
                 }
-            // Begin the deletion repeat
-            } else {
-                deleteHoldTimer += delta;
-                if (deleteHoldTimer >= 0.1) {
-                    text.length -= 1;
-                    setText(text);
-                    deleteHoldTimer = 0;
-                }
+            // Reset if not pressed
+            } else if (!keyboard.backspace_down) {
+                deleteHoldTimer = 0;
+                deleteHold = false;
             }
-        // Reset if not pressed
-        } else if (!keyboard.backspace_down) {
-            deleteHoldTimer = 0;
-            deleteHold = false;
+        } else {
+            // Poll mouse position
+            Vector2 mousePos = mouse.getPosition();
+
+            
         }
     }
 
@@ -520,13 +527,13 @@ public class GUIInput : GUIText{
 
         
 
-        float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * inputBoxWidth) - padding) + offset.x;
+        float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * inputBoxWidth)) + offset.x;
         float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * height)) + offset.y;
 
-        BeginScissorMode(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth + padding, cast(int)height);
+        BeginScissorMode(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth, cast(int)height);
 
-        DrawRectangle(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth + padding, cast(int)height, backgroundColor);
-        DrawRectangleLines(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth + padding, cast(int)height, borderColor);
+        DrawRectangle(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth, cast(int)height, backgroundColor);
+        DrawRectangleLines(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth, cast(int)height, borderColor);
 
         if (text == "" && !focused) {
             // cursor blink goes here
