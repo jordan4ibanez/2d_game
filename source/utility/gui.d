@@ -288,8 +288,6 @@ public class GUITextAnimated : GUIText {
 
         float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
         float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
-        
-
 
         int i = 0;
         foreach (character; text) {
@@ -301,7 +299,7 @@ public class GUITextAnimated : GUIText {
                 positionRenderX + offsetMemory[i].x,
                 positionRenderY - offsetMemory[i].y
             );
-            /*
+
             if (shadowed) {
                 DrawTextEx(
                     GetFontDefault(),
@@ -312,7 +310,7 @@ public class GUITextAnimated : GUIText {
                     Colors.BLACK
                 );    
             }
-            */
+            
             DrawTextEx(
                 GetFontDefault(),
                 letter,
