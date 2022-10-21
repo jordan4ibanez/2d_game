@@ -7,8 +7,6 @@ import std.string: toStringz;
 import std.conv: to;
 
 // Needs to expose externally
-// Todo: Check if these calculations are even correct
-
 static immutable enum Anchor {
     // Corners
     TOP_LEFT     = Vector2(0,0),
@@ -117,6 +115,8 @@ public class GUI {
         }
     }
 }
+
+
 
 private class GUIElement {
 
@@ -332,6 +332,16 @@ public class GUITextAnimated : GUIText {
         }
     }
 }
+
+public class GUIInput : GUIElement{
+    string inputText;
+    int width;
+
+    this() {
+        
+    }
+}
+
 
 public class GUIImage : GUIElement {
 
