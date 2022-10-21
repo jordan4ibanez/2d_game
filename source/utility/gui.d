@@ -353,6 +353,7 @@ public class GUITextAnimated : GUIText {
 public class GUIInput : GUIText{
 
     immutable string textPlaceHolder;
+    Vector2 textPlaceHolderSize;
     int textLimit = 10;
     int inputBoxWidth;
     float height = 0.0;
@@ -371,6 +372,7 @@ public class GUIInput : GUIText{
         this.backgroundColor = backgroundColor;
         this.borderColor = borderColor;
         this.height = measureBoxHeight();
+        this.textPlaceHolderSize = MeasureTextEx(GetFontDefault(),toStringz(textPlaceHolder), fontSize, spacing);
     }
 
     private float measureBoxHeight() {
@@ -387,10 +389,9 @@ public class GUIInput : GUIText{
 
     override
     void render() {
-        float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
-        float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
-
         if (text == "") {
+            float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textPlaceHolderSize.x)) + offset.x;
+            float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textPlaceHolderSize.y)) + offset.y;
             DrawText(
                 toStringz(textPlaceHolder),
                 cast(int)positionRenderX,
@@ -399,6 +400,8 @@ public class GUIInput : GUIText{
                 textPlaceHolderColor
             );
         } else {
+            float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
+            float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
             DrawText(
                 toStringz(text),
                 cast(int)positionRenderX,
