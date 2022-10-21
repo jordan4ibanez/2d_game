@@ -428,6 +428,9 @@ public class GUIInput : GUIText{
     bool cursor;
     float cursorTimer = 0;
 
+    float deleteHoldTimer = 0;
+    bool deleteHold = false;
+
     this(string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {        
         super(anchor, offsetX, offsetY, initialText, fontSize, fontColor, false);
         this.textPlaceHolder = textPlaceHolder;
@@ -477,6 +480,36 @@ public class GUIInput : GUIText{
             if (keyboard[to!string(key) ~ "_pressed"]) {
                 setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[1] : key[0]);
             }
+        }
+
+        // Simulate repeat key - Tapping delete to delete a bunch of chars is annoying
+        if (keyboard.backspace_down && text.length > 0) {
+            // Poll single press or holding
+            if (!deleteHold) {
+                if (deleteHoldTimer > 0) {
+                    deleteHoldTimer += delta;
+                    if (deleteHoldTimer >= 0.5) {
+                        deleteHold = true;
+                        deleteHoldTimer = 0;
+                    }
+                } else if (!deleteHold && deleteHoldTimer == 0) {
+                    text.length -= 1;
+                    setText(text);
+                    deleteHoldTimer += delta;
+                }
+            // Begin the deletion repeat
+            } else {
+                deleteHoldTimer += delta;
+                if (deleteHoldTimer >= 0.1) {
+                    text.length -= 1;
+                    setText(text);
+                    deleteHoldTimer = 0;
+                }
+            }
+        // Reset if not pressed
+        } else if (!keyboard.backspace_down) {
+            deleteHoldTimer = 0;
+            deleteHold = false;
         }
     }
 
