@@ -40,10 +40,36 @@ static immutable enum ElementType {
     WINDOW
 }
 
-static immutable string[] alphabeticKeys = [
-    "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
-];
-static immutable enum NumericKeys = {
+// Memory is cheap, predefine everything
+static immutable enum AlphabeticKeys {
+    a = ["a", "A"],
+    b = ["b", "B"],
+    c = ["c", "C"],
+    d = ["d", "D"],
+    e = ["e", "E"],
+    f = ["f", "F"],
+    g = ["g", "G"],
+    h = ["h", "H"],
+    i = ["i", "I"],
+    j = ["j", "J"],
+    k = ["k", "K"],
+    l = ["l", "L"],
+    m = ["m", "M"],
+    n = ["n", "N"],
+    o = ["o", "O"],
+    p = ["p", "P"],
+    q = ["q", "Q"],
+    r = ["r", "R"],
+    s = ["s", "S"],
+    t = ["t", "T"],
+    u = ["u", "U"],
+    v = ["v", "V"],
+    w = ["w", "W"],
+    x = ["x", "X"],
+    y = ["y", "Y"],
+    z = ["z", "Z"],
+}
+static immutable enum NumericKeys {
     zero    = ["0", ")"],
     one     = ["1", "!"],
     two     = ["2", "@"],
@@ -54,7 +80,8 @@ static immutable enum NumericKeys = {
     seven   = ["7", "&"],
     eight   = ["8", "*"],
     nine    = ["9", "("],
-};
+}
+
 static immutable enum SymbolicKeys {
     apostrophe    = ["'",  "\""], // Key: '
     comma         = [",",  "<" ], // Key: ,
@@ -432,7 +459,7 @@ public class GUIInput : GUIText{
         string temp = text ~ "_";
         this.textSize = MeasureTextEx(GetFontDefault(),toStringz(temp), fontSize, spacing);
         this.height = measureBoxHeightPadded();        
-    }    
+    }
 
     override
     void update(int windowWidth, int windowHeight, float delta, Mouse mouse, Keyboard keyboard) {
@@ -445,19 +472,19 @@ public class GUIInput : GUIText{
             cursorTimer = 0;
         }
 
-        static foreach (key; alphabeticKeys) {
-            if (keyboard[key ~ "_pressed"]) {
-                setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? toUpper(key[0]) : key[0]);
-            }
-        }
-        static foreach (i; 0..numericKeys.length) {
-            if (keyboard[to!string(numericKeys[i]) ~ "_pressed"]) {
-                setText(text ~= to!string(i));
-            }
-        }
-        static foreach (key; EnumMembers!Symbols) {
+        static foreach (key; EnumMembers!AlphabeticKeys) {
             if (keyboard[to!string(key) ~ "_pressed"]) {
-                setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[0] : key[1]);
+                setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[1] : key[0]);
+            }
+        }
+        static foreach (key; EnumMembers!NumericKeys) {
+            if (keyboard[to!string(key) ~ "_pressed"]) {
+                setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[1] : key[0]);
+            }
+        }
+        static foreach (key; EnumMembers!SymbolicKeys) {
+            if (keyboard[to!string(key) ~ "_pressed"]) {
+                setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[1] : key[0]);
             }
         }
     }
