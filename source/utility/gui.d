@@ -38,6 +38,24 @@ static immutable enum ElementType {
     WINDOW
 }
 
+static immutable string[] typingInputLetters = [
+    "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
+];
+static immutable string[] typingInputNumbers = [
+    "zero","one","two","three","four","five","six","seven","eight","nine"
+];
+static immutable enum Symbols {
+    APOSTROPHE    = ["'",  "\""], // Key: '
+    COMMA         = [",",  "<" ], // Key: ,
+    MINUS         = ["-",  "_" ], // Key: -
+    PERIOD        = [".",  ">" ], // Key: .
+    SEMICOLON     = [";",  ":" ], // Key: ;
+    EQUAL         = ["=",  "+" ], // Key: =
+    LEFT_BRACKET  = ["[",  "{" ], // Key: [
+    BACKSLASH     = ["\\", "|" ], // Key: '\'
+    RIGHT_BRACKET = ["]",  "}" ], // Key: ]
+    GRAVE         = ["`",  "~" ], // Key: `
+}
 
 //! I've never made a generic GUI before so this might be a disaster
 public class GUI {
@@ -392,6 +410,13 @@ public class GUIInput : GUIText{
         this.spacing = fontSize/GetFontDefault().baseSize;
         this.textSize = MeasureTextEx(GetFontDefault(),toStringz(text), fontSize, spacing);
         this.height = measureBoxHeight();
+    }
+
+    override
+    void update(int windowWidth, int windowHeight, float delta, Mouse mouse, Keyboard keyboard) {
+        this.windowWidth = windowWidth;
+        this.windowHeight = windowHeight;
+        
     }
 
     override
