@@ -5,6 +5,8 @@ import std.stdio;
 import window;
 import std.string: toStringz;
 import std.conv: to;
+import mouse;
+import keyboard;
 
 // Needs to expose externally
 static immutable enum Anchor {
@@ -39,6 +41,9 @@ static immutable enum ElementType {
 
 //! I've never made a generic GUI before so this might be a disaster
 public class GUI {
+
+    Mouse mouse;
+    Keyboard keyboard;
     
     int windowWidth;
     int windowHeight;
@@ -52,8 +57,10 @@ public class GUI {
     GUIImage[string] imageElements;
     GUIInput[string] textInputElements;
 
-    this(Window window) {
+    this(Window window, Mouse mouse, Keyboard keyboard) {
         this.window = window;
+        this.mouse = mouse;
+        this.keyboard = keyboard;
         windowOffsetX = 0;
         windowOffsetY = 0;
     }
@@ -399,8 +406,8 @@ public class GUIInput : GUIText{
 
         DrawRectangle(cast(int)positionRenderX, cast(int)positionRenderY, inputBoxWidth, cast(int)height, backgroundColor);
 
-        if (text == "") {
-            positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textPlaceHolderSize.x)) + offset.x;
+        if (text == "" && !focused) {
+            // positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textPlaceHolderSize.x)) + offset.x;
             positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textPlaceHolderSize.y)) + offset.y;
             DrawText(
                 toStringz(textPlaceHolder),
@@ -410,7 +417,7 @@ public class GUIInput : GUIText{
                 textPlaceHolderColor
             );
         } else {
-            positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
+            // positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
             positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
             DrawText(
                 toStringz(text),
