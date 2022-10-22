@@ -32,7 +32,7 @@ static immutable enum ElementType {
     NULL,          //! DONE
     TEXT,          //! DONE
     ANIMATED_TEXT, //! DONE
-    INPUT,         
+    INPUT,         //! DONE
     BUTTON,
     IMAGE,
     DROP_MENU,
@@ -138,18 +138,24 @@ public class GUI {
         this.textElements.remove(ID);
     }
     GUIText getTextElement(string ID) {
-        return this.textElements[ID];
+        if (ID in textElements) {
+            return this.textElements[ID];
+        }
+        return null;
     }
 
     //! Text Input Element
-    void addTextInputElement(string ID, string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, int padding, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {
-        this.textInputElements[ID] = new GUIInput(initialText, textPlaceHolder, anchor, offsetX, offsetY, textLimit, inputBoxWidth, fontSize, padding, fontColor, textPlaceHolderColor, backgroundColor, borderColor);
+    void addTextInputElement(string ID, string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, int padding, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor, void delegate(GUIInput) enterAction = null) {
+        this.textInputElements[ID] = new GUIInput(initialText, textPlaceHolder, anchor, offsetX, offsetY, textLimit, inputBoxWidth, fontSize, padding, fontColor, textPlaceHolderColor, backgroundColor, borderColor, enterAction);
     }
     void removeTextInputElement(string ID) {
         this.textInputElements.remove(ID);
     }
     GUIInput getTextInputElement(string ID) {
-        return this.textInputElements[ID];
+        if (ID in textInputElements) {
+            return this.textInputElements[ID];
+        }
+        return null;
     }
     
     //! Animated Text Elements    
@@ -160,7 +166,10 @@ public class GUI {
         this.textElements.remove(ID);
     }
     GUIText getAnimatedTextElement(string ID) {
-        return this.textElements[ID];
+        if (ID in textElements) {
+            return this.textElements[ID];
+        }
+        return null;
     }
 
     //! Image Elements
@@ -171,7 +180,10 @@ public class GUI {
         this.imageElements.remove(ID);
     }
     GUIImage getImageElement(string ID) {
-        return this.imageElements[ID];
+        if (ID in imageElements) {
+            return this.imageElements[ID];
+        }
+        return null;
     }
     
 
@@ -182,18 +194,24 @@ public class GUI {
         windowHeight = cast(int)wSize.y;
 
         foreach (element; textElements) {
-            element.update(windowWidth, windowHeight, delta, mouse, keyboard);
-            element.render();
+            if (element.isVisible()) {
+                element.update(windowWidth, windowHeight, delta, mouse, keyboard);
+                element.render();
+            }
         }
 
         foreach (element; imageElements) {
-            element.update(windowWidth, windowHeight, delta, mouse, keyboard);
-            element.render();
+            if (element.isVisible()) {
+                element.update(windowWidth, windowHeight, delta, mouse, keyboard);
+                element.render();
+            }
         }
 
         foreach (element; textInputElements) {
-            element.update(windowWidth, windowHeight, delta, mouse, keyboard);
-            element.render();
+            if (element.isVisible()) {
+                element.update(windowWidth, windowHeight, delta, mouse, keyboard);
+                element.render();
+            }
         }
     }
 }
@@ -432,7 +450,9 @@ public class GUIInput : GUIText{
     float deleteHoldTimer = 0;
     bool deleteHold = false;
 
-    this(string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, int padding, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor) {        
+    void delegate(GUIInput) enterAction;
+
+    this(string initialText, string textPlaceHolder, Anchor anchor, int offsetX, int offsetY, int textLimit, int inputBoxWidth, int fontSize, int padding, Color fontColor, Color textPlaceHolderColor, Color backgroundColor, Color borderColor, void delegate(GUIInput) enterAction) {
         super(anchor, offsetX, offsetY, initialText, fontSize, fontColor, false);
         this.textPlaceHolder = textPlaceHolder;
         this.textLimit = textLimit;
@@ -442,6 +462,7 @@ public class GUIInput : GUIText{
         this.borderColor = borderColor;
         this.padding = padding;
         this.height = measureBoxHeightPadded();
+        this.enterAction = enterAction;
     }
 
     override
@@ -512,6 +533,10 @@ public class GUIInput : GUIText{
             } else if (!keyboard.backspace_down) {
                 deleteHoldTimer = 0;
                 deleteHold = false;
+            }
+
+            if (keyboard.enter_pressed && enterAction !is null) {
+                enterAction(this);
             }
         }
 
