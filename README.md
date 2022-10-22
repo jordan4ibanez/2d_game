@@ -10,6 +10,11 @@ How to use map editor:
 4. Hold left shift, and then drag while holding the left mouse button to move around
 5. Todo: Export to JSON or something on save button :P
 
+Notes:
+```
+Raylib allows drawing to a texture: https://github.com/schveiguy/enterthedungeon/blob/master/source/dungeon/engine.d#L146
+How to build a texture: https://github.com/schveiguy/enterthedungeon/blob/master/source/dungeon/engine.d#L305-L325
+```
 
 ### Here is a preview of the map editor:
 
