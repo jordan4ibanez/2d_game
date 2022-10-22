@@ -122,7 +122,7 @@ public class MainMenu : GameState {
         
         gui.addTextElement("question", Anchor.CENTER, "What is your name?", 0, -50, 30, Colors.WHITE, true);
 
-        gui.addTextInputElement("namePrompt", "", "*input name here*", Anchor.CENTER, 0, 0, 10, 350, 30, 3, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE,
+        gui.addTextInputElement("namePrompt", "", "*input name here*", Anchor.CENTER, 0, 0, 20, 350, 30, 3, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE,
             (GUIInput textInput) {
 
                 gui.getAnimatedTextElement("HAPPY").setVisible(true);

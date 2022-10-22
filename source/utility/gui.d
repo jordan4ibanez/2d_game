@@ -499,9 +499,11 @@ public class GUIInput : GUIText{
                 cursorTimer = 0;
             }
 
-            static foreach (key; EnumMembers!KeyIndexes) {
-                if (keyboard[to!string(key) ~ "_pressed"]) {
-                    setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[1] : key[0]);
+            if (text.length < textLimit) {
+                static foreach (key; EnumMembers!KeyIndexes) {
+                    if (keyboard[to!string(key) ~ "_pressed"]) {
+                        setText(text ~= (keyboard.left_shift_down || keyboard.right_shift_down) ? key[1] : key[0]);
+                    }
                 }
             }
 
