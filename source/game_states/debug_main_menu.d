@@ -123,7 +123,8 @@ public class MainMenu : GameState {
         gui.addTextElement("question", Anchor.CENTER, "What is your name?", 0, -50, 30, Colors.WHITE, true);
 
         int sassIndex = 0;
-        string[] sass = [
+        // Sass is eternal
+        static immutable string[] sass = [
             "What is your name?",
             "Surely, you must have a name!",
             "Oh come on, type your name..",
