@@ -122,22 +122,45 @@ public class MainMenu : GameState {
         
         gui.addTextElement("question", Anchor.CENTER, "What is your name?", 0, -50, 30, Colors.WHITE, true);
 
-        gui.addTextInputElement("namePrompt", "", "*input name here*", Anchor.CENTER, 0, 0, 20, 350, 30, 3, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE,
+        int sassIndex = 0;
+        string[] sass = [
+            "What is your name?",
+            "Surely, you must have a name!",
+            "Oh come on, type your name..",
+            "I don't have all day here, type that name!",
+            "Name! Now!",
+            "Okay fine, don't type your name",
+            "See if I care!",
+            "I'm getting tired of this",
+            "I bet your name is Bob. Hi Bob.",
+            "That's it, I'm resetting back to the first index."
+        ];
+
+        gui.addTextInputElement("namePrompt", "", "*input name here*", Anchor.CENTER, 0, 0, 60, 350, 30, 3, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE,
             (GUIInput textInput) {
 
-                gui.getAnimatedTextElement("HAPPY").setVisible(true);
-                GUIText greeting =  gui.getAnimatedTextElement("HALLOWEEN");
-                greeting.setText("HALLOWEEN " ~ textInput.getText() ~ "!");
-                greeting.setVisible(true);
+                if (textInput.getText().length == 0) {
+                    sassIndex++;
+                    if (sassIndex >= sass.length) {
+                        sassIndex = 0;
+                    }
+                    gui.getTextElement("question").setText(sass[sassIndex]);
+                } else {
+                    gui.getTextElement("question").setText("What is your name?");
+                    gui.getAnimatedTextElement("HAPPY").setVisible(true);
+                    GUIText greeting =  gui.getAnimatedTextElement("HALLOWEEN");
+                    greeting.setText("HALLOWEEN " ~ textInput.getText() ~ "!");
+                    greeting.setVisible(true);
 
-                gui.getImageElement("pumpkin").setVisible(true);
+                    gui.getImageElement("pumpkin").setVisible(true);
 
-                gui.getTextElement("question").setVisible(false);
-                textInput.setVisible(false);
+                    gui.getTextElement("question").setVisible(false);
+                    textInput.setVisible(false);
 
-                camera.setClearColor(255, 117, 24,255);
+                    camera.setClearColor(255, 117, 24,255);
 
-                musicPlaying = true;
+                    musicPlaying = true;
+                }
                 
 
             }
@@ -173,6 +196,27 @@ public class MainMenu : GameState {
 
         if (musicPlaying) {
             UpdateMusicStream(music);
+        }
+
+        if (keyboard.f1_pressed) {
+
+            gui.getAnimatedTextElement("HAPPY").setVisible(false);
+
+            gui.getAnimatedTextElement("HALLOWEEN").setVisible(false);
+
+            gui.getImageElement("pumpkin").setVisible(false);
+
+            gui.getTextElement("question").setVisible(true);
+
+            GUIInput blah =  gui.getTextInputElement("namePrompt");
+            blah.setText("");
+            blah.focused = false; // oops forgot this one
+            blah.setVisible(true);
+
+            camera.setClearColor(90, 90, 90,255);
+
+            musicPlaying = false;
+            SeekMusicStream(music, 0);
         }
 
         /*
