@@ -35,6 +35,8 @@ public class MainMenu : GameState {
         // "debug9",
     ];
 
+    int sassIndex = 0;
+
     this(Game game) {
         super(game);
 
@@ -121,8 +123,7 @@ public class MainMenu : GameState {
         gui.getAnimatedTextElement("HALLOWEEN").setVisible(false);
         
         gui.addTextElement("question", Anchor.CENTER, "What is your name?", 0, -50, 30, Colors.WHITE, true);
-
-        int sassIndex = 0;
+        
         // Sass is eternal
         static immutable string[] sass = [
             "What is your name?",
@@ -162,7 +163,6 @@ public class MainMenu : GameState {
 
                     musicPlaying = true;
                 }
-                
 
             }
         );
@@ -218,6 +218,9 @@ public class MainMenu : GameState {
 
             musicPlaying = false;
             SeekMusicStream(music, 0);
+            
+            sassIndex = 0;
+            
         }
 
         /*
