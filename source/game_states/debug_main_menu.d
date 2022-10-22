@@ -20,6 +20,8 @@ public class MainMenu : GameState {
     Texture pumpkin;
     Music music;
 
+    bool musicPlaying = false;
+
 
     string[8] runners = [
         "debug1",
@@ -52,6 +54,7 @@ public class MainMenu : GameState {
         gui.addTextElement("debug7", Anchor.LEFT,         "my test", 0,0, 20, pumpkinOrange, true);
         //gui.addTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 20, pumpkinOrange, true);
         gui.addTextElement("debug8", Anchor.RIGHT,        "my test", 0,0, 20, pumpkinOrange, true);
+        */
 
         // Constructor function
         void init(GUITextAnimated animation) {
@@ -114,23 +117,47 @@ public class MainMenu : GameState {
         
         gui.addAnimatedTextElement("HAPPY",     Anchor.CENTER, "HAPPY",     0, -150, 50, Colors.BLACK, false, &init, &update);
         gui.addAnimatedTextElement("HALLOWEEN", Anchor.CENTER, "HALLOWEEN", 0,  150, 50, Colors.BLACK, false, &init, &update);
-        */
+        gui.getAnimatedTextElement("HAPPY").setVisible(false);
+        gui.getAnimatedTextElement("HALLOWEEN").setVisible(false);
+        
+        gui.addTextElement("question", Anchor.CENTER, "What is your name?", 0, -50, 30, Colors.WHITE, true);
 
-        gui.addTextInputElement("typeWords", "", "*input text*", Anchor.RIGHT, 0, -20, 10, 220, 20, 3, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE);
-        gui.addTextInputElement("overlapText", "", "Focused?", Anchor.RIGHT, 0, 20, 10, 220, 20, 3, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE);
+        gui.addTextInputElement("namePrompt", "", "*input name here*", Anchor.CENTER, 0, 0, 10, 350, 30, 3, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE,
+            (GUIInput textInput) {
+
+                gui.getAnimatedTextElement("HAPPY").setVisible(true);
+                GUIText greeting =  gui.getAnimatedTextElement("HALLOWEEN");
+                greeting.setText("HALLOWEEN " ~ textInput.getText() ~ "!");
+                greeting.setVisible(true);
+
+                gui.getImageElement("pumpkin").setVisible(true);
+
+                gui.getTextElement("question").setVisible(false);
+                textInput.setVisible(false);
+
+                camera.setClearColor(255, 117, 24,255);
+
+                musicPlaying = true;
+                
+
+            }
+        );
+        // gui.addTextInputElement("overlapText", "", "Focused?", Anchor.RIGHT, 0, 20, 10, 220, 20, 3, Colors.WHITE, Colors.GRAY, Colors.BLACK, Colors.WHITE);
 
 
-        // cache.upload("jackolantern", "textures/jackolantern.png");
+        cache.upload("jackolantern", "textures/jackolantern.png");
 
-        // pumpkin = cache.get("jackolantern").get();
+        pumpkin = cache.get("jackolantern").get();
+         
+        gui.addImageElement("pumpkin", Anchor.CENTER, 10,0, pumpkin, 0.75);
 
-        // gui.addImageElement("pumpkin", Anchor.CENTER, 10,0, pumpkin, 0.75);
+        gui.getImageElement("pumpkin").setVisible(false);
 
     }
 
     override
     void start() {
-        camera.setClearColor(0,0,0,255);
+        camera.setClearColor(90,90,90,255);
 
         camera.setOffset(Vector2(0,0));
 
@@ -144,8 +171,11 @@ public class MainMenu : GameState {
     override
     void update() {
 
-        // UpdateMusicStream(music);
+        if (musicPlaying) {
+            UpdateMusicStream(music);
+        }
 
+        /*
         float delta = timeKeeper.getDelta();
 
         final switch (up) {
@@ -166,13 +196,14 @@ public class MainMenu : GameState {
         }
 
         Vector3 clearColor = Vector3Lerp(startClearColor, goalClearColor, progress);
+        
 
         camera.setClearColor(
             cast(ubyte)floor(clearColor.x),
             cast(ubyte)floor(clearColor.y),
             cast(ubyte)floor(clearColor.z),
             255
-        );
+        );*/
 
         /*
         Random randy;
