@@ -20,12 +20,12 @@ public class GameState {
 
     // Assign pointer for all GameStates
     this(Game game) {
-        window = game.window;
-        camera = game.camera;
-        cache  = game.cache;
+        window     = game.window;
+        camera     = game.camera;
+        cache      = game.cache;
         timeKeeper = game.timeKeeper;
-        mouse = game.mouse;
-        keyboard = game.keyboard;
+        mouse      = game.mouse;
+        keyboard   = game.keyboard;
     }
     void start() {
         throw new Exception("Start() is not implimented for a GameState!");
