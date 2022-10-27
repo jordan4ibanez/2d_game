@@ -43,20 +43,6 @@ public class MainMenu : GameState {
         gui = new GUI(window, mouse, keyboard);
 
         Color pumpkinOrange = Color(255, 117, 24,255);
-        /*
-
-        gui.addTextElement("debug1", Anchor.TOP_LEFT,     "my test", 0,0, 20, pumpkinOrange, true);
-        gui.addTextElement("debug2", Anchor.TOP,          "my test", 0,0, 20, pumpkinOrange, true);
-        gui.addTextElement("debug3", Anchor.TOP_RIGHT,    "my test", 0,0, 20, pumpkinOrange, true);
-
-        gui.addTextElement("debug4", Anchor.BOTTOM_LEFT,  "my test", 0,0, 20, pumpkinOrange, true);
-        gui.addTextElement("debug5", Anchor.BOTTOM,       "my test", 0,0, 20, pumpkinOrange, true);
-        gui.addTextElement("debug6", Anchor.BOTTOM_RIGHT, "my test", 0,0, 20, pumpkinOrange, true);
-
-        gui.addTextElement("debug7", Anchor.LEFT,         "my test", 0,0, 20, pumpkinOrange, true);
-        //gui.addTextElement(Anchor.CENTER,       "debug9", "my test", 0,0, 20, pumpkinOrange, true);
-        gui.addTextElement("debug8", Anchor.RIGHT,        "my test", 0,0, 20, pumpkinOrange, true);
-        */
 
         // Constructor function
         void init(GUITextAnimated animation) {
