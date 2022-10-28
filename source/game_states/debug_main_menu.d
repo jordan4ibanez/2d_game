@@ -46,7 +46,6 @@ public class MainMenu : GameState {
 
         
         
-        
         gui.addTextElement("question", Anchor.CENTER, "What is your name?", 0, -50, 30, Colors.WHITE, true);
 
 
