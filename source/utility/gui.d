@@ -614,8 +614,9 @@ public class GUIButton : GUIText {
     Texture texture;
     void delegate() clickProcedure;
 
-    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed) {
+    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, void delegate() clickProcedure = null) {
         super(anchor, offsetX, offsetY, text, fontSize, color, shadowed);
+        this.clickProcedure = clickProcedure;
     }
 }
 
