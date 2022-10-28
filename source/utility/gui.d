@@ -228,6 +228,13 @@ public class GUI {
                 element.render();
             }
         }
+
+        foreach (element; buttonElements) {
+            if (element.isVisible()) {
+                element.update(windowWidth, windowHeight, delta, mouse, keyboard);
+                element.render();
+            }
+        }
     }
 }
 
