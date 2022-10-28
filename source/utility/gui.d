@@ -174,8 +174,8 @@ public class GUI {
     }
 
     //! Button Elements
-    void addButtonElement(string ID, Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, void delegate() clickProcedure = null) {
-        this.buttonElements[ID] = new GUIButton(anchor, offsetX, offsetY, text, fontSize, color, shadowed, clickProcedure);
+    void addButtonElement(string ID, Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, Texture background, void delegate() clickProcedure = null) {
+        this.buttonElements[ID] = new GUIButton(anchor, offsetX, offsetY, text, fontSize, color, shadowed, background, clickProcedure);
     }
     void removeButtonElement(string ID) {
         this.buttonElements.remove(ID);
@@ -633,12 +633,13 @@ public class GUIInput : GUIText {
  * Inherit from text because buttons need words.
  */
 public class GUIButton : GUIText {
-    Texture texture;
+    Texture background;
     void delegate() clickProcedure;
 
-    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, void delegate() clickProcedure = null) {
+    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, Texture background, void delegate() clickProcedure = null) {
         super(anchor, offsetX, offsetY, text, fontSize, color, shadowed);
         this.clickProcedure = clickProcedure;
+        this.background = background;
     }
 
     override

@@ -51,12 +51,15 @@ public class MainMenu : GameState {
 
         cache.upload("jackolantern", "textures/jackolantern.png");
 
+        cache.upload("debugButton", "textures/debug_button.png");
+
         pumpkin = cache.get("jackolantern").get();
          
         gui.addImageElement("pumpkin", Anchor.CENTER, 10,0, pumpkin, 0.75);
 
+        Texture debugButton = cache.get("debugButton").get();
 
-        gui.addButtonElement("button", Anchor.TOP, 0, 0, "A button", 20, Color(255,255,0,255), true, (){
+        gui.addButtonElement("button", Anchor.TOP, 0, 0, "A button", 20, Color(255,255,0,255), true, debugButton, (){
             writeln("clicked!");
         });
 
