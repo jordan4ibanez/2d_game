@@ -114,6 +114,7 @@ public class GUI {
     GUIText[string] textElements;
     GUIImage[string] imageElements;
     GUIInput[string] textInputElements;
+    GUIButton[string] buttonElements;
 
     this(Window window, Mouse mouse, Keyboard keyboard) {
         this.window   = window;
@@ -168,6 +169,20 @@ public class GUI {
     GUIText getAnimatedTextElement(string ID) {
         if (ID in textElements) {
             return this.textElements[ID];
+        }
+        return null;
+    }
+
+    //! Button Elements
+    void addButtonElement(string ID, Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, void delegate() clickProcedure = null) {
+        this.buttonElements[ID] = new GUIButton(anchor, offsetX, offsetY, text, fontSize, color, shadowed, clickProcedure);
+    }
+    void removeButtonElement(string ID) {
+        this.buttonElements.remove(ID);
+    }
+    GUIButton getButtonElement(string ID) {
+        if (ID in buttonElements) {
+            return this.buttonElements[ID];
         }
         return null;
     }
@@ -617,6 +632,11 @@ public class GUIButton : GUIText {
     this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, void delegate() clickProcedure = null) {
         super(anchor, offsetX, offsetY, text, fontSize, color, shadowed);
         this.clickProcedure = clickProcedure;
+    }
+
+    override
+    void render() {
+        writeln("I am a button, amazing");
     }
 }
 
