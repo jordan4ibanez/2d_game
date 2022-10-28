@@ -433,7 +433,7 @@ public class GUITextAnimated : GUIText {
     }
 }
 
-public class GUIInput : GUIText{
+public class GUIInput : GUIText {
 
     immutable string textPlaceHolder;
     int textLimit = 10;
@@ -607,6 +607,17 @@ public class GUIInput : GUIText{
     
 }
 
+/*
+ * Inherit from text because buttons need words.
+ */
+public class GUIButton : GUIText {
+    Texture texture;
+    void delegate() clickProcedure;
+
+    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed) {
+        super(anchor, offsetX, offsetY, text, fontSize, color, shadowed);
+    }
+}
 
 public class GUIImage : GUIElement {
 
