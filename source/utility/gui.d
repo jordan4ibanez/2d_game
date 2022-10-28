@@ -174,8 +174,8 @@ public class GUI {
     }
 
     //! Button Elements
-    void addButtonElement(string ID, Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, Texture background, void delegate() clickProcedure = null) {
-        this.buttonElements[ID] = new GUIButton(anchor, offsetX, offsetY, text, fontSize, color, shadowed, background, clickProcedure);
+    void addButtonElement(string ID, Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, int buttonPadding, Texture background, void delegate() clickProcedure = null) {
+        this.buttonElements[ID] = new GUIButton(anchor, offsetX, offsetY, text, fontSize, color, shadowed, buttonPadding, background, clickProcedure);
     }
     void removeButtonElement(string ID) {
         this.buttonElements.remove(ID);
@@ -636,15 +636,37 @@ public class GUIButton : GUIText {
     Texture background;
     void delegate() clickProcedure;
 
-    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, Texture background, void delegate() clickProcedure = null) {
+    int buttonPadding;
+
+    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, int buttonPadding, Texture background, void delegate() clickProcedure = null) {
         super(anchor, offsetX, offsetY, text, fontSize, color, shadowed);
         this.clickProcedure = clickProcedure;
         this.background = background;
+        this.buttonPadding = buttonPadding;
     }
 
     override
     void render() {
-        writeln("I am a button, amazing");
+        float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
+        float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
+    
+        if (shadowed) {
+            DrawText(
+                toStringz(text),
+                cast(int)positionRenderX + 2,
+                cast(int)positionRenderY + 2,
+                fontSize,
+                Color(0,0,0,255)
+            );
+        }
+
+        DrawText(
+            toStringz(text),
+            cast(int)positionRenderX,
+            cast(int)positionRenderY,
+            fontSize,
+            color
+        );
     }
 }
 
