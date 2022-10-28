@@ -44,7 +44,7 @@ public class MainMenu : GameState {
 
         Color pumpkinOrange = Color(255, 117, 24,255);
 
-        
+
         
         gui.addTextElement("question", Anchor.CENTER, "What is your name?", 0, -50, 30, Colors.WHITE, true);
 
@@ -54,6 +54,11 @@ public class MainMenu : GameState {
         pumpkin = cache.get("jackolantern").get();
          
         gui.addImageElement("pumpkin", Anchor.CENTER, 10,0, pumpkin, 0.75);
+
+
+        gui.addButtonElement("button", Anchor.TOP, 0, 0, "A button", 20, Color(255,255,0,255), true, (){
+            writeln("clicked!");
+        });
 
         // gui.getImageElement("pumpkin").setVisible(false);
 
