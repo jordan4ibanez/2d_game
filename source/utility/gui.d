@@ -97,7 +97,7 @@ static immutable enum KeyIndexes {
     space        = [" ", " "],
 }
 
-//! I've never made a generic GUI before so this might be a disaster
+// Todo: Fix these long lines
 public class GUI {
 
     Mouse mouse;
