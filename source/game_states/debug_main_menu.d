@@ -59,7 +59,7 @@ public class MainMenu : GameState {
 
         Texture debugButton = cache.get("debugButton").get();
 
-        gui.addButtonElement("button", Anchor.TOP, 0, 0, "A button", 20, Color(255,255,0,255), true, 32, debugButton, (){
+        gui.addButtonElement("button", Anchor.TOP, 0, 0, "A button", 20, Color(255,255,0,255), true, 2,12, debugButton, (){
             writeln("clicked!");
         });
 

@@ -174,8 +174,8 @@ public class GUI {
     }
 
     //! Button Elements
-    void addButtonElement(string ID, Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, int buttonPadding, Texture background, void delegate() clickProcedure = null) {
-        this.buttonElements[ID] = new GUIButton(anchor, offsetX, offsetY, text, fontSize, color, shadowed, buttonPadding, background, clickProcedure);
+    void addButtonElement(string ID, Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, int buttonPadding, int cornerSize, Texture background, void delegate() clickProcedure = null) {
+        this.buttonElements[ID] = new GUIButton(anchor, offsetX, offsetY, text, fontSize, color, shadowed, buttonPadding, cornerSize, background, clickProcedure);
     }
     void removeButtonElement(string ID) {
         this.buttonElements.remove(ID);
@@ -636,9 +636,33 @@ public class GUIButton : GUIText {
     Texture background;
     void delegate() clickProcedure;
 
+    // How far away from the "top" of the button the text is padded
+    /*
+     _____________
+    |\
+    | \ 
+    |  \
+    |___\_________
+    |   | This part
+    |   |
+    */
     int buttonPadding;
 
-    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, int buttonPadding, Texture background, void delegate() clickProcedure = null) {
+    // How big the "ridges"/"edges" of the button are
+    /*
+     _____________
+    |\
+    | \ This part
+    |  \
+    |___\_________
+    |   |
+    |   |
+    */
+    int cornerSize;
+
+
+
+    this(Anchor anchor, int offsetX, int offsetY, string text, int fontSize, Color color, bool shadowed, int buttonPadding, int cornerSize, Texture background, void delegate() clickProcedure = null) {
         super(anchor, offsetX, offsetY, text, fontSize, color, shadowed);
         this.clickProcedure = clickProcedure;
         this.background = background;
@@ -647,8 +671,8 @@ public class GUIButton : GUIText {
 
     override
     void render() {
-        float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x;
-        float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y;
+        float positionRenderX = ((anchor.x * windowWidth)  - (anchor.x * textSize.x)) + offset.x + cornerSize + buttonPadding;
+        float positionRenderY = ((anchor.y * windowHeight) - (anchor.y * textSize.y)) + offset.y + cornerSize + buttonPadding;
     
         if (shadowed) {
             DrawText(
